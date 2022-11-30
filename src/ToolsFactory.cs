@@ -12,6 +12,7 @@ public static class ToolsFactory
                  , RemoveTrailingWhiteSpace.Option o => new RemoveTrailingWhiteSpace.Main(o)
                  , Random.Option o                   => new Random.Main(o)
                  , Text.Option o                     => new Text.Main(o)
+                 , Guid.Option o                     => new Guid.Main(o)
                  , _                                 => throw new ArgumentOutOfRangeException(nameof(option))
                };
     }
