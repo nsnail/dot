@@ -58,7 +58,7 @@ public sealed partial class Main : Tool<Option>
             for (var i = 0; i != Opt.Length; ++i) //
                 *(pDest + i) = *(pSource + randScope.Rand());
 
-            var result = new string(pDest);
+            var result = new string(pDest, 0, Opt.Length);
             ClipboardService.SetText(result);
             Console.WriteLine($"已复制到剪贴板：{result}");
         }
