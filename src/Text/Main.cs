@@ -102,5 +102,9 @@ html-decode:       {o.HtmlDecode}
         PrintOutput(utf8);
         PrintOutput(unicodeLittleEndian);
         PrintOutput(unicodeBigEndian);
+
+        Console.Write(Strings.PressAnyKey);
+
+        Console.ReadKey();
     }
 }

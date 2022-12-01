@@ -114,15 +114,6 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 要处理的文本（默认取取剪贴板值）.
-        /// </summary>
-        public static string HelpForTextArg0 {
-            get {
-                return ResourceManager.GetString("HelpForTextArg0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 输入文本为空.
         /// </summary>
         public static string InputTextIsEmpty {
@@ -132,11 +123,29 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 没有需要处理的文件.
+        /// </summary>
+        public static string NoFileToBeProcessed {
+            get {
+                return ResourceManager.GetString("NoFileToBeProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 指定的路径“{0}”不存在.
         /// </summary>
         public static string PathNotFound {
             get {
                 return ResourceManager.GetString("PathNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 按下任意键继续....
+        /// </summary>
+        public static string PressAnyKey {
+            get {
+                return ResourceManager.GetString("PressAnyKey", resourceCulture);
             }
         }
         
@@ -168,6 +177,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 只读模式（仅做测试，不实际修改）.
+        /// </summary>
+        public static string ReadOnly {
+            get {
+                return ResourceManager.GetString("ReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 移除文件尾部换行和空格.
         /// </summary>
         public static string RemoveTrailingWhiteSpaces {
@@ -186,7 +204,7 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 查找文件...OK.
+        ///   Looks up a localized string similar to {0} 个文件.
         /// </summary>
         public static string SearchingFileOK {
             get {
@@ -200,6 +218,15 @@ namespace Dot.Lang {
         public static string ShowMessageTemp {
             get {
                 return ResourceManager.GetString("ShowMessageTemp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 要处理的文本（默认取取剪贴板值）.
+        /// </summary>
+        public static string TextTobeProcessed {
+            get {
+                return ResourceManager.GetString("TextTobeProcessed", resourceCulture);
             }
         }
         

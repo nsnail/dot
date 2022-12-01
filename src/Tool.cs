@@ -9,7 +9,8 @@ public abstract class Tool<TOption> : ITool
                                             , ForegroundColor     = ConsoleColor.Yellow
                                             , ForegroundColorDone = ConsoleColor.DarkGreen
                                             , BackgroundColor     = ConsoleColor.DarkGray
-                                            , BackgroundCharacter = '\u2593'
+                                            , BackgroundCharacter = '\u2500'
+                                            , ProgressCharacter   = '\u2500'
                                           };
 
     protected TOption Opt { get; set; }
@@ -43,16 +44,23 @@ public abstract class Tool<TOption> : ITool
         }
     }
 
-    protected static FileStream OpenFileToWrite(string file)
+    protected static FileStream OpenFileStream(string    file, FileMode mode, FileAccess access
+                                             , FileShare share = FileShare.Read)
     {
-        FileStream fsr;
+        FileStream fsr = null;
         try {
-            fsr = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+            fsr = new FileStream(file, mode, access, share);
         }
         catch (UnauthorizedAccessException) {
-            File.SetAttributes(file, new FileInfo(file).Attributes & ~FileAttributes.ReadOnly);
-            fsr = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+            try {
+                File.SetAttributes(file, new FileInfo(file).Attributes & ~FileAttributes.ReadOnly);
+                fsr = new FileStream(file, mode, access, share);
+            }
+            catch (Exception) {
+                // ignored
+            }
         }
+        catch (IOException) { }
 
         return fsr;
     }

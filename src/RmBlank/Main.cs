@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using NSExt.Extensions;
 
-namespace Dot.Convert2Lf;
+namespace Dot.RmBlank;
 
 public sealed class Main : Tool<Option>, IDisposable
 {
@@ -30,56 +31,51 @@ public sealed class Main : Tool<Option>, IDisposable
     {
         _step2Bar.Tick();
         ShowMessage(1, 0, 0);
+        var spacesCnt = 0;
 
-        var tmpFile    = $"{file}.tmp";
-        var isReplaced = false;
-        var isBin      = false;
+        using var fsrw = OpenFileStream(file, FileMode.Open, FileAccess.ReadWrite);
+
+        if (Opt.ReadOnly) { //测试，只读模式
+            ShowMessage(0, 1, 0);
+            return;
+        }
+
+
+        if (fsrw is null || fsrw.Length == 0 || (spacesCnt = GetSpacesCnt(fsrw)) == 0) {
+            ShowMessage(0, 0, 1);
+            return;
+        }
+
+        fsrw.Seek(0, SeekOrigin.Begin);
+        if (!fsrw.IsTextStream()) return;
+        ShowMessage(0, 1, 0);
+        fsrw.SetLength(fsrw.Length - spacesCnt);
+    }
+
+    private static int GetSpacesCnt(Stream fsr)
+    {
+        var trimLen = 0;
+        fsr.Seek(-1, SeekOrigin.End);
         int data;
-
-        using (var fsr = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-            using var fsw = new FileStream(tmpFile, FileMode.OpenOrCreate, FileAccess.Write);
-
-            while ((data = fsr.ReadByte()) != -1) {
-                switch (data) {
-                    case 0x0d when fsr.ReadByte() == 0x0a: // crlf windows
-                        fsw.WriteByte(0x0a);
-                        isReplaced = true;
-                        continue;
-                    case 0x0d: //cr macos
-                        fsw.WriteByte(0x0a);
-                        fsr.Seek(-1, SeekOrigin.Current);
-                        isReplaced = true;
-                        continue;
-                    case 0x00 or 0xff: //非文本文件
-                        isBin = true;
-                        break;
-                    default:
-                        fsw.WriteByte((byte)data);
-                        continue;
-                }
-
+        while ((data = fsr.ReadByte()) != -1)
+            if (new[] { 0x20, 0x0d, 0x0a }.Contains(data)) {
+                ++trimLen;
+                if (fsr.Position - 2 < 0) break;
+                fsr.Seek(-2, SeekOrigin.Current);
+            }
+            else {
                 break;
             }
-        }
 
-
-        if (isReplaced && !isBin) {
-            MoveFile(tmpFile, file);
-
-            ShowMessage(0, 1, 0);
-        }
-        else {
-            File.Delete(tmpFile);
-            ShowMessage(0, 0, 1);
-        }
+        return trimLen;
     }
 
 
-    private void ShowMessage(int procedCnt, int replaceCnt, int breakCnt)
+    private void ShowMessage(int procedCnt, int removeCnt, int breakCnt)
     {
         lock (_lockObj) {
             _procedCnt        += procedCnt;
-            _replaceCnt       += replaceCnt;
+            _replaceCnt       += removeCnt;
             _breakCnt         += breakCnt;
             _step2Bar.Message =  string.Format(Strings.ShowMessageTemp, _procedCnt, _totalCnt, _replaceCnt, _breakCnt);
         }
@@ -91,6 +87,7 @@ public sealed class Main : Tool<Option>, IDisposable
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public override void Run()
     {
@@ -104,8 +101,10 @@ public sealed class Main : Tool<Option>, IDisposable
         var fileList = EnumerateFiles(Opt.Path, Opt.Filter);
         _totalCnt = fileList.Count();
 
-        step1Bar.Message = Strings.SearchingFileOK;
+        step1Bar.Message = string.Format(Strings.SearchingFileOK, _totalCnt);
         step1Bar.Finished();
+        if (_totalCnt == 0) return;
+
 
         _step2Bar = step1Bar.Spawn(_totalCnt, string.Empty, DefaultProgressBarOptions);
 
