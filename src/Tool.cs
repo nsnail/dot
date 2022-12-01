@@ -61,7 +61,6 @@ public abstract class Tool<TOption> : ITool
             }
         }
         catch (IOException) { }
-
         return fsr;
     }
 
