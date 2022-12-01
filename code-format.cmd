@@ -1,3 +1,3 @@
-dot trim-utf8-bom
-dot remove-whitespace
-dot convert-lf
+dot rm-bom
+dot rm-blank
+dot tolf

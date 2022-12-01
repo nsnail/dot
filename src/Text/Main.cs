@@ -28,7 +28,7 @@ public sealed class Main : Tool<Option>
     public Main(Option opt) : base(opt)
     {
         if (Opt.Text.NullOrEmpty()) Opt.Text = ClipboardService.GetText();
-        if (Opt.Text.NullOrEmpty()) throw new ArgumentException("输入文本为空");
+        if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Strings.InputTextIsEmpty);
     }
 
     private static Output BuildOutput(string text, Encoding enc)
@@ -102,5 +102,7 @@ html-decode:       {o.HtmlDecode}
         PrintOutput(utf8);
         PrintOutput(unicodeLittleEndian);
         PrintOutput(unicodeBigEndian);
+        Console.Write(Strings.PressAnyKey);
+        Console.ReadKey();
     }
 }

@@ -1,8 +1,8 @@
 namespace Dot.Guid;
 
-[Verb("guid", HelpText = "GUID工具")]
+[Verb("guid", HelpText = nameof(Strings.GuidTool), ResourceType = typeof(Strings))]
 public class Option : IOption
 {
-    [Option('u', "upper", HelpText = "大写", Default = false)]
+    [Option('u', "upper", HelpText = nameof(Strings.UseUppercase), Default = false, ResourceType = typeof(Strings))]
     public bool Upper { get; set; } //normal options here
 }

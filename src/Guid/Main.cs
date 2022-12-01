@@ -12,6 +12,6 @@ public sealed class Main : Tool<Option>
         var guid            = System.Guid.NewGuid().ToString();
         if (Opt.Upper) guid = guid.ToUpper();
         ClipboardService.SetText(guid);
-        Console.WriteLine($"已复制到剪贴板：{guid}");
+        Console.WriteLine(Strings.Copied, guid);
     }
 }
