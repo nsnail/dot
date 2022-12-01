@@ -1,10 +1,9 @@
-using System.Text.RegularExpressions;
 using NSExt.Extensions;
 using TextCopy;
 
-namespace Dot.Random;
+namespace Dot.Pwd;
 
-public sealed partial class Main : Tool<Option>
+public sealed class Main : Tool<Option>
 {
     private readonly char[][] _charTable = {
                                                "0123456789".ToCharArray() //
@@ -15,18 +14,6 @@ public sealed partial class Main : Tool<Option>
 
 
     public Main(Option opt) : base(opt) { }
-
-    [GeneratedRegex("[a-z]")]
-    private static partial Regex RegexLowerCaseLetter();
-
-    [GeneratedRegex("\\d")]
-    private static partial Regex RegexNumber();
-
-    [GeneratedRegex("[^\\da-zA-Z]")]
-    private static partial Regex RegexSpecialCharacter();
-
-    [GeneratedRegex("[A-Z]")]
-    private static partial Regex RegexUpperCaseLetter();
 
     public override void Run()
     {
@@ -60,7 +47,7 @@ public sealed partial class Main : Tool<Option>
 
             var result = new string(pDest, 0, Opt.Length);
             ClipboardService.SetText(result);
-            Console.WriteLine($"已复制到剪贴板：{result}");
+            Console.WriteLine(Strings.Copied, result);
         }
     }
 }

@@ -81,7 +81,7 @@ public sealed class Main : Tool<Option>, IDisposable
             _procedCnt        += procedCnt;
             _replaceCnt       += replaceCnt;
             _breakCnt         += breakCnt;
-            _step2Bar.Message =  $"已处理：{_procedCnt}/{_totalCnt}，替换：{_replaceCnt}，跳过：{_breakCnt}";
+            _step2Bar.Message =  string.Format(Strings.ShowMessageTemp, _procedCnt, _totalCnt, _replaceCnt, _breakCnt);
         }
     }
 
@@ -94,16 +94,17 @@ public sealed class Main : Tool<Option>, IDisposable
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public override void Run()
     {
-        if (!Directory.Exists(Opt.Path)) throw new ArgumentException(nameof(Opt.Path), $"指定的路径“{Opt.Path}”不存在");
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Strings.PathNotFound, Opt.Path));
 
 
-        using var step1Bar = new IndeterminateProgressBar("查找文件...", DefaultProgressBarOptions);
+        using var step1Bar = new IndeterminateProgressBar(Strings.SearchingFile, DefaultProgressBarOptions);
 
 
         var fileList = EnumerateFiles(Opt.Path, Opt.Filter);
         _totalCnt = fileList.Count();
 
-        step1Bar.Message = "查找文件...OK";
+        step1Bar.Message = Strings.SearchingFileOK;
         step1Bar.Finished();
 
         _step2Bar = step1Bar.Spawn(_totalCnt, string.Empty, DefaultProgressBarOptions);

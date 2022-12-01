@@ -12,7 +12,7 @@ public abstract class Tool<TOption> : ITool
                                             , BackgroundCharacter = '\u2593'
                                           };
 
-    protected virtual TOption Opt { get; set; }
+    protected TOption Opt { get; set; }
 
     protected Tool(TOption opt)
     {

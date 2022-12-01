@@ -10,7 +10,7 @@ public static class ToolsFactory
                    Option o                          => new Main(o)
                  , Convert2Lf.Option o               => new Convert2Lf.Main(o)
                  , RemoveTrailingWhiteSpace.Option o => new RemoveTrailingWhiteSpace.Main(o)
-                 , Random.Option o                   => new Random.Main(o)
+                 , Pwd.Option o                      => new Pwd.Main(o)
                  , Text.Option o                     => new Text.Main(o)
                  , Guid.Option o                     => new Guid.Main(o)
                  , _                                 => throw new ArgumentOutOfRangeException(nameof(option))
