@@ -123,11 +123,119 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 连接NTP服务器: {0} &lt;{1}&gt; ... .
+        /// </summary>
+        public static string Main_GetUtc_ {
+            get {
+                return ResourceManager.GetString("Main_GetUtc_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} ms.
+        /// </summary>
+        public static string Main_GetUtc__0_us {
+            get {
+                return ResourceManager.GetString("Main_GetUtc__0_us", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 发送请求... .
+        /// </summary>
+        public static string Main_GetUtc_sdf {
+            get {
+                return ResourceManager.GetString("Main_GetUtc_sdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 接收数据... .
+        /// </summary>
+        public static string Main_GetUtc_接收请求___ {
+            get {
+                return ResourceManager.GetString("Main_GetUtc_接收请求___", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NTP服务器时间: {0}.
+        /// </summary>
+        public static string Main_Run_NTP服务器时间___0_ {
+            get {
+                return ResourceManager.GetString("Main_Run_NTP服务器时间___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 按&quot;y&quot;同步系统时钟, 其它按键退出程序.
+        /// </summary>
+        public static string Main_Run_SyncClock {
+            get {
+                return ResourceManager.GetString("Main_Run_SyncClock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 同步完成, 开始复检....
+        /// </summary>
+        public static string Main_Run_SyncDone {
+            get {
+                return ResourceManager.GetString("Main_Run_SyncDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 本地时钟快: {0} ms.
+        /// </summary>
+        public static string Main_Run_时差___0__ms {
+            get {
+                return ResourceManager.GetString("Main_Run_时差___0__ms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 本地时钟慢: {0} ms.
+        /// </summary>
+        public static string Main_Run_时差___1__ms {
+            get {
+                return ResourceManager.GetString("Main_Run_时差___1__ms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 本地时间: {0}.
+        /// </summary>
+        public static string Main_Run_本地时间___0_ {
+            get {
+                return ResourceManager.GetString("Main_Run_本地时间___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 没有需要处理的文件.
         /// </summary>
         public static string NoFileToBeProcessed {
             get {
                 return ResourceManager.GetString("NoFileToBeProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 所有服务均不可用.
+        /// </summary>
+        public static string NoService {
+            get {
+                return ResourceManager.GetString("NoService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
@@ -227,6 +335,15 @@ namespace Dot.Lang {
         public static string TextTobeProcessed {
             get {
                 return ResourceManager.GetString("TextTobeProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 超时.
+        /// </summary>
+        public static string Timeout {
+            get {
+                return ResourceManager.GetString("Timeout", resourceCulture);
             }
         }
         

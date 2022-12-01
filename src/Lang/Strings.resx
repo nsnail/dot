@@ -91,4 +91,43 @@
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>没有需要处理的文件</value>
     </data>
+    <data name="Main_GetUtc_" xml:space="preserve">
+        <value>连接NTP服务器: {0} &lt;{1}&gt; ... </value>
+    </data>
+    <data name="Main_GetUtc__0_us" xml:space="preserve">
+        <value>{0} ms</value>
+    </data>
+    <data name="Main_GetUtc_sdf" xml:space="preserve">
+        <value>发送请求... </value>
+    </data>
+    <data name="Main_GetUtc_接收请求___" xml:space="preserve">
+        <value>接收数据... </value>
+    </data>
+    <data name="Timeout" xml:space="preserve">
+        <value>超时</value>
+    </data>
+    <data name="OK" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="NoService" xml:space="preserve">
+        <value>所有服务均不可用</value>
+    </data>
+    <data name="Main_Run_NTP服务器时间___0_" xml:space="preserve">
+        <value>NTP服务器时间: {0}</value>
+    </data>
+    <data name="Main_Run_本地时间___0_" xml:space="preserve">
+        <value>本地时间: {0}</value>
+    </data>
+    <data name="Main_Run_时差___0__ms" xml:space="preserve">
+        <value>本地时钟快: {0} ms</value>
+    </data>
+    <data name="Main_Run_时差___1__ms" xml:space="preserve">
+        <value>本地时钟慢: {0} ms</value>
+    </data>
+    <data name="Main_Run_SyncClock" xml:space="preserve">
+        <value>按"y"同步系统时钟, 其它按键退出程序</value>
+    </data>
+    <data name="Main_Run_SyncDone" xml:space="preserve">
+        <value>同步完成, 开始复检...</value>
+    </data>
 </root>

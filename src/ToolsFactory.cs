@@ -13,6 +13,7 @@ public static class ToolsFactory
                  , Pwd.Option o     => new Pwd.Main(o)
                  , Text.Option o    => new Text.Main(o)
                  , Guid.Option o    => new Guid.Main(o)
+                 , Time.Option o    => new Time.Main(o)
                  , _                => throw new ArgumentOutOfRangeException(nameof(option))
                };
     }
