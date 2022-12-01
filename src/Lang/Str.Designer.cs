@@ -21,14 +21,14 @@ namespace Dot.Lang {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Strings {
+    public class Str {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings() {
+        internal Str() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace Dot.Lang {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Lang.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Lang.Str", typeof(Str).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -123,11 +123,65 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local clock offset.
+        /// </summary>
+        public static string LocalClockOffset {
+            get {
+                return ResourceManager.GetString("LocalClockOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}, 本机时钟偏移: {1} ms.
+        /// </summary>
+        public static string LocalTimeOffset {
+            get {
+                return ResourceManager.GetString("LocalTimeOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 本机时间已同步.
+        /// </summary>
+        public static string LocalTimeSyncDone {
+            get {
+                return ResourceManager.GetString("LocalTimeSyncDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 没有需要处理的文件.
         /// </summary>
         public static string NoFileToBeProcessed {
             get {
                 return ResourceManager.GetString("NoFileToBeProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} 通信中....
+        /// </summary>
+        public static string NtpCalling {
+            get {
+                return ResourceManager.GetString("NtpCalling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 成功 {0}/{1} , 本机时钟偏移平均值: {2} ms.
+        /// </summary>
+        public static string NtpReceiveDone {
+            get {
+                return ResourceManager.GetString("NtpReceiveDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/{1} 个 NTP 服务器.
+        /// </summary>
+        public static string NtpServerCount {
+            get {
+                return ResourceManager.GetString("NtpServerCount", resourceCulture);
             }
         }
         
@@ -213,6 +267,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server.
+        /// </summary>
+        public static string Server {
+            get {
+                return ResourceManager.GetString("Server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 已读取：{0}/{1}，处理：{2}，跳过：{3}.
         /// </summary>
         public static string ShowMessageTemp {
@@ -222,11 +285,38 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 同步本机时间.
+        /// </summary>
+        public static string SyncToLocalTime {
+            get {
+                return ResourceManager.GetString("SyncToLocalTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 要处理的文本（默认取取剪贴板值）.
         /// </summary>
         public static string TextTobeProcessed {
             get {
                 return ResourceManager.GetString("TextTobeProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 连接NTP服务器超时时间 (毫秒).
+        /// </summary>
+        public static string TimeoutMillSecs {
+            get {
+                return ResourceManager.GetString("TimeoutMillSecs", resourceCulture);
             }
         }
         

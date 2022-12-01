@@ -83,4 +83,34 @@
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>No documents to be processed</value>
     </data>
+    <data name="TimeoutMillSecs" xml:space="preserve">
+        <value>Timeout for connecting to the NTP server (milliseconds)</value>
+    </data>
+    <data name="SyncToLocalTime" xml:space="preserve">
+        <value>Synchronize local time</value>
+    </data>
+    <data name="NtpReceiveDone" xml:space="preserve">
+        <value>Success {0}/{1}, the average value of the clock offset of the machine:{2}ms</value>
+    </data>
+    <data name="NtpServerCount" xml:space="preserve">
+        <value>{0}/{1} NTP servers</value>
+    </data>
+    <data name="NtpCalling" xml:space="preserve">
+        <value>{0} In communication...</value>
+    </data>
+    <data name="LocalTimeOffset" xml:space="preserve">
+        <value>{0}, local clock offset: {1} ms</value>
+    </data>
+    <data name="LocalTimeSyncDone" xml:space="preserve">
+        <value>Local time has been synchronized</value>
+    </data>
+    <data name="Server" xml:space="preserve">
+        <value>Server</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="LocalClockOffset" xml:space="preserve">
+        <value>Local clock offset</value>
+    </data>
 </root>

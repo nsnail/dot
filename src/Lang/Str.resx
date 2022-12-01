@@ -51,6 +51,13 @@
     <data name="FileSearchPattern" xml:space="preserve">
         <value>文件通配符</value>
     </data>
+    <data name="TimeoutMillSecs" xml:space="preserve">
+        <value>连接NTP服务器超时时间 (毫秒)</value>
+    </data>
+    <data name="SyncToLocalTime" xml:space="preserve">
+        <value>同步本机时间</value>
+    </data>
+
     <data name="FolderPath" xml:space="preserve">
         <value>要处理的目录路径</value>
     </data>
@@ -90,5 +97,29 @@
     </data>
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>没有需要处理的文件</value>
+    </data>
+    <data name="NtpReceiveDone" xml:space="preserve">
+        <value>成功 {0}/{1} , 本机时钟偏移平均值: {2} ms</value>
+    </data>
+    <data name="NtpServerCount" xml:space="preserve">
+        <value>{0}/{1} 个 NTP 服务器</value>
+    </data>
+    <data name="NtpCalling" xml:space="preserve">
+        <value>{0} 通信中...</value>
+    </data>
+    <data name="LocalTimeOffset" xml:space="preserve">
+        <value>{0}, 本机时钟偏移: {1} ms</value>
+    </data>
+    <data name="LocalTimeSyncDone" xml:space="preserve">
+        <value>本机时间已同步</value>
+    </data>
+    <data name="Server" xml:space="preserve">
+        <value>Server</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="LocalClockOffset" xml:space="preserve">
+        <value>Local clock offset</value>
     </data>
 </root>

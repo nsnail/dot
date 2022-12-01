@@ -1,4 +1,4 @@
 namespace Dot.ToLf;
 
-[Verb("tolf", HelpText = nameof(Strings.ConvertEndOfLineToLF), ResourceType = typeof(Strings))]
+[Verb("tolf", HelpText = nameof(Str.ConvertEndOfLineToLF), ResourceType = typeof(Str))]
 public class Option : DirOption { }

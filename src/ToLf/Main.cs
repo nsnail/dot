@@ -26,7 +26,7 @@ public sealed class Main : Tool<Option>, IDisposable
         _disposed = true;
     }
 
-    private void FileHandle(string file)
+    private async ValueTask FileHandle(string file, CancellationToken _)
     {
         _step2Bar.Tick();
         ShowMessage(1, 0, 0);
@@ -36,7 +36,7 @@ public sealed class Main : Tool<Option>, IDisposable
         var isBin      = false;
         int data;
 
-        using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+        await using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
             if (Opt.ReadOnly) { //测试，只读模式
                 ShowMessage(0, 1, 0);
                 return;
@@ -48,7 +48,7 @@ public sealed class Main : Tool<Option>, IDisposable
             }
 
 
-            using var fsw = OpenFileStream(tmpFile, FileMode.OpenOrCreate, FileAccess.Write);
+            await using var fsw = OpenFileStream(tmpFile, FileMode.OpenOrCreate, FileAccess.Write);
 
             while ((data = fsr.ReadByte()) != -1) {
                 switch (data) {
@@ -92,7 +92,7 @@ public sealed class Main : Tool<Option>, IDisposable
             _procedCnt        += procedCnt;
             _replaceCnt       += replaceCnt;
             _breakCnt         += breakCnt;
-            _step2Bar.Message =  string.Format(Strings.ShowMessageTemp, _procedCnt, _totalCnt, _replaceCnt, _breakCnt);
+            _step2Bar.Message =  string.Format(Str.ShowMessageTemp, _procedCnt, _totalCnt, _replaceCnt, _breakCnt);
         }
     }
 
@@ -103,25 +103,25 @@ public sealed class Main : Tool<Option>, IDisposable
     }
 
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public override void Run()
+    public override async Task Run()
     {
         if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Strings.PathNotFound, Opt.Path));
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
 
 
-        using var step1Bar = new IndeterminateProgressBar(Strings.SearchingFile, DefaultProgressBarOptions);
+        using var step1Bar = new IndeterminateProgressBar(Str.SearchingFile, DefaultProgressBarOptions);
 
 
         var fileList = EnumerateFiles(Opt.Path, Opt.Filter);
         _totalCnt = fileList.Count();
 
-        step1Bar.Message = string.Format(Strings.SearchingFileOK, _totalCnt);
+        step1Bar.Message = string.Format(Str.SearchingFileOK, _totalCnt);
         step1Bar.Finished();
         if (_totalCnt == 0) return;
 
 
         _step2Bar = step1Bar.Spawn(_totalCnt, string.Empty, DefaultProgressBarOptions);
 
-        Parallel.ForEach(fileList, FileHandle);
+        await Parallel.ForEachAsync(fileList, FileHandle);
     }
 }

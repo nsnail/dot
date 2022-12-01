@@ -15,7 +15,7 @@ public sealed class Main : Tool<Option>
 
     public Main(Option opt) : base(opt) { }
 
-    public override void Run()
+    public override Task Run()
     {
         unsafe {
             var pSource   = stackalloc char[_charTable.Sum(x => x.Length)];
@@ -47,7 +47,9 @@ public sealed class Main : Tool<Option>
 
             var result = new string(pDest, 0, Opt.Length);
             ClipboardService.SetText(result);
-            Console.WriteLine(Strings.Copied, result);
+            Console.WriteLine(Str.Copied, result);
         }
+
+        return Task.CompletedTask;
     }
 }
