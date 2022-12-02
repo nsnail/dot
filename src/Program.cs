@@ -10,10 +10,10 @@ Type[] LoadVerbs()
 }
 
 
-void Run(object args)
+async Task Run(object args)
 {
     var tool = ToolsFactory.Create(args as IOption);
-    tool.Run();
+    await tool.Run();
 }
 
 
@@ -22,7 +22,7 @@ void Run(object args)
 var types = LoadVerbs();
 
 try {
-    Parser.Default.ParseArguments(args, types).WithParsed(Run);
+    await Parser.Default.ParseArguments(args, types).WithParsedAsync(Run);
 }
 catch (ArgumentException ex) {
     Console.Error.WriteLine(ex.Message);

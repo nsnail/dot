@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root" xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="InputTextIsEmpty" xml:space="preserve">
+        <value>The input text is empty</value>
+    </data>
+    <data name="SearchingFile" xml:space="preserve">
+        <value>Find files...</value>
+    </data>
+    <data name="PathNotFound" xml:space="preserve">
+        <value>The specified path "{0}" does not exist</value>
+    </data>
+    <data name="SearchingFileOK" xml:space="preserve">
+        <value>Find files...OK</value>
+    </data>
+    <data name="ShowMessageTemp" xml:space="preserve">
+        <value>Read: {0}/{1}, processed: {2}, skipped: {3}</value>
+    </data>
+    <data name="HelpForText" xml:space="preserve">
+        <value>Text encoding tool</value>
+    </data>
+    <data name="Copied" xml:space="preserve">
+        <value>{0}(copied to clipboard)</value>
+    </data>
+    <data name="FileSearchPattern" xml:space="preserve">
+        <value>File wildcards</value>
+    </data>
+    <data name="FolderPath" xml:space="preserve">
+        <value>Directory path to be processed</value>
+    </data>
+    <data name="ConvertEndOfLineToLF" xml:space="preserve">
+        <value>Convert newline characters to LF</value>
+    </data>
+    <data name="GuidTool" xml:space="preserve">
+        <value>GUID tool</value>
+    </data>
+    <data name="UseUppercase" xml:space="preserve">
+        <value>Use uppercase output</value>
+    </data>
+    <data name="RandomPasswordGenerator" xml:space="preserve">
+        <value>Random password generator</value>
+    </data>
+    <data name="PwdLength" xml:space="preserve">
+        <value>Password length</value>
+    </data>
+    <data name="PwdGenerateTypes" xml:space="preserve">
+        <value>BitSet 1：[0-9]，2：[a-z]，4：[A-Z]，8：[ascii.0x21-0x2F]</value>
+    </data>
+    <data name="RemoveTrailingWhiteSpaces" xml:space="preserve">
+        <value>Remove line breaks and spaces at the end of the file</value>
+    </data>
+    <data name="TrimUtf8Bom" xml:space="preserve">
+        <value>Remove the uf8 bom of the file</value>
+    </data>
+    <data name="TextTobeProcessed" xml:space="preserve">
+        <value>Text to be processed (clipboard value is taken by default)</value>
+    </data>
+    <data name="PressAnyKey" xml:space="preserve">
+        <value>Press any key to continue...</value>
+    </data>
+    <data name="ReadOnly" xml:space="preserve">
+        <value>Read-only mode (only for testing, no actual modification)</value>
+    </data>
+    <data name="NoFileToBeProcessed" xml:space="preserve">
+        <value>No documents to be processed</value>
+    </data>
+    <data name="TimeoutMillSecs" xml:space="preserve">
+        <value>Timeout for connecting to the NTP server (milliseconds)</value>
+    </data>
+    <data name="SyncToLocalTime" xml:space="preserve">
+        <value>Synchronize local time</value>
+    </data>
+    <data name="NtpReceiveDone" xml:space="preserve">
+        <value>Success {0}/{1}, the average value of the clock offset of the machine:{2}ms</value>
+    </data>
+    <data name="NtpServerCount" xml:space="preserve">
+        <value>{0}/{1} NTP servers</value>
+    </data>
+    <data name="NtpCalling" xml:space="preserve">
+        <value>{0} In communication...</value>
+    </data>
+    <data name="LocalTimeOffset" xml:space="preserve">
+        <value>{0}, local clock offset: {1} ms</value>
+    </data>
+    <data name="LocalTimeSyncDone" xml:space="preserve">
+        <value>Local time has been synchronized</value>
+    </data>
+    <data name="Server" xml:space="preserve">
+        <value>Server</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="LocalClockOffset" xml:space="preserve">
+        <value>Local clock offset</value>
+    </data>
+</root>

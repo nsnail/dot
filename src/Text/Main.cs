@@ -25,11 +25,7 @@ public sealed class Main : Tool<Option>
         public ReadOnlySpan<char> UrlEncode;
     }
 
-    public Main(Option opt) : base(opt)
-    {
-        if (Opt.Text.NullOrEmpty()) Opt.Text = ClipboardService.GetText();
-        if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Strings.InputTextIsEmpty);
-    }
+    public Main(Option opt) : base(opt) { }
 
     private static Output BuildOutput(string text, Encoding enc)
     {
@@ -68,6 +64,22 @@ public sealed class Main : Tool<Option>
         return ret;
     }
 
+    private static void ParseAndShow(string text)
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        var ansi                = BuildOutput(text, Encoding.GetEncoding("gbk"));
+        var utf8                = BuildOutput(text, Encoding.UTF8);
+        var unicodeLittleEndian = BuildOutput(text, Encoding.Unicode);
+        var unicodeBigEndian    = BuildOutput(text, Encoding.BigEndianUnicode);
+
+
+        PrintOutput(ansi);
+        PrintOutput(utf8);
+        PrintOutput(unicodeLittleEndian);
+        PrintOutput(unicodeBigEndian);
+    }
+
     private static void PrintOutput(Output o)
     {
         var outputTemp = $"""
@@ -89,20 +101,14 @@ html-decode:       {o.HtmlDecode}
         Console.WriteLine(outputTemp);
     }
 
-    public override void Run()
+    public override async Task Run()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var ansi                = BuildOutput(Opt.Text, Encoding.GetEncoding("gbk"));
-        var utf8                = BuildOutput(Opt.Text, Encoding.UTF8);
-        var unicodeLittleEndian = BuildOutput(Opt.Text, Encoding.Unicode);
-        var unicodeBigEndian    = BuildOutput(Opt.Text, Encoding.BigEndianUnicode);
+        if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
+        if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);
 
 
-        PrintOutput(ansi);
-        PrintOutput(utf8);
-        PrintOutput(unicodeLittleEndian);
-        PrintOutput(unicodeBigEndian);
-        Console.Write(Strings.PressAnyKey);
+        ParseAndShow(Opt.Text);
+        Console.Write(Str.PressAnyKey);
         Console.ReadKey();
     }
 }

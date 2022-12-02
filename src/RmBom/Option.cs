@@ -1,4 +1,4 @@
 namespace Dot.RmBom;
 
-[Verb("rm-bom", HelpText = nameof(Strings.TrimUtf8Bom), ResourceType = typeof(Strings))]
+[Verb("rm-bom", HelpText = nameof(Str.TrimUtf8Bom), ResourceType = typeof(Str))]
 public class Option : DirOption { }
