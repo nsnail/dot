@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Dot</RootNamespace>
         <AssemblyName>dot</AssemblyName>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <Authors>nsnail</Authors>
         <Copyright>Copyright (c) 2022 nsnail</Copyright>
         <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>
