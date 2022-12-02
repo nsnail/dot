@@ -21,14 +21,14 @@ namespace Dot.Lang {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Strings {
+    public class Str {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings() {
+        internal Str() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace Dot.Lang {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Lang.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Lang.Str", typeof(Str).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -123,92 +123,29 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 连接NTP服务器: {0} &lt;{1}&gt; ... .
+        ///   Looks up a localized string similar to Local clock offset.
         /// </summary>
-        public static string Main_GetUtc_ {
+        public static string LocalClockOffset {
             get {
-                return ResourceManager.GetString("Main_GetUtc_", resourceCulture);
+                return ResourceManager.GetString("LocalClockOffset", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} ms.
+        ///   Looks up a localized string similar to {0}, 本机时钟偏移: {1} ms.
         /// </summary>
-        public static string Main_GetUtc__0_us {
+        public static string LocalTimeOffset {
             get {
-                return ResourceManager.GetString("Main_GetUtc__0_us", resourceCulture);
+                return ResourceManager.GetString("LocalTimeOffset", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 发送请求... .
+        ///   Looks up a localized string similar to 本机时间已同步.
         /// </summary>
-        public static string Main_GetUtc_sdf {
+        public static string LocalTimeSyncDone {
             get {
-                return ResourceManager.GetString("Main_GetUtc_sdf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 接收数据... .
-        /// </summary>
-        public static string Main_GetUtc_接收请求___ {
-            get {
-                return ResourceManager.GetString("Main_GetUtc_接收请求___", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NTP服务器时间: {0}.
-        /// </summary>
-        public static string Main_Run_NTP服务器时间___0_ {
-            get {
-                return ResourceManager.GetString("Main_Run_NTP服务器时间___0_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 按&quot;y&quot;同步系统时钟, 其它按键退出程序.
-        /// </summary>
-        public static string Main_Run_SyncClock {
-            get {
-                return ResourceManager.GetString("Main_Run_SyncClock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 同步完成, 开始复检....
-        /// </summary>
-        public static string Main_Run_SyncDone {
-            get {
-                return ResourceManager.GetString("Main_Run_SyncDone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 本地时钟快: {0} ms.
-        /// </summary>
-        public static string Main_Run_时差___0__ms {
-            get {
-                return ResourceManager.GetString("Main_Run_时差___0__ms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 本地时钟慢: {0} ms.
-        /// </summary>
-        public static string Main_Run_时差___1__ms {
-            get {
-                return ResourceManager.GetString("Main_Run_时差___1__ms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 本地时间: {0}.
-        /// </summary>
-        public static string Main_Run_本地时间___0_ {
-            get {
-                return ResourceManager.GetString("Main_Run_本地时间___0_", resourceCulture);
+                return ResourceManager.GetString("LocalTimeSyncDone", resourceCulture);
             }
         }
         
@@ -222,20 +159,29 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 所有服务均不可用.
+        ///   Looks up a localized string similar to {0} 通信中....
         /// </summary>
-        public static string NoService {
+        public static string NtpCalling {
             get {
-                return ResourceManager.GetString("NoService", resourceCulture);
+                return ResourceManager.GetString("NtpCalling", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to 成功 {0}/{1} , 本机时钟偏移平均值: {2} ms.
         /// </summary>
-        public static string OK {
+        public static string NtpReceiveDone {
             get {
-                return ResourceManager.GetString("OK", resourceCulture);
+                return ResourceManager.GetString("NtpReceiveDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/{1} 个 NTP 服务器.
+        /// </summary>
+        public static string NtpServerCount {
+            get {
+                return ResourceManager.GetString("NtpServerCount", resourceCulture);
             }
         }
         
@@ -321,11 +267,38 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server.
+        /// </summary>
+        public static string Server {
+            get {
+                return ResourceManager.GetString("Server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 已读取：{0}/{1}，处理：{2}，跳过：{3}.
         /// </summary>
         public static string ShowMessageTemp {
             get {
                 return ResourceManager.GetString("ShowMessageTemp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 同步本机时间.
+        /// </summary>
+        public static string SyncToLocalTime {
+            get {
+                return ResourceManager.GetString("SyncToLocalTime", resourceCulture);
             }
         }
         
@@ -339,11 +312,11 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 超时.
+        ///   Looks up a localized string similar to 连接NTP服务器超时时间 (毫秒).
         /// </summary>
-        public static string Timeout {
+        public static string TimeoutMillSecs {
             get {
-                return ResourceManager.GetString("Timeout", resourceCulture);
+                return ResourceManager.GetString("TimeoutMillSecs", resourceCulture);
             }
         }
         

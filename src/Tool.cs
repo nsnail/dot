@@ -13,7 +13,7 @@ public abstract class Tool<TOption> : ITool
                                             , ProgressCharacter   = '\u2500'
                                           };
 
-    protected TOption Opt { get; set; }
+    protected TOption Opt { get; }
 
     protected Tool(TOption opt)
     {
@@ -61,9 +61,10 @@ public abstract class Tool<TOption> : ITool
             }
         }
         catch (IOException) { }
+
         return fsr;
     }
 
 
-    public abstract void Run();
+    public abstract Task Run();
 }

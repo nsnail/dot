@@ -51,6 +51,13 @@
     <data name="FileSearchPattern" xml:space="preserve">
         <value>文件通配符</value>
     </data>
+    <data name="TimeoutMillSecs" xml:space="preserve">
+        <value>连接NTP服务器超时时间 (毫秒)</value>
+    </data>
+    <data name="SyncToLocalTime" xml:space="preserve">
+        <value>同步本机时间</value>
+    </data>
+
     <data name="FolderPath" xml:space="preserve">
         <value>要处理的目录路径</value>
     </data>
@@ -91,43 +98,28 @@
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>没有需要处理的文件</value>
     </data>
-    <data name="Main_GetUtc_" xml:space="preserve">
-        <value>连接NTP服务器: {0} &lt;{1}&gt; ... </value>
+    <data name="NtpReceiveDone" xml:space="preserve">
+        <value>成功 {0}/{1} , 本机时钟偏移平均值: {2} ms</value>
     </data>
-    <data name="Main_GetUtc__0_us" xml:space="preserve">
-        <value>{0} ms</value>
+    <data name="NtpServerCount" xml:space="preserve">
+        <value>{0}/{1} 个 NTP 服务器</value>
     </data>
-    <data name="Main_GetUtc_sdf" xml:space="preserve">
-        <value>发送请求... </value>
+    <data name="NtpCalling" xml:space="preserve">
+        <value>{0} 通信中...</value>
     </data>
-    <data name="Main_GetUtc_接收请求___" xml:space="preserve">
-        <value>接收数据... </value>
+    <data name="LocalTimeOffset" xml:space="preserve">
+        <value>{0}, 本机时钟偏移: {1} ms</value>
     </data>
-    <data name="Timeout" xml:space="preserve">
-        <value>超时</value>
+    <data name="LocalTimeSyncDone" xml:space="preserve">
+        <value>本机时间已同步</value>
     </data>
-    <data name="OK" xml:space="preserve">
-        <value>OK</value>
+    <data name="Server" xml:space="preserve">
+        <value>Server</value>
     </data>
-    <data name="NoService" xml:space="preserve">
-        <value>所有服务均不可用</value>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
     </data>
-    <data name="Main_Run_NTP服务器时间___0_" xml:space="preserve">
-        <value>NTP服务器时间: {0}</value>
-    </data>
-    <data name="Main_Run_本地时间___0_" xml:space="preserve">
-        <value>本地时间: {0}</value>
-    </data>
-    <data name="Main_Run_时差___0__ms" xml:space="preserve">
-        <value>本地时钟快: {0} ms</value>
-    </data>
-    <data name="Main_Run_时差___1__ms" xml:space="preserve">
-        <value>本地时钟慢: {0} ms</value>
-    </data>
-    <data name="Main_Run_SyncClock" xml:space="preserve">
-        <value>按"y"同步系统时钟, 其它按键退出程序</value>
-    </data>
-    <data name="Main_Run_SyncDone" xml:space="preserve">
-        <value>同步完成, 开始复检...</value>
+    <data name="LocalClockOffset" xml:space="preserve">
+        <value>Local clock offset</value>
     </data>
 </root>

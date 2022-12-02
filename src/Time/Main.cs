@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
@@ -5,8 +6,16 @@ namespace Dot.Time;
 
 public sealed class Main : Tool<Option>
 {
+    private enum ServerStatues : byte
+    {
+        Ready
+      , Connecting
+      , Succeed
+      , Failed
+    }
+
     [StructLayout(LayoutKind.Explicit)]
-    public ref struct _SYSTEMTIME
+    private ref struct Systemtime
     {
         [FieldOffset(6)]  public ushort wDay;
         [FieldOffset(4)]  public ushort wDayOfWeek;
@@ -18,163 +27,168 @@ public sealed class Main : Tool<Option>
         [FieldOffset(0)]  public ushort wYear;
     }
 
-    private readonly Dictionary<string, string> _serverList = new() {
-                                                                        { "ntp.ntsc.ac.cn", "国家授时中心 NTP 服务器" }
-                                                                      , { "cn.ntp.org.cn", "中国 NTP 快速授时服务" }
-                                                                      , { "edu.ntp.org.cn", "中国 NTP 快速授时服务" }
-                                                                      , { "cn.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "time.pool.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time1.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time2.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time3.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time4.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time5.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time6.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time7.aliyun.com", "阿里云公共 NTP 服务器" }
-                                                                      , { "time1.cloud.tencent.com", "腾讯云公共 NTP 服务器" }
-                                                                      , { "time2.cloud.tencent.com", "腾讯云公共 NTP 服务器" }
-                                                                      , { "time3.cloud.tencent.com", "腾讯云公共 NTP 服务器" }
-                                                                      , { "time4.cloud.tencent.com", "腾讯云公共 NTP 服务器" }
-                                                                      , { "time5.cloud.tencent.com", "腾讯云公共 NTP 服务器" }
-                                                                      , { "ntp.sjtu.edu.cn", "教育网（高校自建）" }
-                                                                      , { "ntp.neu.edu.cn", "教育网（高校自建）" }
-                                                                      , { "ntp.bupt.edu.cn", "教育网（高校自建）" }
-                                                                      , { "ntp.shu.edu.cn", "教育网（高校自建）" }
-                                                                      , { "pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "0.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "1.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "2.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "3.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "asia.pool.ntp.org", "国际 NTP 快速授时服务" }
-                                                                      , { "time1.google.com", "谷歌公共 NTP 服务器" }
-                                                                      , { "time2.google.com", "谷歌公共 NTP 服务器" }
-                                                                      , { "time3.google.com", "谷歌公共 NTP 服务器" }
-                                                                      , { "time4.google.com", "谷歌公共 NTP 服务器" }
-                                                                      , { "time.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time1.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time2.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time3.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time4.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time5.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time6.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time7.apple.com", "苹果公司公共 NTP 服务器" }
-                                                                      , { "time.windows.com", "微软 Windows NTP 服务器" }
-                                                                      , { "time.nist.gov", "美国标准技术研究院 NTP 服务器" }
-                                                                      , { "time-nw.nist.gov", "美国标准技术研究院 NTP 服务器" }
-                                                                      , { "time-a.nist.gov", "美国标准技术研究院 NTP 服务器" }
-                                                                      , { "time-b.nist.gov", "美国标准技术研究院 NTP 服务器" }
-                                                                      , { "stdtime.gov.hk", "香港天文台公共 NTP 服务器" }
-                                                                    };
+    private const    int    _MAX_DEGREE_OF_PARALLELISM = 10;
+    private const    int    _NTP_PORT                  = 123;
+    private readonly char[] _loading                   = { '-', '\\', '|', '/' };
+    private          int    _procedCnt;
+    private readonly int    _serverCnt;
 
-    public Main(Option opt) : base(opt) { }
+    private readonly Dictionary<string, Server> _serverDictionary;
 
 
-    private TimeSpan GetNtpOffset()
+    private readonly string[] _serverDomains = {
+                                                   "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn"
+                                                 , "cn.pool.ntp.org", "time.pool.aliyun.com", "time1.aliyun.com"
+                                                 , "time2.aliyun.com", "time3.aliyun.com", "time4.aliyun.com"
+                                                 , "time5.aliyun.com", "time6.aliyun.com", "time7.aliyun.com"
+                                                 , "time1.cloud.tencent.com", "time2.cloud.tencent.com"
+                                                 , "time3.cloud.tencent.com", "time4.cloud.tencent.com"
+                                                 , "time5.cloud.tencent.com", "ntp.sjtu.edu.cn", "ntp.neu.edu.cn"
+                                                 , "ntp.bupt.edu.cn", "ntp.shu.edu.cn", "pool.ntp.org", "0.pool.ntp.org"
+                                                 , "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"
+                                                 , "asia.pool.ntp.org", "time1.google.com", "time2.google.com"
+                                                 , "time3.google.com", "time4.google.com", "time.apple.com"
+                                                 , "time1.apple.com", "time2.apple.com", "time3.apple.com"
+                                                 , "time4.apple.com", "time5.apple.com", "time6.apple.com"
+                                                 , "time7.apple.com", "time.windows.com", "time.nist.gov"
+                                                 , "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov"
+                                                 , "stdtime.gov.hk"
+                                               };
+
+    private int _successCnt;
+
+
+    public Main(Option opt) : base(opt)
+    {
+        _serverCnt        = _serverDomains.Length;
+        _serverDictionary = _serverDomains.ToDictionary(x => x, _ => new Server { Status = ServerStatues.Ready });
+    }
+
+
+    private TimeSpan GetNtpOffset(string server)
     {
         Span<byte> ntpData = stackalloc byte[48];
-        TimeSpan   ts;
         ntpData[0] = 0x1B;
-        foreach (var server in _serverList) {
-            Console.Write(Strings.Main_GetUtc_, server.Key, server.Value);
+        using var socket
+            = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) {
+                  ReceiveTimeout = Opt.Timeout
+              };
 
-            using var socket
-                = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveTimeout = 3000 };
 
-            try {
-                socket.Connect(_serverList.First().Key, 123);
-                Console.WriteLine(Strings.OK);
-                Console.Write(Strings.Main_GetUtc_sdf);
-                socket.Send(ntpData);
-                Console.WriteLine(Strings.OK);
-                Console.Write(Strings.Main_GetUtc_接收请求___);
-                var timeStart = DateTime.Now;
-                socket.Receive(ntpData);
-                ts = DateTime.Now - timeStart;
-                Console.WriteLine(Strings.Main_GetUtc__0_us, ts.TotalMilliseconds);
-            }
-            catch (Exception) {
-                Console.WriteLine(Strings.Timeout);
-                continue;
-            }
-            finally {
-                socket.Close();
-            }
-
+        try {
+            socket.Connect(server, _NTP_PORT);
+            socket.Send(ntpData);
+            var timeBefore = DateTime.Now;
+            socket.Receive(ntpData);
+            var transferTime = DateTime.Now - timeBefore;
 
             var intPart = ((ulong)ntpData[40]   << 24) //
                           | ((ulong)ntpData[41] << 16) //
                           | ((ulong)ntpData[42] << 8)  //
                           | ntpData[43];
-
             var fractPart = ((ulong)ntpData[44]   << 24) //
                             | ((ulong)ntpData[45] << 16) //
                             | ((ulong)ntpData[46] << 8)  //
                             | ntpData[47];
-
             var from1900Ms = intPart * 1000 + fractPart * 1000 / 0x100000000L;
-            var onlineTime = new DateTime(1900, 1, 1).AddMilliseconds((long)from1900Ms) + ts;
+            var onlineTime = new DateTime(1900, 1, 1).AddMilliseconds((long)from1900Ms) + transferTime / 2;
             return DateTime.UtcNow - onlineTime;
         }
+        catch (Exception) {
+            return TimeSpan.Zero;
+        }
+        finally {
+            socket.Close();
+        }
+    }
 
-        throw new TimeoutException();
+    private async void Printing()
+    {
+        const string outputTemp = "{0,-30}\t{1}\t{2,20}\t{3,20}";
+        var          rolling    = 0;
+
+        Console.Clear();
+        while (true) {
+            await Task.Delay(100);
+            Console.SetCursorPosition(0, 0);
+            var row =                      //
+                _serverDictionary.Select(x //
+                                             => string.Format(outputTemp, x.Key
+                                                            , x.Value.Status == ServerStatues.Connecting
+                                                                  ? _loading[++rolling % 4]
+                                                                  : ' ', x.Value.Status
+                                                            , x.Value.Offset == TimeSpan.Zero
+                                                                  ? string.Empty
+                                                                  : x.Value.Offset));
+
+
+            Console.WriteLine(outputTemp, Str.Server, ' ', Str.Status, Str.LocalClockOffset);
+            Console.WriteLine(string.Join(Environment.NewLine, row));
+            if (_procedCnt == _serverCnt) break;
+        }
     }
 
 
     [DllImport("Kernel32.dll")]
-    public static extern unsafe void GetLocalTime(_SYSTEMTIME* st);
+    private static extern void SetLocalTime(Systemtime st);
 
-    public override void Run()
+    private static void SetSysteTime(DateTime time)
     {
-        while (true) {
-            TimeSpan offset;
-            try {
-                offset = GetNtpOffset();
-            }
-            catch (TimeoutException) {
-                Console.Error.WriteLine(Strings.NoService);
-                return;
-            }
-
-
-            using var tokenSource = new CancellationTokenSource();
-            var       token       = tokenSource.Token;
-            Task.Run(async () => {
-                for (;;) {
-                    if (token.IsCancellationRequested) return;
-                    Console.WriteLine(Strings.Main_Run_NTP服务器时间___0_, (DateTime.Now + offset).ToString("O"));
-                    Console.WriteLine(Strings.Main_Run_本地时间___0_,     DateTime.Now.ToString("O"));
-                    Console.WriteLine(offset > TimeSpan.Zero
-                                          ? string.Format(Strings.Main_Run_时差___0__ms, offset.TotalMilliseconds)
-                                          : string.Format(Strings.Main_Run_时差___1__ms, -offset.TotalMilliseconds));
-                    Console.WriteLine(Strings.Main_Run_SyncClock);
-                    await Task.Delay(1000, token);
-                    Console.Clear();
-                }
-            }, token);
-
-            if (Console.ReadKey().Key == ConsoleKey.Y) {
-                var ntpTime = DateTime.Now - offset;
-                var f = new _SYSTEMTIME {
-                                            wDay          = (ushort)ntpTime.Day
-                                          , wDayOfWeek    = (ushort)ntpTime.DayOfWeek
-                                          , wHour         = (ushort)ntpTime.Hour
-                                          , wMilliseconds = (ushort)ntpTime.Millisecond
-                                          , wMinute       = (ushort)ntpTime.Minute
-                                          , wMonth        = (ushort)ntpTime.Month
-                                          , wSecond       = (ushort)ntpTime.Second
-                                          , wYear         = (ushort)ntpTime.Year
-                                        };
-
-                SetLocalTime(f);
-                Console.WriteLine(Strings.Main_Run_SyncDone);
-                tokenSource.Cancel();
-                continue;
-            }
-
-            break;
-        }
+        var timeToSet = new Systemtime {
+                                           wDay          = (ushort)time.Day
+                                         , wDayOfWeek    = (ushort)time.DayOfWeek
+                                         , wHour         = (ushort)time.Hour
+                                         , wMilliseconds = (ushort)time.Millisecond
+                                         , wMinute       = (ushort)time.Minute
+                                         , wMonth        = (ushort)time.Month
+                                         , wSecond       = (ushort)time.Second
+                                         , wYear         = (ushort)time.Year
+                                       };
+        SetLocalTime(timeToSet);
     }
 
-    [DllImportAttribute("Kernel32.dll")]
-    public static extern void SetLocalTime(_SYSTEMTIME st);
+
+    [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
+    public override async Task Run()
+    {
+        var tPrinting = Task.Run(Printing);
+
+        await Parallel.ForEachAsync(_serverDictionary
+                                  , new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
+                                  , (server, _) => {
+                                        server.Value.Status = ServerStatues.Connecting;
+                                        var offset = GetNtpOffset(server.Key);
+
+                                        Interlocked.Increment(ref _procedCnt);
+
+                                        if (offset == TimeSpan.Zero) {
+                                            server.Value.Status = ServerStatues.Failed;
+                                        }
+                                        else {
+                                            server.Value.Status = ServerStatues.Succeed;
+                                            Interlocked.Increment(ref _successCnt);
+                                            server.Value.Offset = offset;
+                                        }
+
+                                        return ValueTask.CompletedTask;
+                                    });
+
+        tPrinting.Wait();
+        var avgOffset = TimeSpan.FromTicks((long)_serverDictionary //
+                                                 .Where(x => x.Value.Status == ServerStatues.Succeed)
+                                                 .Average(x => x.Value.Offset.Ticks));
+
+
+        Console.WriteLine(Str.NtpReceiveDone, _successCnt, _serverCnt, avgOffset.TotalMilliseconds);
+        if (!Opt.Sync) return;
+        Console.WriteLine();
+        SetSysteTime(DateTime.Now - avgOffset);
+        Console.WriteLine(Str.LocalTimeSyncDone);
+    }
+
+    private record Server
+    {
+        public TimeSpan      Offset;
+        public ServerStatues Status;
+    }
 }

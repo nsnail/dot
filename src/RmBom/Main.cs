@@ -11,12 +11,24 @@ public sealed class Main : Tool<Option>, IDisposable
     private                 ChildProgressBar _step2Bar;
     private                 int              _totalCnt;
     private                 int              _trimCnt;
+    private readonly        byte[]           _utf8Bom = { 0xef, 0xbb, 0xbf };
     public Main(Option opt) : base(opt) { }
 
 
     ~Main()
     {
         Dispose(false);
+    }
+
+    private bool CreateTempFile(Stream fsr, string tmpFile)
+    {
+        Span<byte> buffer  = stackalloc byte[_utf8Bom.Length];
+        var        readLen = fsr.Read(buffer);
+        if (readLen != _utf8Bom.Length || !buffer.SequenceEqual(_utf8Bom)) return false;
+        using var fsw = OpenFileStream(tmpFile, FileMode.OpenOrCreate, FileAccess.Write);
+        int       data;
+        while ((data = fsr.ReadByte()) != -1) fsw.WriteByte((byte)data);
+        return true;
     }
 
     private void Dispose(bool disposing)
@@ -26,6 +38,37 @@ public sealed class Main : Tool<Option>, IDisposable
         _disposed = true;
     }
 
+    private async ValueTask FileHandle(string file, CancellationToken _)
+    {
+        _step2Bar.Tick();
+        ShowMessage(1, 0, 0);
+
+        var  tmpFile = $"{file}.tmp";
+        bool isReplaced;
+        await using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+            if (Opt.ReadOnly) { //测试，只读模式
+                ShowMessage(0, 1, 0);
+                return;
+            }
+
+            if (fsr is null) {
+                ShowMessage(0, 0, 1);
+                return;
+            }
+
+
+            isReplaced = CreateTempFile(fsr, tmpFile);
+        }
+
+        if (isReplaced) {
+            MoveFile(tmpFile, file);
+            ShowMessage(0, 1, 0);
+        }
+        else {
+            ShowMessage(0, 0, 1);
+        }
+    }
+
 
     private void ShowMessage(int procedCnt, int replaceCnt, int breakCnt)
     {
@@ -33,7 +76,7 @@ public sealed class Main : Tool<Option>, IDisposable
             _procedCnt        += procedCnt;
             _trimCnt          += replaceCnt;
             _breakCnt         += breakCnt;
-            _step2Bar.Message =  string.Format(Strings.ShowMessageTemp, _procedCnt, _totalCnt, _trimCnt, _breakCnt);
+            _step2Bar.Message =  string.Format(Str.ShowMessageTemp, _procedCnt, _totalCnt, _trimCnt, _breakCnt);
         }
     }
 
@@ -44,60 +87,24 @@ public sealed class Main : Tool<Option>, IDisposable
     }
 
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public override void Run()
+    public override async Task Run()
     {
         if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Strings.PathNotFound, Opt.Path));
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
 
 
-        var       utf8Bom  = new byte[] { 0xef, 0xbb, 0xbf };
-        using var step1Bar = new IndeterminateProgressBar(Strings.SearchingFile, DefaultProgressBarOptions);
+        using var step1Bar = new IndeterminateProgressBar(Str.SearchingFile, DefaultProgressBarOptions);
 
 
         var fileList = EnumerateFiles(Opt.Path, Opt.Filter);
         _totalCnt = fileList.Count();
 
-        step1Bar.Message = string.Format(Strings.SearchingFileOK, _totalCnt);
+        step1Bar.Message = string.Format(Str.SearchingFileOK, _totalCnt);
         step1Bar.Finished();
         if (_totalCnt == 0) return;
 
         _step2Bar = step1Bar.Spawn(_totalCnt, string.Empty, DefaultProgressBarOptions);
 
-        Parallel.ForEach(fileList, file => {
-            _step2Bar.Tick();
-            ShowMessage(1, 0, 0);
-
-            var tmpFile    = $"{file}.tmp";
-            var isReplaced = false;
-            using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                if (Opt.ReadOnly) { //测试，只读模式
-                    ShowMessage(0, 1, 0);
-                    return;
-                }
-
-                if (fsr is null) {
-                    ShowMessage(0, 0, 1);
-                    return;
-                }
-
-
-                Span<byte> buffer  = stackalloc byte[utf8Bom.Length];
-                var        readLen = fsr.Read(buffer);
-                if (readLen == utf8Bom.Length && buffer.SequenceEqual(utf8Bom)) {
-                    using var fsw = OpenFileStream(tmpFile, FileMode.OpenOrCreate, FileAccess.Write);
-                    int       data;
-                    while ((data = fsr.ReadByte()) != -1) fsw.WriteByte((byte)data);
-                    isReplaced = true;
-                }
-            }
-
-            if (isReplaced) {
-                MoveFile(tmpFile, file);
-                ShowMessage(0, 1, 0);
-            }
-            else {
-                ShowMessage(0, 0, 1);
-            }
-        });
+        await Parallel.ForEachAsync(fileList, FileHandle);
     }
 }
