@@ -122,4 +122,7 @@
     <data name="LocalClockOffset" xml:space="preserve">
         <value>Local clock offset</value>
     </data>
+    <data name="ServerTime" xml:space="preserve">
+        <value>NTP 标准网络时钟: {0}</value>
+    </data>
 </root>

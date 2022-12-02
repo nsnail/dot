@@ -1,7 +1,6 @@
 <wpf:ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:s="clr-namespace:System;assembly=mscorlib"
-                        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xml:space="preserve">
+                        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xml:space="preserve">
     <s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns"&gt;
     &lt;TypePattern&gt;
@@ -11,6 +10,7 @@
                     &lt;Kind.Order&gt;
                         &lt;DeclarationKind&gt;Interface&lt;/DeclarationKind&gt;
                         &lt;DeclarationKind&gt;Class&lt;/DeclarationKind&gt;
+                        &lt;DeclarationKind&gt;Record&lt;/DeclarationKind&gt;
                         &lt;DeclarationKind&gt;Enum&lt;/DeclarationKind&gt;
                         &lt;DeclarationKind&gt;Struct&lt;/DeclarationKind&gt;
                         &lt;DeclarationKind&gt;Delegate&lt;/DeclarationKind&gt;

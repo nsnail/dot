@@ -276,6 +276,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NTP 标准网络时钟: {0}.
+        /// </summary>
+        public static string ServerTime {
+            get {
+                return ResourceManager.GetString("ServerTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 已读取：{0}/{1}，处理：{2}，跳过：{3}.
         /// </summary>
         public static string ShowMessageTemp {
