@@ -60,6 +60,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 单击鼠标左键复制颜色和坐标到剪贴板.
+        /// </summary>
+        public static string ClickCopyColor {
+            get {
+                return ResourceManager.GetString("ClickCopyColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 转换换行符为LF.
         /// </summary>
         public static string ConvertEndOfLineToLF {
@@ -101,15 +110,6 @@ namespace Dot.Lang {
         public static string GuidTool {
             get {
                 return ResourceManager.GetString("GuidTool", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 文本编码工具.
-        /// </summary>
-        public static string HelpForText {
-            get {
-                return ResourceManager.GetString("HelpForText", resourceCulture);
             }
         }
         
@@ -249,6 +249,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 屏幕坐标颜色选取工具.
+        /// </summary>
+        public static string ScreenPixelTool {
+            get {
+                return ResourceManager.GetString("ScreenPixelTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 查找文件....
         /// </summary>
         public static string SearchingFile {
@@ -312,11 +321,29 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 文本编码工具.
+        /// </summary>
+        public static string TextTool {
+            get {
+                return ResourceManager.GetString("TextTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 连接NTP服务器超时时间 (毫秒).
         /// </summary>
         public static string TimeoutMillSecs {
             get {
                 return ResourceManager.GetString("TimeoutMillSecs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 时间同步工具.
+        /// </summary>
+        public static string TimeTool {
+            get {
+                return ResourceManager.GetString("TimeTool", resourceCulture);
             }
         }
         

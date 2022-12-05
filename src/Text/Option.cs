@@ -1,6 +1,6 @@
 namespace Dot.Text;
 
-[Verb("text", HelpText = nameof(Str.HelpForText), ResourceType = typeof(Str))]
+[Verb("text", HelpText = nameof(Str.TextTool), ResourceType = typeof(Str))]
 public class Option : IOption
 {
     [Value(0, HelpText = nameof(Str.TextTobeProcessed), ResourceType = typeof(Str))]

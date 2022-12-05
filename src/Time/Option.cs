@@ -1,6 +1,6 @@
 namespace Dot.Time;
 
-[Verb("time", HelpText = nameof(Str.HelpForText), ResourceType = typeof(Str))]
+[Verb("time", HelpText = nameof(Str.TimeTool), ResourceType = typeof(Str))]
 public class Option : IOption
 {
     [Option('s', "sync", HelpText = nameof(Str.SyncToLocalTime), Default = false, ResourceType = typeof(Str))]
