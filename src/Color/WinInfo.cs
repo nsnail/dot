@@ -12,21 +12,22 @@ public class WinInfo : Form
 
     public WinInfo()
     {
-        FormBorderStyle              = FormBorderStyle.None;
-        TopMost                      = true;
-        MinimizeBox                  = false;
-        MaximizeBox                  = false;
-        Size                         = new Size(_WINDOW_SIZE, _WINDOW_SIZE);
-        StartPosition                = FormStartPosition.Manual;
-        Location                     = new Point(0, 0);
-        _pbox                        = new PictureBox();
-        _pbox.Location               = new Point(0, 0);
-        _pbox.Size                   = Size;
-        _pbox.Image                  = new Bitmap(_WINDOW_SIZE, _WINDOW_SIZE);
-        _graphics                    = Graphics.FromImage(_pbox.Image);
-        _graphics.InterpolationMode  = InterpolationMode.NearestNeighbor; //指定最临近插值法，禁止平滑缩放（模糊）
-        _graphics.CompositingQuality = CompositingQuality.HighQuality;
-        _graphics.SmoothingMode      = SmoothingMode.None;
+        FormBorderStyle              =  FormBorderStyle.None;
+        TopMost                      =  true;
+        MinimizeBox                  =  false;
+        MaximizeBox                  =  false;
+        Size                         =  new Size(_WINDOW_SIZE, _WINDOW_SIZE);
+        StartPosition                =  FormStartPosition.Manual;
+        Location                     =  new Point(0, 0);
+        _pbox                        =  new PictureBox();
+        _pbox.Location               =  new Point(0, 0);
+        _pbox.Size                   =  Size;
+        _pbox.Image                  =  new Bitmap(_WINDOW_SIZE, _WINDOW_SIZE);
+        _graphics                    =  Graphics.FromImage(_pbox.Image);
+        _graphics.InterpolationMode  =  InterpolationMode.NearestNeighbor; //指定最临近插值法，禁止平滑缩放（模糊）
+        _graphics.CompositingQuality =  CompositingQuality.HighQuality;
+        _graphics.SmoothingMode      =  SmoothingMode.None;
+        _pbox.MouseEnter             += PboxOnMouseEnter;
         Controls.Add(_pbox);
     }
 
@@ -34,6 +35,12 @@ public class WinInfo : Form
     ~WinInfo()
     {
         Dispose(false);
+    }
+
+    private void PboxOnMouseEnter(object sender, EventArgs e)
+    {
+        // 信息窗口避开鼠标指针指向区域
+        Location = new Point(Location.X, Location.Y == 0 ? Screen.PrimaryScreen!.Bounds.Height - _WINDOW_SIZE : 0);
     }
 
     protected override void Dispose(bool disposing)
