@@ -39,7 +39,13 @@
     <data name="ShowMessageTemp" xml:space="preserve">
         <value>已读取：{0}/{1}，处理：{2}，跳过：{3}</value>
     </data>
-    <data name="HelpForText" xml:space="preserve">
+    <data name="TimeTool" xml:space="preserve">
+        <value>时间同步工具</value>
+    </data>
+    <data name="ScreenPixelTool" xml:space="preserve">
+        <value>屏幕坐标颜色选取工具</value>
+    </data>
+    <data name="TextTool" xml:space="preserve">
         <value>文本编码工具</value>
     </data>
     <data name="TextTobeProcessed" xml:space="preserve">
@@ -121,5 +127,8 @@
     </data>
     <data name="LocalClockOffset" xml:space="preserve">
         <value>Local clock offset</value>
+    </data>
+    <data name="ClickCopyColor" xml:space="preserve">
+        <value>单击鼠标左键复制颜色和坐标到剪贴板</value>
     </data>
 </root>

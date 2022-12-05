@@ -31,7 +31,7 @@ public sealed class Main : Tool<Option>, IDisposable
     {
         _step2Bar.Tick();
         ShowMessage(1, 0, 0);
-        var spacesCnt = 0;
+        int spacesCnt;
 
         await using var fsrw = OpenFileStream(file, FileMode.Open, FileAccess.ReadWrite);
 
