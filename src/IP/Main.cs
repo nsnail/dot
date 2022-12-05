@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace Dot.IP;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 
 {
     public Main(Option opt) : base(opt) { }

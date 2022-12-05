@@ -1,6 +1,6 @@
 namespace Dot;
 
-public abstract class Tool<TOption> : ITool
+public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
 {
     protected readonly ProgressBarOptions //
         DefaultProgressBarOptions = new() {
@@ -15,7 +15,7 @@ public abstract class Tool<TOption> : ITool
 
     protected TOption Opt { get; }
 
-    protected Tool(TOption opt)
+    protected ToolBase(TOption opt)
     {
         Opt = opt;
     }

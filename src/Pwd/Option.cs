@@ -1,7 +1,7 @@
 namespace Dot.Pwd;
 
 [Verb("pwd", HelpText = nameof(Str.RandomPasswordGenerator), ResourceType = typeof(Str))]
-public class Option : IOption
+public class Option : OptionBase
 {
     [Flags]
     public enum GenerateTypes

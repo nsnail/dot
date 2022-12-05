@@ -60,6 +60,9 @@
     <data name="FileSearchPattern" xml:space="preserve">
         <value>文件通配符</value>
     </data>
+    <data name="KeepSession" xml:space="preserve">
+        <value>执行命令后保留会话</value>
+    </data>
     <data name="TimeoutMillSecs" xml:space="preserve">
         <value>连接NTP服务器超时时间 (毫秒)</value>
     </data>
@@ -120,6 +123,9 @@
     </data>
     <data name="LocalTimeOffset" xml:space="preserve">
         <value>{0}, 本机时钟偏移: {1} ms</value>
+    </data>
+    <data name="NtpServerTime" xml:space="preserve">
+        <value>NTP 服务器标准时钟: {0}</value>
     </data>
     <data name="LocalTimeSyncDone" xml:space="preserve">
         <value>本机时间已同步</value>

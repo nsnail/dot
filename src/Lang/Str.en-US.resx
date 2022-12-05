@@ -131,4 +131,10 @@
     <data name="Ip" xml:space="preserve">
         <value>IP tools</value>
     </data>
+    <data name="KeepSession" xml:space="preserve">
+        <value>Keep the session after executing the command</value>
+    </data>
+    <data name="NtpServerTime" xml:space="preserve">
+        <value>NTP server standard clock: {0}</value>
+    </data>
 </root>

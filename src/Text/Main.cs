@@ -5,7 +5,7 @@ using TextCopy;
 
 namespace Dot.Text;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 {
     private ref struct Output
     {
@@ -108,7 +108,5 @@ html-decode:       {o.HtmlDecode}
 
 
         ParseAndShow(Opt.Text);
-        Console.Write(Str.PressAnyKey);
-        Console.ReadKey();
     }
 }

@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Dot.ToLf;
 
-public sealed class Main : Tool<Option>, IDisposable
+public sealed class Main : ToolBase<Option>, IDisposable
 {
     private                 int              _breakCnt;
     private                 bool             _disposed;

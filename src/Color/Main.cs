@@ -1,6 +1,6 @@
 namespace Dot.Color;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 
 {
     public Main(Option opt) : base(opt) { }

@@ -132,6 +132,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 执行命令后保留会话.
+        /// </summary>
+        public static string KeepSession {
+            get {
+                return ResourceManager.GetString("KeepSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Local clock offset.
         /// </summary>
         public static string LocalClockOffset {
@@ -191,6 +200,15 @@ namespace Dot.Lang {
         public static string NtpServerCount {
             get {
                 return ResourceManager.GetString("NtpServerCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NTP 服务器标准时钟: {0}.
+        /// </summary>
+        public static string NtpServerTime {
+            get {
+                return ResourceManager.GetString("NtpServerTime", resourceCulture);
             }
         }
         
