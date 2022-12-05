@@ -123,6 +123,15 @@ namespace Dot.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IP工具.
+        /// </summary>
+        public static string Ip {
+            get {
+                return ResourceManager.GetString("Ip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Local clock offset.
         /// </summary>
         public static string LocalClockOffset {
@@ -200,6 +209,15 @@ namespace Dot.Lang {
         public static string PressAnyKey {
             get {
                 return ResourceManager.GetString("PressAnyKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public network ip... .
+        /// </summary>
+        public static string PublicIP {
+            get {
+                return ResourceManager.GetString("PublicIP", resourceCulture);
             }
         }
         
@@ -285,7 +303,7 @@ namespace Dot.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NTP 标准网络时钟: {0}.
+        ///   Looks up a localized string similar to 同步本机时间.
         /// </summary>
         public static string ServerTime {
             get {

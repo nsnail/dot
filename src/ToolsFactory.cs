@@ -15,6 +15,7 @@ public static class ToolsFactory
                  , Guid.Option o    => new Guid.Main(o)
                  , Time.Option o    => new Time.Main(o)
                  , Color.Option o   => new Color.Main(o)
+                 , IP.Option o      => new IP.Main(o)
                  , _                => throw new ArgumentOutOfRangeException(nameof(option))
                };
     }

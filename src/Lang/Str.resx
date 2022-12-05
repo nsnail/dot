@@ -42,6 +42,9 @@
     <data name="TimeTool" xml:space="preserve">
         <value>时间同步工具</value>
     </data>
+    <data name="Ip" xml:space="preserve">
+        <value>IP工具</value>
+    </data>
     <data name="ScreenPixelTool" xml:space="preserve">
         <value>屏幕坐标颜色选取工具</value>
     </data>
@@ -63,7 +66,9 @@
     <data name="SyncToLocalTime" xml:space="preserve">
         <value>同步本机时间</value>
     </data>
-
+    <data name="ServerTime" xml:space="preserve">
+        <value>同步本机时间</value>
+    </data>
     <data name="FolderPath" xml:space="preserve">
         <value>要处理的目录路径</value>
     </data>
@@ -130,5 +135,8 @@
     </data>
     <data name="ClickCopyColor" xml:space="preserve">
         <value>单击鼠标左键复制颜色和坐标到剪贴板</value>
+    </data>
+    <data name="PublicIP" xml:space="preserve">
+        <value>Public network ip... </value>
     </data>
 </root>

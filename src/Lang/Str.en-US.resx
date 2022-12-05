@@ -122,4 +122,13 @@
     <data name="ClickCopyColor" xml:space="preserve">
         <value>Click the left mouse button to copy the colors and coordinates to the clipboard</value>
     </data>
+    <data name="PublicIP" xml:space="preserve">
+        <value>Public network ip: </value>
+    </data>
+    <data name="ServerTime" xml:space="preserve">
+        <value>Synchronize local time</value>
+    </data>
+    <data name="Ip" xml:space="preserve">
+        <value>IP tools</value>
+    </data>
 </root>
