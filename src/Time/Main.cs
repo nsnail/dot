@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -6,6 +7,13 @@ namespace Dot.Time;
 
 public sealed class Main : Tool<Option>
 {
+    private record Server
+    {
+        public int           ConsoleRowIndex;
+        public TimeSpan      Offset;
+        public ServerStatues Status;
+    }
+
     private enum ServerStatues : byte
     {
         Ready
@@ -27,41 +35,76 @@ public sealed class Main : Tool<Option>
         [FieldOffset(0)]  public ushort wYear;
     }
 
-    private const    int    _MAX_DEGREE_OF_PARALLELISM = 10;
-    private const    int    _NTP_PORT                  = 123;
-    private readonly char[] _loading                   = { '-', '\\', '|', '/' };
-    private          int    _procedCnt;
-    private readonly int    _serverCnt;
+    private const           int    _MAX_DEGREE_OF_PARALLELISM = 10;
+    private const           int    _NTP_PORT                  = 123;
+    private const           string _OUTPUT_TEMP               = "{0,-30}         {1,20}    {2,20}";
+    private static readonly object _lockObj                   = new();
+    private                 int    _procedCnt;
+    private readonly        int    _serverCnt;
 
-    private readonly Dictionary<string, Server> _serverDictionary;
+    private readonly string[] _srvAddr = {
+                                             "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn", "cn.pool.ntp.org"
+                                           , "time.pool.aliyun.com", "time1.aliyun.com", "time2.aliyun.com"
+                                           , "time3.aliyun.com", "time4.aliyun.com", "time5.aliyun.com"
+                                           , "time6.aliyun.com", "time7.aliyun.com", "time1.cloud.tencent.com"
+                                           , "time2.cloud.tencent.com", "time3.cloud.tencent.com"
+                                           , "time4.cloud.tencent.com", "time5.cloud.tencent.com", "ntp.sjtu.edu.cn"
+                                           , "ntp.neu.edu.cn", "ntp.bupt.edu.cn", "ntp.shu.edu.cn", "pool.ntp.org"
+                                           , "0.pool.ntp.org", "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"
+                                           , "asia.pool.ntp.org", "time1.google.com", "time2.google.com"
+                                           , "time3.google.com", "time4.google.com", "time.apple.com", "time1.apple.com"
+                                           , "time2.apple.com", "time3.apple.com", "time4.apple.com", "time5.apple.com"
+                                           , "time6.apple.com", "time7.apple.com", "time.windows.com", "time.nist.gov"
+                                           , "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov", "stdtime.gov.hk"
+                                         };
 
-
-    private readonly string[] _serverDomains = {
-                                                   "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn"
-                                                 , "cn.pool.ntp.org", "time.pool.aliyun.com", "time1.aliyun.com"
-                                                 , "time2.aliyun.com", "time3.aliyun.com", "time4.aliyun.com"
-                                                 , "time5.aliyun.com", "time6.aliyun.com", "time7.aliyun.com"
-                                                 , "time1.cloud.tencent.com", "time2.cloud.tencent.com"
-                                                 , "time3.cloud.tencent.com", "time4.cloud.tencent.com"
-                                                 , "time5.cloud.tencent.com", "ntp.sjtu.edu.cn", "ntp.neu.edu.cn"
-                                                 , "ntp.bupt.edu.cn", "ntp.shu.edu.cn", "pool.ntp.org", "0.pool.ntp.org"
-                                                 , "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"
-                                                 , "asia.pool.ntp.org", "time1.google.com", "time2.google.com"
-                                                 , "time3.google.com", "time4.google.com", "time.apple.com"
-                                                 , "time1.apple.com", "time2.apple.com", "time3.apple.com"
-                                                 , "time4.apple.com", "time5.apple.com", "time6.apple.com"
-                                                 , "time7.apple.com", "time.windows.com", "time.nist.gov"
-                                                 , "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov"
-                                                 , "stdtime.gov.hk"
-                                               };
-
-    private int _successCnt;
+    private readonly Dictionary<string, Server> _srvStatus;
+    private          int                        _successCnt;
 
 
     public Main(Option opt) : base(opt)
     {
-        _serverCnt        = _serverDomains.Length;
-        _serverDictionary = _serverDomains.ToDictionary(x => x, _ => new Server { Status = ServerStatues.Ready });
+        _serverCnt = _srvAddr.Length;
+        var i = 0;
+        _srvStatus = _srvAddr.ToDictionary(
+            x => x, _ => new Server { Status = ServerStatues.Ready, ConsoleRowIndex = ++i });
+    }
+
+    private static void ChangeStatus(KeyValuePair<string, Server> server, ServerStatues status
+                                   , TimeSpan                     offset = default)
+    {
+        server.Value.Status = status;
+        server.Value.Offset = offset;
+        DrawTextInConsole(0, server.Value.ConsoleRowIndex
+                     ,       string.Format(_OUTPUT_TEMP, server.Key, server.Value.Status
+                                      , status == ServerStatues.Succeed ? server.Value.Offset : string.Empty));
+    }
+
+    private async Task DrawLoading()
+    {
+        char[] loading      = { '-', '\\', '|', '/' };
+        var    loadingIndex = 0;
+        while (true) {
+            if (Volatile.Read(ref _procedCnt) == _serverCnt) break;
+            await Task.Delay(100);
+            ++loadingIndex;
+            for (var i = 0; i != _serverCnt; ++i)
+                DrawTextInConsole(
+                    34, i + 1
+              ,         _srvStatus[_srvAddr[i]].Status is ServerStatues.Succeed or ServerStatues.Failed
+                        ? " "
+                        : loading[loadingIndex % 4].ToString());
+        }
+
+        Debug.WriteLine(Environment.CurrentManagedThreadId + ":" + DateTime.Now.ToString("O"));
+    }
+
+    private static void DrawTextInConsole(int left, int top, string text)
+    {
+        lock (_lockObj) {
+            Console.SetCursorPosition(left, top);
+            Console.Write(text);
+        }
     }
 
 
@@ -102,30 +145,35 @@ public sealed class Main : Tool<Option>
         }
     }
 
-    private async void Printing()
+    private void PrintTemplate()
     {
-        const string outputTemp = "{0,-30}\t{1}\t{2,20}\t{3,20}";
-        var          rolling    = 0;
-
         Console.Clear();
-        while (true) {
-            await Task.Delay(100);
-            Console.SetCursorPosition(0, 0);
-            var row =                      //
-                _serverDictionary.Select(x //
-                                             => string.Format(outputTemp, x.Key
-                                                            , x.Value.Status == ServerStatues.Connecting
-                                                                  ? _loading[++rolling % 4]
-                                                                  : ' ', x.Value.Status
-                                                            , x.Value.Offset == TimeSpan.Zero
-                                                                  ? string.Empty
-                                                                  : x.Value.Offset));
+        Console.CursorVisible = false;
+        var row =               //
+            _srvStatus.Select(x //
+                                  => string.Format(_OUTPUT_TEMP, x.Key, x.Value.Status
+                                                 , x.Value.Offset == TimeSpan.Zero ? string.Empty : x.Value.Offset));
 
 
-            Console.WriteLine(outputTemp, Str.Server, ' ', Str.Status, Str.LocalClockOffset);
-            Console.WriteLine(string.Join(Environment.NewLine, row));
-            if (_procedCnt == _serverCnt) break;
+        Console.WriteLine(_OUTPUT_TEMP, Str.Server, Str.Status, Str.LocalClockOffset);
+        Console.WriteLine(string.Join(Environment.NewLine, row));
+    }
+
+    private ValueTask ServerHandle(KeyValuePair<string, Server> server)
+    {
+        ChangeStatus(server, ServerStatues.Connecting);
+        var offset = GetNtpOffset(server.Key);
+        Interlocked.Increment(ref _procedCnt);
+
+        if (offset == TimeSpan.Zero) {
+            ChangeStatus(server, ServerStatues.Failed);
         }
+        else {
+            Interlocked.Increment(ref _successCnt);
+            ChangeStatus(server, ServerStatues.Succeed, offset);
+        }
+
+        return ValueTask.CompletedTask;
     }
 
 
@@ -147,48 +195,42 @@ public sealed class Main : Tool<Option>
         SetLocalTime(timeToSet);
     }
 
-
     [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
     public override async Task Run()
     {
-        var tPrinting = Task.Run(Printing);
+        PrintTemplate();
+        var tLoading = DrawLoading();
 
-        await Parallel.ForEachAsync(_serverDictionary
+
+        await Parallel.ForEachAsync(_srvStatus
                                   , new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
-                                  , (server, _) => {
-                                        server.Value.Status = ServerStatues.Connecting;
-                                        var offset = GetNtpOffset(server.Key);
+                                  , (server, _) => ServerHandle(server));
 
-                                        Interlocked.Increment(ref _procedCnt);
+        await tLoading;
 
-                                        if (offset == TimeSpan.Zero) {
-                                            server.Value.Status = ServerStatues.Failed;
-                                        }
-                                        else {
-                                            server.Value.Status = ServerStatues.Succeed;
-                                            Interlocked.Increment(ref _successCnt);
-                                            server.Value.Offset = offset;
-                                        }
 
-                                        return ValueTask.CompletedTask;
-                                    });
-
-        tPrinting.Wait();
-        var avgOffset = TimeSpan.FromTicks((long)_serverDictionary //
+        var avgOffset = TimeSpan.FromTicks((long)_srvStatus //
                                                  .Where(x => x.Value.Status == ServerStatues.Succeed)
                                                  .Average(x => x.Value.Offset.Ticks));
 
-
+        Console.SetCursorPosition(0, _serverCnt + 1);
         Console.WriteLine(Str.NtpReceiveDone, _successCnt, _serverCnt, avgOffset.TotalMilliseconds);
-        if (!Opt.Sync) return;
-        Console.WriteLine();
+
+        if (!Opt.Sync) {
+            var _ = Task.Run(async () => {
+                while (true) {
+                    await Task.Delay(100);
+                    Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
+                    Console.Write(Str.ServerTime, (DateTime.Now - avgOffset).ToString("O"));
+                    Console.Write(@", {0}",       Str.PressAnyKey);
+                }
+                // ReSharper disable once FunctionNeverReturns
+            });
+            Console.ReadKey();
+            return;
+        }
+
         SetSysteTime(DateTime.Now - avgOffset);
         Console.WriteLine(Str.LocalTimeSyncDone);
-    }
-
-    private record Server
-    {
-        public TimeSpan      Offset;
-        public ServerStatues Status;
     }
 }
