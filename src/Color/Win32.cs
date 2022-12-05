@@ -11,8 +11,14 @@ public static class Win32
     private const string _USER32_DLL   = "user32.dll";
 
 
+    public const int SW_HIDE = 0;
+
+
     [DllImport(_USER32_DLL)]
     public static extern nint CallNextHookEx(nint hhk, int nCode, nint wParam, nint lParam);
+
+    [DllImport(_KERNEL32_DLL)]
+    public static extern nint GetConsoleWindow();
 
 
     [DllImport(_USER32_DLL)]
@@ -33,6 +39,9 @@ public static class Win32
 
     [DllImport(_USER32_DLL)]
     public static extern nint SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, nint hMod, uint dwThreadId);
+
+    [DllImport(_USER32_DLL)]
+    public static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
     [DllImport(_USER32_DLL)]
     [return: MarshalAs(UnmanagedType.Bool)]
