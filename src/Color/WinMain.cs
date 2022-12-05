@@ -6,15 +6,18 @@ public class WinMain : Form
 {
     private readonly Bitmap  _bmp;
     private          bool    _disposed;
-    private readonly WinInfo _winInfo = new();
+    private readonly WinInfo _winInfo = new(); //小图窗口
 
     public WinMain()
     {
+        // 隐藏控制台窗口，避免捕获到截屏
+        Win32.ShowWindow(Win32.GetConsoleWindow(), Win32.SW_HIDE);
+
         FormBorderStyle = FormBorderStyle.None;
         Size            = Screen.PrimaryScreen!.Bounds.Size;
         StartPosition   = FormStartPosition.Manual;
         Location        = new Point(0, 0);
-        Opacity         = 0.01d;
+        Opacity         = 0.01d; //主窗体加载截图过程设置为透明避免闪烁
         _bmp            = new Bitmap(Size.Width, Size.Height);
         using var g = Graphics.FromImage(_bmp);
         g.CopyFromScreen(0, 0, 0, 0, Size);
@@ -57,6 +60,7 @@ public class WinMain : Form
 
     protected override void OnMouseMove(MouseEventArgs e)
     {
+        // 移动鼠标时更新小图窗口
         _winInfo.UpdateImage(_bmp, e.X, e.Y);
     }
 

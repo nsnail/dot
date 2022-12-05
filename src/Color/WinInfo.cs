@@ -4,8 +4,8 @@ namespace Dot.Color;
 
 public class WinInfo : Form
 {
-    private const    int        _WINDOW_SIZE = 480;
-    private const    int        _ZOOM_RATE   = 16;
+    private const    int        _WINDOW_SIZE = 480; //窗口大小
+    private const    int        _ZOOM_RATE   = 16;  //缩放倍率
     private          bool       _disposed;
     private readonly Graphics   _graphics;
     private readonly PictureBox _pbox;
@@ -24,7 +24,7 @@ public class WinInfo : Form
         _pbox.Size                   = Size;
         _pbox.Image                  = new Bitmap(_WINDOW_SIZE, _WINDOW_SIZE);
         _graphics                    = Graphics.FromImage(_pbox.Image);
-        _graphics.InterpolationMode  = InterpolationMode.NearestNeighbor;
+        _graphics.InterpolationMode  = InterpolationMode.NearestNeighbor; //指定最临近插值法，禁止平滑缩放（模糊）
         _graphics.CompositingQuality = CompositingQuality.HighQuality;
         _graphics.SmoothingMode      = SmoothingMode.None;
         Controls.Add(_pbox);
@@ -52,19 +52,25 @@ public class WinInfo : Form
 
     public void UpdateImage(Bitmap img, int x, int y)
     {
+        // 计算复制小图的区域
         var copySize = new Size(_WINDOW_SIZE / _ZOOM_RATE, _WINDOW_SIZE / _ZOOM_RATE);
         _graphics.DrawImage(img, new Rectangle(0, 0, _WINDOW_SIZE, _WINDOW_SIZE) //
-                          , x - copySize.Width  / 2                              //
-                          , y - copySize.Height / 2                              //
+                          , x - copySize.Width  / 2                              // 左移x，使光标位置居中
+                          , y - copySize.Height / 2                              // 上移y，使光标位置居中
                           , copySize.Width, copySize.Height, GraphicsUnit.Pixel);
-        using var pen = new Pen(System.Drawing.Color.Aqua);
+        using var pen = new Pen(System.Drawing.Color.Aqua);            //绘制准星
         _graphics.DrawRectangle(pen, _WINDOW_SIZE / 2 - _ZOOM_RATE / 2 //
                               , _WINDOW_SIZE      / 2 - _ZOOM_RATE / 2 //
                               , _ZOOM_RATE, _ZOOM_RATE);
+
+        // 取鼠标位置颜色
         var posColor = img.GetPixel(x, y);
+        // 绘制底部文字信息
         _graphics.FillRectangle(Brushes.Black, 0, _WINDOW_SIZE - 30, _WINDOW_SIZE, 30);
         _graphics.DrawString($"{Str.ClickCopyColor}  X: {x} Y: {y} RGB({posColor.R},{posColor.G},{posColor.B})"
-                           , new Font(FontFamily.GenericSerif, 10), Brushes.White, 0, _WINDOW_SIZE - 20);
+                           , new Font(FontFamily.GenericSerif, 10) //
+                           , Brushes.White, 0, _WINDOW_SIZE - 20);
+        // 触发重绘
         _pbox.Refresh();
     }
 }
