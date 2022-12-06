@@ -18,40 +18,43 @@ public class Main : ToolBase<Option>
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
         if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
+            throw new ArgumentException(nameof(Opt.Path) //
+                                      , string.Format(Str.PathNotFound, Opt.Path));
     }
 
 
     private async ValueTask DirHandle(string dir, CancellationToken cancelToken)
     {
-        var index    = _repoPathList.FindIndex(x => x == dir);
-        var tAnimate = LoadingAnimate(_POST_Y_LOADING, _cursorPosBackup.y + index, out var cts);
+        var row      = _repoPathList.FindIndex(x => x == dir); // 行号
+        var tAnimate = LoadingAnimate(_POST_Y_LOADING, _cursorPosBackup.y + row, out var cts);
 
+        // 打印 git command rsp
         void ExecRspReceived(object sender, DataReceivedEventArgs e)
         {
             if (e.Data is null) return;
             var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
-            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + index, new string(' ', Console.WindowWidth - _POS_Y_MSG));
-            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + index, msg);
+            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + row, new string(' ', Console.WindowWidth - _POS_Y_MSG));
+            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + row, msg);
         }
 
-
-        var startInfo = new ProcessStartInfo {
-                                                 CreateNoWindow         = true
-                                               , WorkingDirectory       = dir
-                                               , FileName               = "git"
-                                               , Arguments              = Opt.Args
-                                               , UseShellExecute        = false
-                                               , RedirectStandardOutput = true
-                                               , RedirectStandardError  = true
-                                             };
-        using var p = Process.Start(startInfo);
-        p!.OutputDataReceived += ExecRspReceived;
-        p.ErrorDataReceived   += ExecRspReceived;
-        p.BeginOutputReadLine();
-        p.BeginErrorReadLine();
-        await p.WaitForExitAsync();
-
+        // 启动git进程
+        {
+            var startInfo = new ProcessStartInfo {
+                                                     CreateNoWindow         = true
+                                                   , WorkingDirectory       = dir
+                                                   , FileName               = "git"
+                                                   , Arguments              = Opt.Args
+                                                   , UseShellExecute        = false
+                                                   , RedirectStandardOutput = true
+                                                   , RedirectStandardError  = true
+                                                 };
+            using var p = Process.Start(startInfo);
+            p!.OutputDataReceived += ExecRspReceived;
+            p.ErrorDataReceived   += ExecRspReceived;
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            await p.WaitForExitAsync();
+        }
 
         cts.Cancel();
         await tAnimate;
@@ -59,7 +62,6 @@ public class Main : ToolBase<Option>
     }
 
     private void StashCurorPos()
-
     {
         _cursorPosBackup = Console.GetCursorPosition();
     }
@@ -67,24 +69,25 @@ public class Main : ToolBase<Option>
 
     public override async Task Run()
     {
-        Console.Write(Str.FindGitReps, Opt.Path);
-        StashCurorPos();
-
-        var tAnimate = LoadingAnimate(_cursorPosBackup.x, _cursorPosBackup.y, out var cts);
-        _repoPathList = Directory.GetDirectories(Opt.Path, ".git", SearchOption.AllDirectories)
-                                 .Select(x => Directory.GetParent(x)!.FullName)
-                                 .ToList();
-
-        cts.Cancel();
-        await tAnimate;
-
-        cts.Dispose();
-
-        Console.WriteLine(Str.Ok);
-        StashCurorPos();
-
-
+        // 查找git仓库目录
         {
+            Console.Write(Str.FindGitReps, Opt.Path);
+            StashCurorPos();
+
+            var tAnimate = LoadingAnimate(_cursorPosBackup.x, _cursorPosBackup.y, out var cts);
+            _repoPathList = Directory.GetDirectories(Opt.Path, ".git", SearchOption.AllDirectories)
+                                     .Select(x => Directory.GetParent(x)!.FullName)
+                                     .ToList();
+            cts.Cancel();
+            await tAnimate;
+            cts.Dispose();
+        }
+
+        // 打印git仓库目录
+        {
+            Console.WriteLine(Str.Ok);
+            StashCurorPos();
+
             var i = 0;
             Console.WriteLine( //
                 string.Join(Environment.NewLine
@@ -94,9 +97,8 @@ public class Main : ToolBase<Option>
             );
         }
 
-
+        // 并行执行git命令
         await Parallel.ForEachAsync(_repoPathList, DirHandle);
-
         Console.SetCursorPosition(_cursorPosBackup.x, _cursorPosBackup.y + _repoPathList.Count);
     }
 }
