@@ -1,7 +1,7 @@
 <#@ template language="C#" #>
-<#@ import namespace="System.Xml" #>
 <#@ assembly name="System.Xml" #>
 <#@ output encoding="utf-8" extension="Designer.cs" #>
+<#@ import namespace="System.Xml" #>
 
 
 //------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ namespace Dot.Lang {
     var xml = new XmlDocument();
     xml.Load("Str.resx");
     foreach (XmlNode data in xml.SelectNodes("//root/data")) {
-        #>
+#>
         /// <summary>
         ///   <#= data.SelectSingleNode("value").InnerText #>
         /// </summary>
