@@ -75,7 +75,14 @@ public class Main : ToolBase<Option>
             StashCurorPos();
 
             var tAnimate = LoadingAnimate(_cursorPosBackup.x, _cursorPosBackup.y, out var cts);
-            _repoPathList = Directory.GetDirectories(Opt.Path, ".git", SearchOption.AllDirectories)
+            _repoPathList = Directory.GetDirectories(Opt.Path, ".git"       //
+                                                   , new EnumerationOptions //
+                                                     {
+                                                         MaxRecursionDepth     = Opt.MaxRecursionDepth
+                                                       , RecurseSubdirectories = true
+                                                       , IgnoreInaccessible    = true
+                                                       , AttributesToSkip      = FileAttributes.ReparsePoint
+                                                     })
                                      .Select(x => Directory.GetParent(x)!.FullName)
                                      .ToList();
             cts.Cancel();

@@ -10,6 +10,10 @@ public class Option : OptionBase
           , ResourceType = typeof(Str))]
     public string GitOutputEncoding { get; set; }
 
+    [Option('d', "max-recursion-depth", HelpText = nameof(Str.MaxRecursionDepth), Default = int.MaxValue
+          , ResourceType = typeof(Str))]
+    public int MaxRecursionDepth { get; set; }
+
     [Value(0, HelpText = nameof(Str.FolderPath), Default = ".", ResourceType = typeof(Str))]
     public string Path { get; set; }
 }

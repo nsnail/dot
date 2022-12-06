@@ -152,4 +152,7 @@
     <data name="GitOutputEncoding" xml:space="preserve">
         <value>Git output encoding</value>
     </data>
+    <data name="MaxRecursionDepth" xml:space="preserve">
+        <value>Directory search depth</value>
+    </data>
 </root>
