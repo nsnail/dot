@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
                 id="root" xmlns="">
@@ -148,5 +148,8 @@
     </data>
     <data name="FindGitReps" xml:space="preserve">
         <value>Find all git repository directories under "{0}"...</value>
+    </data>
+    <data name="GitOutputEncoding" xml:space="preserve">
+        <value>Git output encoding</value>
     </data>
 </root>

@@ -6,43 +6,48 @@ namespace Dot.Git;
 
 public class Main : ToolBase<Option>
 {
-    private const int            _POS_Y_MSG      = 74;
-    private const int            _POST_Y_LOADING = 70;
-    private const int            _REP_MAX_LENGTH = 32;
-    private       (int x, int y) _cursorInitPos;
-    private       List<string>   _dirList;
-    private       Encoding       _encGbk;
+    private const    int            _POS_Y_MSG             = 74; //git command rsp 显示的位置 y
+    private const    int            _POST_Y_LOADING        = 70; //loading 动画显示的位置 y
+    private const    int            _REP_PATH_LENGTH_LIMIT = 32; //仓库路径长度显示截断阈值
+    private          (int x, int y) _cursorPosBackup;            //光标位置备份
+    private readonly Encoding       _gitOutputEnc;               //git command rsp 编码
+    private          List<string>   _repoPathList;               //仓库目录列表
 
 
-    public Main(Option opt) : base(opt) { }
+    public Main(Option opt) : base(opt)
+    {
+        _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
+    }
 
 
     private async ValueTask DirHandle(string dir, CancellationToken cancelToken)
     {
-        var index    = _dirList.FindIndex(x => x == dir);
-        var tAnimate = LoadingAnimate(_POST_Y_LOADING, _cursorInitPos.y + index, out var cts);
+        var index    = _repoPathList.FindIndex(x => x == dir);
+        var tAnimate = LoadingAnimate(_POST_Y_LOADING, _cursorPosBackup.y + index, out var cts);
 
-        void Write(object sender, DataReceivedEventArgs e)
+        void ExecRspReceived(object sender, DataReceivedEventArgs e)
         {
             if (e.Data is null) return;
-            var msg = Encoding.UTF8.GetString(_encGbk.GetBytes(e.Data));
-            ConcurrentWrite(_POS_Y_MSG, _cursorInitPos.y + index, new string(' ', Console.WindowWidth - _POS_Y_MSG));
-            ConcurrentWrite(_POS_Y_MSG, _cursorInitPos.y + index, msg);
+            var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
+            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + index, new string(' ', Console.WindowWidth - _POS_Y_MSG));
+            ConcurrentWrite(_POS_Y_MSG, _cursorPosBackup.y + index, msg);
         }
 
 
-        var gitStartInfo = new ProcessStartInfo {
-                                                    CreateNoWindow         = true
-                                                  , WorkingDirectory       = dir
-                                                  , FileName               = "git"
-                                                  , Arguments              = Opt.Args
-                                                  , UseShellExecute        = false
-                                                  , RedirectStandardOutput = true
-                                                  , RedirectStandardError  = true
-                                                };
-        using var p = Process.Start(gitStartInfo);
-        p.OutputDataReceived += Write;
-        p.ErrorDataReceived  += Write;
+        var startInfo = new ProcessStartInfo {
+                                                 CreateNoWindow         = true
+                                               , WorkingDirectory       = dir
+                                               , FileName               = "git"
+                                               , Arguments              = Opt.Args
+                                               , UseShellExecute        = false
+                                               , RedirectStandardOutput = true
+                                               , RedirectStandardError  = true
+                                             };
+        using var p = Process.Start(startInfo);
+        p!.OutputDataReceived += ExecRspReceived;
+        p.ErrorDataReceived   += ExecRspReceived;
         p.BeginOutputReadLine();
         p.BeginErrorReadLine();
         await p.WaitForExitAsync();
@@ -53,37 +58,45 @@ public class Main : ToolBase<Option>
         cts.Dispose();
     }
 
+    private void StashCurorPos()
+
+    {
+        _cursorPosBackup = Console.GetCursorPosition();
+    }
+
 
     public override async Task Run()
     {
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
-
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        _encGbk = Encoding.GetEncoding("gbk");
-
         Console.Write(Str.FindGitReps, Opt.Path);
-        _cursorInitPos = Console.GetCursorPosition();
-        var tAnimate = LoadingAnimate(_cursorInitPos.x, _cursorInitPos.y, out var cts);
+        StashCurorPos();
 
-        _dirList = Directory.GetDirectories(Opt.Path, ".git", SearchOption.AllDirectories)
-                            .Select(x => Directory.GetParent(x)!.FullName)
-                            .ToList();
+        var tAnimate = LoadingAnimate(_cursorPosBackup.x, _cursorPosBackup.y, out var cts);
+        _repoPathList = Directory.GetDirectories(Opt.Path, ".git", SearchOption.AllDirectories)
+                                 .Select(x => Directory.GetParent(x)!.FullName)
+                                 .ToList();
+
         cts.Cancel();
         await tAnimate;
 
         cts.Dispose();
 
         Console.WriteLine(Str.Ok);
-        _cursorInitPos = Console.GetCursorPosition();
-        var i = 0;
-        Console.WriteLine(string.Join(Environment.NewLine
-                                    , _dirList.Select(
-                                          x => $"{++i}: {new DirectoryInfo(x).Name.Sub(0, _REP_MAX_LENGTH)}")));
+        StashCurorPos();
 
 
-        await Parallel.ForEachAsync(_dirList, DirHandle);
+        {
+            var i = 0;
+            Console.WriteLine( //
+                string.Join(Environment.NewLine
+                          , _repoPathList.Select(
+                                x => $"{++i}: {new DirectoryInfo(x).Name.Sub(0, _REP_PATH_LENGTH_LIMIT)}"))
+                //
+            );
+        }
 
-        Console.SetCursorPosition(_cursorInitPos.x, _cursorInitPos.y + _dirList.Count);
+
+        await Parallel.ForEachAsync(_repoPathList, DirHandle);
+
+        Console.SetCursorPosition(_cursorPosBackup.x, _cursorPosBackup.y + _repoPathList.Count);
     }
 }

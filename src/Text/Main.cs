@@ -66,8 +66,6 @@ public sealed class Main : ToolBase<Option>
 
     private static void ParseAndShow(string text)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
         var ansi                = BuildOutput(text, Encoding.GetEncoding("gbk"));
         var utf8                = BuildOutput(text, Encoding.UTF8);
         var unicodeLittleEndian = BuildOutput(text, Encoding.Unicode);

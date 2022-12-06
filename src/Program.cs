@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using Dot;
 
 Type[] LoadVerbs()
@@ -24,8 +25,8 @@ async Task Run(object args)
 }
 
 
-//Entry Point
-
+// Entry Point
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 var types = LoadVerbs();
 
 try {

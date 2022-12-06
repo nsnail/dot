@@ -2,7 +2,8 @@ namespace Dot;
 
 public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
 {
-    private static readonly object _lockObj = new();
+    // ReSharper disable once StaticMemberInGenericType
+    private static SpinLock _spinlock;
 
     protected readonly ProgressBarOptions //
         DefaultProgressBarOptions = new() {
@@ -25,9 +26,14 @@ public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
 
     protected static void ConcurrentWrite(int x, int y, string text)
     {
-        lock (_lockObj) {
+        var lockTaken = false;
+        try {
+            _spinlock.Enter(ref lockTaken);
             Console.SetCursorPosition(x, y);
             Console.Write(text);
+        }
+        finally {
+            if (lockTaken) _spinlock.Exit(false);
         }
     }
 
