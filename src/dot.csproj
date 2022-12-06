@@ -50,6 +50,7 @@
         <ItemGroup Condition="!Exists('Lang\Str.Designer.cs')">
             <Compile Include="Lang\Str.Designer.cs" />
         </ItemGroup>
+        <Exec Command="dotnet tool restore" />
         <Exec WorkingDirectory="$(ProjectDir)\Lang" Command="dotnet t4 Str.tt" />
     </Target>
 
