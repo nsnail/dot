@@ -81,8 +81,14 @@
     <data name="GuidTool" xml:space="preserve">
         <value>GUID工具</value>
     </data>
+    <data name="GitTool" xml:space="preserve">
+        <value>Git批量操作工具</value>
+    </data>
     <data name="UseUppercase" xml:space="preserve">
         <value>使用大写输出</value>
+    </data>
+    <data name="GitArgs" xml:space="preserve">
+        <value>传递给Git的参数</value>
     </data>
     <data name="RandomPasswordGenerator" xml:space="preserve">
         <value>随机密码生成器</value>
@@ -144,5 +150,11 @@
     </data>
     <data name="PublicIP" xml:space="preserve">
         <value>Public network ip... </value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="FindGitReps" xml:space="preserve">
+        <value>查找 "{0}" 下所有git仓库目录... </value>
     </data>
 </root>

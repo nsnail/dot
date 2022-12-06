@@ -30,7 +30,7 @@
         <value>The specified path "{0}" does not exist</value>
     </data>
     <data name="SearchingFileOK" xml:space="preserve">
-        <value>Find files...OK</value>
+         <value>{0} files</value>
     </data>
     <data name="ShowMessageTemp" xml:space="preserve">
         <value>Read: {0}/{1}, processed: {2}, skipped: {3}</value>
@@ -136,5 +136,17 @@
     </data>
     <data name="NtpServerTime" xml:space="preserve">
         <value>NTP server standard clock: {0}</value>
+    </data>
+    <data name="GitTool" xml:space="preserve">
+        <value>Git batch operation tool</value>
+    </data>
+    <data name="GitArgs" xml:space="preserve">
+        <value>Parameters passed to Git</value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="FindGitReps" xml:space="preserve">
+        <value>Find all git repository directories under "{0}"...</value>
     </data>
 </root>

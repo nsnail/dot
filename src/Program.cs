@@ -12,8 +12,9 @@ Type[] LoadVerbs()
 
 async Task Run(object args)
 {
-    var option = args as OptionBase;
-    var tool   = ToolsFactory.Create(option);
+    if (args is not OptionBase option) return;
+
+    var tool = ToolsFactory.Create(option);
     await tool.Run();
     if (option!.KeepSession) {
         Console.WriteLine();

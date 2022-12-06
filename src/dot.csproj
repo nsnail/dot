@@ -7,7 +7,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Dot</RootNamespace>
         <AssemblyName>dot</AssemblyName>
-        <Version>1.1.3</Version>
+        <Version>1.1.4</Version>
         <Authors>nsnail</Authors>
         <Copyright>Copyright (c) 2022 nsnail</Copyright>
         <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>
@@ -24,10 +24,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.1" />
-        <PackageReference Include="NSExt" Version="1.0.6" />
-        <PackageReference Include="ShellProgressBar" Version="5.2.0" />
-        <PackageReference Include="TextCopy" Version="6.2.0" />
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="NSExt" Version="1.0.6"/>
+        <PackageReference Include="ShellProgressBar" Version="5.2.0"/>
+        <PackageReference Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
 
 
@@ -37,7 +37,7 @@
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-    
+
     <ItemGroup>
         <Compile Update="Lang\Str.Designer.cs">
             <DesignTime>True</DesignTime>
@@ -48,10 +48,10 @@
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <ItemGroup Condition="!Exists('Lang\Str.Designer.cs')">
-            <Compile Include="Lang\Str.Designer.cs" />
+            <Compile Include="Lang\Str.Designer.cs"/>
         </ItemGroup>
-        <Exec Command="dotnet tool restore" />
-        <Exec WorkingDirectory="$(ProjectDir)\Lang" Command="dotnet t4 Str.tt" />
+        <Exec Command="dotnet tool restore"/>
+        <Exec WorkingDirectory="$(ProjectDir)\Lang" Command="dotnet t4 Str.tt"/>
     </Target>
 
 </Project>
