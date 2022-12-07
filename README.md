@@ -1,5 +1,7 @@
 # dot
 
+[中](README.zh-CN.md) | **En**
+
 A full-featured utility - the programmer's swiss army knife
 
 ```mermaid
