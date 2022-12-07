@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AD79881E-7
 								git-clean.ps1 = git-clean.ps1
 								code-format.cmd = code-format.cmd
 		GenerateResx.targets = GenerateResx.targets
+		code-cleanup-on-save.csx = code-cleanup-on-save.csx
 	EndProjectSection
 EndProject
 Global
