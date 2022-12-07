@@ -4,15 +4,15 @@ A full-featured utility - the programmer's swiss army knife
 
 ```mermaid
 graph LR;
-    dot-v1.1.5-->newline-character-converter;
-    dot-v1.1.5-->ntp-time-sync-tool;
-    dot-v1.1.5-->text-encoding-tool;
-    dot-v1.1.5-->trim-utf8-bom-of-file
-    dot-v1.1.5-->remote-whitespaces-eof
-    dot-v1.1.5-->random-password-generator
-    dot-v1.1.5-->json-tool
-    dot-v1.1.5-->ip-tool
-    dot-v1.1.5-->guid-gennerator
-    dot-v1.1.5-->git-bulk-executor
-    dot-v1.1.5-->color-picker
+    dot-v1.1.5-->文件换行符转换工具
+    dot-v1.1.5-->NTP时钟同步工具
+    dot-v1.1.5-->各种文本编解码工具
+    dot-v1.1.5-->移除文件UTF-BOM
+    dot-v1.1.5-->移除文件尾部空白符
+    dot-v1.1.5-->随机密码生成器
+    dot-v1.1.5-->Json实用工具
+    dot-v1.1.5-->Ip实用工具
+    dot-v1.1.5-->GUID生成器
+    dot-v1.1.5-->Git命令批量执行器
+    dot-v1.1.5-->屏幕坐标和颜色选取工具
 ```

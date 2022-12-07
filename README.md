@@ -14,5 +14,5 @@ dot-v1.1.5-->Json-utility
 dot-v1.1.5-->Ip-utility-tool
 dot-v1.1.5-->GUID-generator
 dot-v1.1.5-->Git-command-bulk-executor
-dot-v1.1.5-->screen-coordinates-and-color-selection-tool
+dot-v1.1.5-->Screen-coordinates-and-pixel-picker
 ```
