@@ -1,6 +1,6 @@
 # dot
 
-A full-featured utility - the programmer's swiss army knife
+功能全面的实用工具 - 程序员的瑞士军刀
 
 ```mermaid
 graph LR;
