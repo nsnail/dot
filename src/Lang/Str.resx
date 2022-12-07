@@ -33,6 +33,9 @@
     <data name="PathNotFound" xml:space="preserve">
         <value>指定的路径“{0}”不存在</value>
     </data>
+    <data name="InvalidJsonString" xml:space="preserve">
+        <value>剪贴板未包含正确的Json字符串</value>
+    </data>
     <data name="SearchingFileOK" xml:space="preserve">
         <value>{0} 个文件</value>
     </data>
@@ -45,6 +48,9 @@
     <data name="Ip" xml:space="preserve">
         <value>IP工具</value>
     </data>
+    <data name="Json" xml:space="preserve">
+        <value>Json工具</value>
+    </data>
     <data name="ScreenPixelTool" xml:space="preserve">
         <value>屏幕坐标颜色选取工具</value>
     </data>
@@ -54,11 +60,21 @@
     <data name="TextTobeProcessed" xml:space="preserve">
         <value>要处理的文本（默认取取剪贴板值）</value>
     </data>
+
     <data name="Copied" xml:space="preserve">
         <value>{0}（已复制到剪贴板）</value>
     </data>
+    <data name="GitOutputEncoding" xml:space="preserve">
+        <value>Git输出编码</value>
+    </data>
+    <data name="MaxRecursionDepth" xml:space="preserve">
+        <value>目录检索深度</value>
+    </data>
     <data name="FileSearchPattern" xml:space="preserve">
         <value>文件通配符</value>
+    </data>
+    <data name="KeepSession" xml:space="preserve">
+        <value>执行命令后保留会话</value>
     </data>
     <data name="TimeoutMillSecs" xml:space="preserve">
         <value>连接NTP服务器超时时间 (毫秒)</value>
@@ -78,8 +94,26 @@
     <data name="GuidTool" xml:space="preserve">
         <value>GUID工具</value>
     </data>
+    <data name="GitTool" xml:space="preserve">
+        <value>Git批量操作工具</value>
+    </data>
     <data name="UseUppercase" xml:space="preserve">
         <value>使用大写输出</value>
+    </data>
+    <data name="GitArgs" xml:space="preserve">
+        <value>传递给Git的参数</value>
+    </data>
+    <data name="CompressJson" xml:space="preserve">
+        <value>压缩Json文本</value>
+    </data>
+    <data name="FormatJson" xml:space="preserve">
+        <value>格式化Json文本</value>
+    </data>
+    <data name="GeneratorClass" xml:space="preserve">
+        <value>生成实体类</value>
+    </data>
+    <data name="JsonToString" xml:space="preserve">
+        <value>Json文本转义成字符串</value>
     </data>
     <data name="RandomPasswordGenerator" xml:space="preserve">
         <value>随机密码生成器</value>
@@ -121,6 +155,9 @@
     <data name="LocalTimeOffset" xml:space="preserve">
         <value>{0}, 本机时钟偏移: {1} ms</value>
     </data>
+    <data name="NtpServerTime" xml:space="preserve">
+        <value>NTP 服务器标准时钟: {0}</value>
+    </data>
     <data name="LocalTimeSyncDone" xml:space="preserve">
         <value>本机时间已同步</value>
     </data>
@@ -138,5 +175,11 @@
     </data>
     <data name="PublicIP" xml:space="preserve">
         <value>Public network ip... </value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="FindGitReps" xml:space="preserve">
+        <value>查找 "{0}" 下所有git仓库目录... </value>
     </data>
 </root>

@@ -1,6 +1,6 @@
 namespace Dot;
 
-public class DirOption : IOption
+public class DirOption : OptionBase
 {
     [Option('f', "filter", HelpText = nameof(Str.FileSearchPattern), Default = "*.*", ResourceType = typeof(Str))]
     public string Filter { get; set; }

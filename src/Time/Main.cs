@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Dot.Time;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 {
     private record Server
     {
@@ -217,16 +217,20 @@ public sealed class Main : Tool<Option>
         Console.WriteLine(Str.NtpReceiveDone, _successCnt, _serverCnt, avgOffset.TotalMilliseconds);
 
         if (!Opt.Sync) {
+            if (!Opt.KeepSession) return;
+
+            var waitObj = new ManualResetEvent(false);
             var _ = Task.Run(async () => {
+                var top = Console.GetCursorPosition().Top;
                 while (true) {
+                    Console.SetCursorPosition(0, top);
+                    Console.Write(Str.NtpServerTime, (DateTime.Now - avgOffset).ToString("O"));
+                    waitObj.Set();
                     await Task.Delay(100);
-                    Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
-                    Console.Write(Str.ServerTime, (DateTime.Now - avgOffset).ToString("O"));
-                    Console.Write(@", {0}",       Str.PressAnyKey);
                 }
                 // ReSharper disable once FunctionNeverReturns
             });
-            Console.ReadKey();
+            waitObj.WaitOne();
             return;
         }
 

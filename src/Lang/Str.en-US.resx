@@ -30,7 +30,7 @@
         <value>The specified path "{0}" does not exist</value>
     </data>
     <data name="SearchingFileOK" xml:space="preserve">
-        <value>Find files...OK</value>
+         <value>{0} files</value>
     </data>
     <data name="ShowMessageTemp" xml:space="preserve">
         <value>Read: {0}/{1}, processed: {2}, skipped: {3}</value>
@@ -130,5 +130,47 @@
     </data>
     <data name="Ip" xml:space="preserve">
         <value>IP tools</value>
+    </data>
+    <data name="KeepSession" xml:space="preserve">
+        <value>Keep the session after executing the command</value>
+    </data>
+    <data name="NtpServerTime" xml:space="preserve">
+        <value>NTP server standard clock: {0}</value>
+    </data>
+    <data name="GitTool" xml:space="preserve">
+        <value>Git batch operation tool</value>
+    </data>
+    <data name="GitArgs" xml:space="preserve">
+        <value>Parameters passed to Git</value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+    </data>
+    <data name="FindGitReps" xml:space="preserve">
+        <value>Find all git repository directories under "{0}"...</value>
+    </data>
+    <data name="GitOutputEncoding" xml:space="preserve">
+        <value>Git output encoding</value>
+    </data>
+    <data name="MaxRecursionDepth" xml:space="preserve">
+        <value>Directory search depth</value>
+    </data>
+    <data name="InvalidJsonString" xml:space="preserve">
+        <value>Clipboard does not contain correct Json string</value>
+    </data>
+    <data name="Json" xml:space="preserve">
+        <value>JsonTools</value>
+    </data>
+    <data name="CompressJson" xml:space="preserve">
+        <value>Compress Json text</value>
+    </data>
+    <data name="FormatJson" xml:space="preserve">
+        <value>Format JSON text</value>
+    </data>
+    <data name="GeneratorClass" xml:space="preserve">
+        <value>generate entity classes</value>
+    </data>
+    <data name="JsonToString" xml:space="preserve">
+        <value>Json text escaped into a string</value>
     </data>
 </root>

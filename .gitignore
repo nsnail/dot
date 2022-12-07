@@ -803,3 +803,4 @@ FodyWeavers.xsd
 # User Define
 build/
 nuget.config
+*.[Dd]esigner.cs

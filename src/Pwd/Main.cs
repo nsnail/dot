@@ -3,7 +3,7 @@ using TextCopy;
 
 namespace Dot.Pwd;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 {
     private readonly char[][] _charTable = {
                                                "0123456789".ToCharArray() //

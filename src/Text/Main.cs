@@ -5,7 +5,7 @@ using TextCopy;
 
 namespace Dot.Text;
 
-public sealed class Main : Tool<Option>
+public sealed class Main : ToolBase<Option>
 {
     private ref struct Output
     {
@@ -66,8 +66,6 @@ public sealed class Main : Tool<Option>
 
     private static void ParseAndShow(string text)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
         var ansi                = BuildOutput(text, Encoding.GetEncoding("gbk"));
         var utf8                = BuildOutput(text, Encoding.UTF8);
         var unicodeLittleEndian = BuildOutput(text, Encoding.Unicode);
@@ -108,7 +106,5 @@ html-decode:       {o.HtmlDecode}
 
 
         ParseAndShow(Opt.Text);
-        Console.Write(Str.PressAnyKey);
-        Console.ReadKey();
     }
 }

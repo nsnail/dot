@@ -1,7 +1,10 @@
 namespace Dot;
 
-public abstract class Tool<TOption> : ITool
+public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
 {
+    // ReSharper disable once StaticMemberInGenericType
+    private static SpinLock _spinlock;
+
     protected readonly ProgressBarOptions //
         DefaultProgressBarOptions = new() {
                                               MessageEncodingName = "utf-8"
@@ -15,9 +18,23 @@ public abstract class Tool<TOption> : ITool
 
     protected TOption Opt { get; }
 
-    protected Tool(TOption opt)
+    protected ToolBase(TOption opt)
     {
         Opt = opt;
+    }
+
+
+    protected static void ConcurrentWrite(int x, int y, string text)
+    {
+        var lockTaken = false;
+        try {
+            _spinlock.Enter(ref lockTaken);
+            Console.SetCursorPosition(x, y);
+            Console.Write(text);
+        }
+        finally {
+            if (lockTaken) _spinlock.Exit(false);
+        }
     }
 
     protected static IEnumerable<string> EnumerateFiles(string path, string searchPattern)
@@ -31,6 +48,28 @@ public abstract class Tool<TOption> : ITool
                        .Where(x => !new[] { ".git", "node_modules" }.Any(
                                   y => x.Contains(y, StringComparison.OrdinalIgnoreCase)));
         return fileList;
+    }
+
+    protected static Task LoadingAnimate(int x, int y, out CancellationTokenSource cts)
+    {
+        char[] animateChars = { '-', '\\', '|', '/' };
+        long   counter      = 0;
+
+        cts = new CancellationTokenSource();
+        var cancelToken = cts.Token;
+
+        return Task.Run(async () => {
+            for (;;) {
+                if (cancelToken.IsCancellationRequested) {
+                    ConcurrentWrite(x, y, @" ");
+                    return;
+                }
+
+                ConcurrentWrite(x, y, animateChars[counter++ % 4].ToString());
+
+                await Task.Delay(100);
+            }
+        });
     }
 
     protected static void MoveFile(string source, string dest)
@@ -64,7 +103,6 @@ public abstract class Tool<TOption> : ITool
 
         return fsr;
     }
-
 
     public abstract Task Run();
 }
