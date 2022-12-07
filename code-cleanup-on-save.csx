@@ -8,4 +8,5 @@ var path = Directory.GetFiles(@".idea", "workspace.xml", SearchOption.AllDirecto
 """;
         var content = File.ReadAllText(path);
         content = content.Replace(findStr, replaceStr);
+        Console.WriteLine(content);
         File.WriteAllText(path, content);

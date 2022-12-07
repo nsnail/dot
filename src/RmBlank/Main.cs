@@ -35,7 +35,7 @@ public sealed class Main : ToolBase<Option>, IDisposable
 
         await using var fsrw = OpenFileStream(file, FileMode.Open, FileAccess.ReadWrite);
 
-        if (Opt.ReadOnly) { //测试，只读模式
+        if (!Opt.WriteMode) { //测试，只读模式
             ShowMessage(0, 1, 0);
             return;
         }

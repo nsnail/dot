@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
                 id="root" xmlns="">
@@ -73,9 +73,6 @@
     </data>
     <data name="PressAnyKey" xml:space="preserve">
         <value>Press any key to continue...</value>
-    </data>
-    <data name="ReadOnly" xml:space="preserve">
-        <value>Read-only mode (only for testing, no actual modification)</value>
     </data>
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>No documents to be processed</value>
@@ -172,5 +169,23 @@
     </data>
     <data name="JsonToString" xml:space="preserve">
         <value>Json text escaped into a string</value>
+    </data>
+    <data name="WriteMode" xml:space="preserve">
+        <value>Enable write mode</value>
+    </data>
+    <data name="ExerciseMode" xml:space="preserve">
+        <value>Read-only mode, the file will not be modified in real time!</value>
+    </data>
+    <data name="Read" xml:space="preserve">
+        <value>read</value>
+    </data>
+    <data name="Write" xml:space="preserve">
+        <value>write</value>
+    </data>
+    <data name="Break" xml:space="preserve">
+        <value>skip</value>
+    </data>
+    <data name="WriteFileStats" xml:space="preserve">
+        <value>Write statistics</value>
     </data>
 </root>

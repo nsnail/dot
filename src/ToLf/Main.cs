@@ -1,16 +1,19 @@
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Spectre.Console;
+using Panel = Spectre.Console.Panel;
 
 namespace Dot.ToLf;
 
 public sealed class Main : ToolBase<Option>
 {
-    private                 int          _breakCnt;
-    private                 ProgressTask _fileTask;
-    private static readonly object       _lockObj = new();
-    private                 long         _procedCnt;
-    private                 int          _replaceCnt;
-    private                 int          _totalCnt;
+    private                 int                               _breakCnt;
+    private                 ProgressTask                      _fileTask;
+    private static readonly object                            _lockObj = new();
+    private                 long                              _procedCnt;
+    private                 int                               _replaceCnt;
+    private readonly        ConcurrentDictionary<string, int> _replacedStats = new();
+    private                 int                               _totalCnt;
 
     public Main(Option opt) : base(opt)
     {
@@ -28,11 +31,6 @@ public sealed class Main : ToolBase<Option>
         int data;
 
         await using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-            if (Opt.ReadOnly) { //测试，只读模式
-                ShowMessage(0, 1, 0);
-                return;
-            }
-
             if (fsr is null) {
                 ShowMessage(0, 0, 1);
                 return;
@@ -66,13 +64,16 @@ public sealed class Main : ToolBase<Option>
 
 
         if (isReplaced && !isBin) {
-            MoveFile(tmpFile, file);
+            if (Opt.WriteMode) //测试，只读模式
+                MoveFile(tmpFile, file);
             ShowMessage(0, 1, 0);
+            _replacedStats.AddOrUpdate(Path.GetExtension(file), 1, (_, oldValue) => oldValue + 1);
         }
         else {
-            File.Delete(tmpFile);
             ShowMessage(0, 0, 1);
         }
+
+        File.Delete(tmpFile);
     }
 
 
@@ -92,7 +93,7 @@ public sealed class Main : ToolBase<Option>
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public override async Task Run()
     {
-        if (Opt.ReadOnly) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
+        if (!Opt.WriteMode) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
         IEnumerable<string> fileList;
         await AnsiConsole.Progress()
                          .Columns(new ProgressBarColumn()                                //
@@ -113,5 +114,12 @@ public sealed class Main : ToolBase<Option>
                              _fileTask.StartTask();
                              await Parallel.ForEachAsync(fileList, FileHandle);
                          });
+
+        var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))
+                             .AddColumn(new GridColumn().Alignment(Justify.Right));
+
+        foreach (var kv in _replacedStats) grid.AddRow(kv.Key, kv.Value.ToString());
+
+        AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
     }
 }

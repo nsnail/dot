@@ -9,6 +9,6 @@ public class DirOption : OptionBase
     public string Path { get; set; }
 
 
-    [Option('r', "readonly", HelpText = nameof(Str.ReadOnly), Default = false, ResourceType = typeof(Str))]
-    public bool ReadOnly { get; set; }
+    [Option('w', "write", HelpText = nameof(Str.WriteMode), Default = false, ResourceType = typeof(Str))]
+    public bool WriteMode { get; set; }
 }

@@ -46,7 +46,7 @@ public sealed class Main : ToolBase<Option>, IDisposable
         var  tmpFile = $"{file}.tmp";
         bool isReplaced;
         await using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-            if (Opt.ReadOnly) { //测试，只读模式
+            if (!Opt.WriteMode) { //测试，只读模式
                 ShowMessage(0, 1, 0);
                 return;
             }

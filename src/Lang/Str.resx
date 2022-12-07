@@ -137,8 +137,8 @@
     <data name="PressAnyKey" xml:space="preserve">
         <value>按下任意键继续...</value>
     </data>
-    <data name="ReadOnly" xml:space="preserve">
-        <value>只读模式（仅做测试，不实际修改）</value>
+    <data name="WriteMode" xml:space="preserve">
+        <value>启用写入模式</value>
     </data>
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>没有需要处理的文件</value>
@@ -183,7 +183,7 @@
         <value>查找 "{0}" 下所有git仓库目录... </value>
     </data>
     <data name="ExerciseMode" xml:space="preserve">
-        <value>演习模式, 不会真实修改文件!</value>
+        <value>只读模式, 不会真实修改文件!</value>
     </data>
     <data name="Read" xml:space="preserve">
         <value>读取</value>
@@ -195,5 +195,8 @@
 
     <data name="Break" xml:space="preserve">
         <value>跳过</value>
+    </data>
+    <data name="WriteFileStats" xml:space="preserve">
+        <value>写入统计</value>
     </data>
 </root>
