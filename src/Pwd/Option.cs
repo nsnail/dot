@@ -6,10 +6,10 @@ public class Option : OptionBase
     [Flags]
     public enum GenerateTypes
     {
-        Number           = 1
-      , LowerCaseLetter  = 2
-      , UpperCaseLetter  = 4
-      , SpecialCharacter = 8
+        Number           = 0b0001
+      , LowerCaseLetter  = 0b0010
+      , UpperCaseLetter  = 0b0100
+      , SpecialCharacter = 0b1000
     }
 
     [Value(1, Required = true, HelpText = nameof(Str.PwdLength), ResourceType = typeof(Str))]

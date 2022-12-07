@@ -155,4 +155,22 @@
     <data name="MaxRecursionDepth" xml:space="preserve">
         <value>Directory search depth</value>
     </data>
+    <data name="InvalidJsonString" xml:space="preserve">
+        <value>Clipboard does not contain correct Json string</value>
+    </data>
+    <data name="Json" xml:space="preserve">
+        <value>JsonTools</value>
+    </data>
+    <data name="CompressJson" xml:space="preserve">
+        <value>Compress Json text</value>
+    </data>
+    <data name="FormatJson" xml:space="preserve">
+        <value>Format JSON text</value>
+    </data>
+    <data name="GeneratorClass" xml:space="preserve">
+        <value>generate entity classes</value>
+    </data>
+    <data name="JsonToString" xml:space="preserve">
+        <value>Json text escaped into a string</value>
+    </data>
 </root>

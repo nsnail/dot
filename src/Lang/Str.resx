@@ -33,6 +33,9 @@
     <data name="PathNotFound" xml:space="preserve">
         <value>指定的路径“{0}”不存在</value>
     </data>
+    <data name="InvalidJsonString" xml:space="preserve">
+        <value>剪贴板未包含正确的Json字符串</value>
+    </data>
     <data name="SearchingFileOK" xml:space="preserve">
         <value>{0} 个文件</value>
     </data>
@@ -45,6 +48,9 @@
     <data name="Ip" xml:space="preserve">
         <value>IP工具</value>
     </data>
+    <data name="Json" xml:space="preserve">
+        <value>Json工具</value>
+    </data>
     <data name="ScreenPixelTool" xml:space="preserve">
         <value>屏幕坐标颜色选取工具</value>
     </data>
@@ -54,6 +60,7 @@
     <data name="TextTobeProcessed" xml:space="preserve">
         <value>要处理的文本（默认取取剪贴板值）</value>
     </data>
+
     <data name="Copied" xml:space="preserve">
         <value>{0}（已复制到剪贴板）</value>
     </data>
@@ -95,6 +102,18 @@
     </data>
     <data name="GitArgs" xml:space="preserve">
         <value>传递给Git的参数</value>
+    </data>
+    <data name="CompressJson" xml:space="preserve">
+        <value>压缩Json文本</value>
+    </data>
+    <data name="FormatJson" xml:space="preserve">
+        <value>格式化Json文本</value>
+    </data>
+    <data name="GeneratorClass" xml:space="preserve">
+        <value>生成实体类</value>
+    </data>
+    <data name="JsonToString" xml:space="preserve">
+        <value>Json文本转义成字符串</value>
     </data>
     <data name="RandomPasswordGenerator" xml:space="preserve">
         <value>随机密码生成器</value>
