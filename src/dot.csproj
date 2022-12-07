@@ -24,10 +24,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
-        <PackageReference Include="NSExt" Version="1.0.6"/>
-        <PackageReference Include="ShellProgressBar" Version="5.2.0"/>
-        <PackageReference Include="TextCopy" Version="6.2.0"/>
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
+        <PackageReference Include="NSExt" Version="1.0.6" />
+        <PackageReference Include="ShellProgressBar" Version="5.2.0" />
+        <PackageReference Include="TextCopy" Version="6.2.0" />
     </ItemGroup>
 
 
@@ -38,20 +38,6 @@
         </EmbeddedResource>
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Lang\Str.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Str.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-        <ItemGroup Condition="!Exists('Lang\Str.Designer.cs')">
-            <Compile Include="Lang\Str.Designer.cs"/>
-        </ItemGroup>
-        <Exec Command="dotnet tool restore" StdOutEncoding="utf-8"/>
-        <Exec WorkingDirectory="$(ProjectDir)\Lang" Command="dotnet t4 Str.tt" StdOutEncoding="utf-8"/>
-    </Target>
+    <Import Project="../GenerateResx.targets" />
 
 </Project>
