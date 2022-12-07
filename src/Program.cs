@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using Dot;
+using Spectre.Console;
 
 Type[] LoadVerbs()
 {
@@ -18,9 +19,8 @@ async Task Run(object args)
     var tool = ToolsFactory.Create(option);
     await tool.Run();
     if (option!.KeepSession) {
-        Console.WriteLine();
-        Console.WriteLine(Str.PressAnyKey);
-        Console.ReadKey();
+        AnsiConsole.MarkupLine(Str.PressAnyKey);
+        AnsiConsole.Console.Input.ReadKey(true);
     }
 }
 
@@ -33,7 +33,7 @@ try {
     await Parser.Default.ParseArguments(args, types).WithParsedAsync(Run);
 }
 catch (ArgumentException ex) {
-    Console.Error.WriteLine(ex.Message);
+    AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
     return -1;
 }
 

@@ -28,7 +28,7 @@
         <value>输入文本为空</value>
     </data>
     <data name="SearchingFile" xml:space="preserve">
-        <value>查找文件...</value>
+        <value>查找文件</value>
     </data>
     <data name="PathNotFound" xml:space="preserve">
         <value>指定的路径“{0}”不存在</value>
@@ -181,5 +181,19 @@
     </data>
     <data name="FindGitReps" xml:space="preserve">
         <value>查找 "{0}" 下所有git仓库目录... </value>
+    </data>
+    <data name="ExerciseMode" xml:space="preserve">
+        <value>演习模式, 不会真实修改文件!</value>
+    </data>
+    <data name="Read" xml:space="preserve">
+        <value>读取</value>
+    </data>
+
+    <data name="Write" xml:space="preserve">
+        <value>写入</value>
+    </data>
+
+    <data name="Break" xml:space="preserve">
+        <value>跳过</value>
     </data>
 </root>

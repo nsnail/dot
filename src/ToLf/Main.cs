@@ -1,34 +1,25 @@
 using System.Diagnostics.CodeAnalysis;
+using Spectre.Console;
 
 namespace Dot.ToLf;
 
-public sealed class Main : ToolBase<Option>, IDisposable
+public sealed class Main : ToolBase<Option>
 {
-    private                 int              _breakCnt;
-    private                 bool             _disposed;
-    private static readonly object           _lockObj = new();
-    private                 int              _procedCnt;
-    private                 int              _replaceCnt;
-    private                 ChildProgressBar _step2Bar;
-    private                 int              _totalCnt;
-    public Main(Option opt) : base(opt) { }
+    private                 int          _breakCnt;
+    private                 ProgressTask _fileTask;
+    private static readonly object       _lockObj = new();
+    private                 long         _procedCnt;
+    private                 int          _replaceCnt;
+    private                 int          _totalCnt;
 
-
-    ~Main()
+    public Main(Option opt) : base(opt)
     {
-        Dispose(false);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (_disposed) return;
-        if (disposing) _step2Bar?.Dispose();
-        _disposed = true;
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
     }
 
     private async ValueTask FileHandle(string file, CancellationToken _)
     {
-        _step2Bar.Tick();
         ShowMessage(1, 0, 0);
 
         var tmpFile    = $"{file}.tmp";
@@ -76,7 +67,6 @@ public sealed class Main : ToolBase<Option>, IDisposable
 
         if (isReplaced && !isBin) {
             MoveFile(tmpFile, file);
-
             ShowMessage(0, 1, 0);
         }
         else {
@@ -89,39 +79,39 @@ public sealed class Main : ToolBase<Option>, IDisposable
     private void ShowMessage(int procedCnt, int replaceCnt, int breakCnt)
     {
         lock (_lockObj) {
-            _procedCnt        += procedCnt;
-            _replaceCnt       += replaceCnt;
-            _breakCnt         += breakCnt;
-            _step2Bar.Message =  string.Format(Str.ShowMessageTemp, _procedCnt, _totalCnt, _replaceCnt, _breakCnt);
+            _procedCnt  += procedCnt;
+            _replaceCnt += replaceCnt;
+            _breakCnt   += breakCnt;
+            if (procedCnt > 0) _fileTask.Increment(1);
+            _fileTask.Description
+                = $"{Str.Read}: [green]{_procedCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_replaceCnt}[/], {Str.Break}: [gray]{_breakCnt}[/]";
         }
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
 
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public override async Task Run()
     {
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
+        if (Opt.ReadOnly) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
+        IEnumerable<string> fileList;
+        await AnsiConsole.Progress()
+                         .Columns(new ProgressBarColumn()                                //
+                                , new ElapsedTimeColumn()                                //
+                                , new PercentageColumn()                                 //
+                                , new SpinnerColumn()                                    //
+                                , new TaskDescriptionColumn { Alignment = Justify.Left } //
+                         )
+                         .StartAsync(async ctx => {
+                             var taskSearchfile = ctx.AddTask(Str.SearchingFile).IsIndeterminate();
+                             _fileTask = ctx.AddTask("-/-", false);
+                             fileList  = EnumerateFiles(Opt.Path, Opt.Filter);
+                             _totalCnt = fileList.Count();
+                             taskSearchfile.IsIndeterminate(false);
+                             taskSearchfile.Increment(100);
 
-
-        using var step1Bar = new IndeterminateProgressBar(Str.SearchingFile, DefaultProgressBarOptions);
-
-
-        var fileList = EnumerateFiles(Opt.Path, Opt.Filter);
-        _totalCnt = fileList.Count();
-
-        step1Bar.Message = string.Format(Str.SearchingFileOK, _totalCnt);
-        step1Bar.Finished();
-        if (_totalCnt == 0) return;
-
-
-        _step2Bar = step1Bar.Spawn(_totalCnt, string.Empty, DefaultProgressBarOptions);
-
-        await Parallel.ForEachAsync(fileList, FileHandle);
+                             _fileTask.MaxValue = _totalCnt;
+                             _fileTask.StartTask();
+                             await Parallel.ForEachAsync(fileList, FileHandle);
+                         });
     }
 }

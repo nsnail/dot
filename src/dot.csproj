@@ -27,6 +27,7 @@
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
         <PackageReference Include="NSExt" Version="1.0.6"/>
         <PackageReference Include="ShellProgressBar" Version="5.2.0"/>
+        <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.46"/>
         <PackageReference Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
 
