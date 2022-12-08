@@ -143,6 +143,12 @@
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>没有需要处理的文件</value>
     </data>
+    <data name="ExcludePathRegexes" xml:space="preserve">
+        <value>排除路径的正则表达式</value>
+    </data>
+    <data name="Exclude" xml:space="preserve">
+        <value>排除</value>
+    </data>
     <data name="NtpReceiveDone" xml:space="preserve">
         <value>成功 {0}/{1} , 本机时钟偏移平均值: {2} ms</value>
     </data>

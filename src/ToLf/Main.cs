@@ -47,7 +47,7 @@ public sealed class Main : FilesTool<Option>
 
 
         if (hasWrote && !isBin) {
-            if (Opt.WriteMode) CopyFile(tmpFile, file);
+            if (Opt.WriteMode) File.Copy(tmpFile, file, true);
             ShowMessage(0, 1, 0);
             UpdateStats(Path.GetExtension(file));
         }

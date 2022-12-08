@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using Panel = Spectre.Console.Panel;
 
 namespace Dot;
@@ -7,6 +8,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
 {
     private                 int                               _breakCnt;           //跳过文件数
     private                 ProgressTask                      _childTask;          //子任务进度
+    private                 int                               _excludeCnt;         //排除文件数
     private static readonly object                            _lock = new();       //线程锁
     private                 int                               _readCnt;            //读取文件数
     private                 int                               _totalCnt;           //总文件数
@@ -19,30 +21,28 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
             throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
     }
 
-    private static string[] EnumerateFiles(string path, string searchPattern)
+    private string[] EnumerateFiles(string path, string searchPattern, out int excludeCnt)
     {
-        var fileList = Directory
-                       .EnumerateFiles(path, searchPattern
-                               ,             new EnumerationOptions {
-                                                                  RecurseSubdirectories = true
-                                                                , AttributesToSkip      = FileAttributes.ReparsePoint
-                                                              })
-                       .Where(x => !new[] { ".git", "node_modules" }.Any(
-                                  y => x.Contains(y, StringComparison.OrdinalIgnoreCase)))
-                       .ToArray();
+        var exCnt = 0;
+        if (!Opt.ExcludeRegexes.Any()) //默认排除.git 、 node_modules 目录
+            Opt.ExcludeRegexes = new[] { @"\.git", "node_modules" };
+        var excludeRegexes = Opt.ExcludeRegexes.Select(x => new Regex(x));
+        var fileList = Directory.EnumerateFiles(path, searchPattern
+                                              , new EnumerationOptions {
+                                                                           RecurseSubdirectories = true
+                                                                         , AttributesToSkip
+                                                                               = FileAttributes.ReparsePoint
+                                                                         , IgnoreInaccessible = true
+                                                                         , MaxRecursionDepth  = Opt.MaxRecursionDepth
+                                                                       })
+                                .Where(x => {
+                                    if (!excludeRegexes.Any(y => y.IsMatch(x))) return true;
+                                    ++exCnt;
+                                    return false;
+                                })
+                                .ToArray();
+        excludeCnt = exCnt;
         return fileList;
-    }
-
-
-    protected static void CopyFile(string source, string dest)
-    {
-        try {
-            File.Copy(source, dest, true);
-        }
-        catch (UnauthorizedAccessException) {
-            File.SetAttributes(dest, new FileInfo(dest).Attributes & ~FileAttributes.ReadOnly);
-            File.Copy(source, dest, true);
-        }
     }
 
 
@@ -85,9 +85,10 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
             _breakCnt += breakCnt;
             if (readCnt > 0) _childTask.Increment(1);
             _childTask.Description
-                = $"{Str.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_writeCnt}[/], {Str.Break}: [gray]{_breakCnt}[/]";
+                = $"{Str.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_writeCnt}[/], {Str.Break}: [gray]{_breakCnt}[/], {Str.Exclude}: [yellow]{_excludeCnt}[/]";
         }
     }
+
 
     protected void UpdateStats(string key)
     {
@@ -108,7 +109,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
                          .StartAsync(async ctx => {
                              var taskSearchfile = ctx.AddTask(Str.SearchingFile).IsIndeterminate();
                              _childTask = ctx.AddTask("-/-", false);
-                             fileList   = EnumerateFiles(Opt.Path, Opt.Filter);
+                             fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
                              _totalCnt  = fileList.Count();
                              taskSearchfile.IsIndeterminate(false);
                              taskSearchfile.Increment(100);
