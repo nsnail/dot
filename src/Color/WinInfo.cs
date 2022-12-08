@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using Size = System.Drawing.Size;
 
 namespace Dot.Color;
 

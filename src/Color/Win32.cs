@@ -4,6 +4,19 @@ namespace Dot.Color;
 
 public static partial class Win32
 {
+    [StructLayout(LayoutKind.Explicit)]
+    internal ref struct Systemtime
+    {
+        [FieldOffset(6)]  public ushort wDay;
+        [FieldOffset(4)]  public ushort wDayOfWeek;
+        [FieldOffset(8)]  public ushort wHour;
+        [FieldOffset(14)] public ushort wMilliseconds;
+        [FieldOffset(10)] public ushort wMinute;
+        [FieldOffset(2)]  public ushort wMonth;
+        [FieldOffset(12)] public ushort wSecond;
+        [FieldOffset(0)]  public ushort wYear;
+    }
+
     public delegate nint LowLevelMouseProc(int nCode, nint wParam, nint lParam);
 
     private const string _GDI32_DLL    = "gdi32.dll";
@@ -34,6 +47,10 @@ public static partial class Win32
 
     [LibraryImport(_USER32_DLL)]
     internal static partial int ReleaseDC(nint hWnd, nint dc);
+
+
+    [LibraryImport(_KERNEL32_DLL)]
+    internal static partial void SetLocalTime(Systemtime st);
 
     [LibraryImport(_USER32_DLL)]
     internal static partial nint SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, nint hMod, uint dwThreadId);

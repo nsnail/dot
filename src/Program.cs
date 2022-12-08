@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text;
 using Dot;
-using Spectre.Console;
 
 Type[] LoadVerbs()
 {

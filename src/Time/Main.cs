@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
+using Dot.Color;
 
 namespace Dot.Time;
 
@@ -22,23 +22,11 @@ public sealed class Main : ToolBase<Option>
       , Failed
     }
 
-    [StructLayout(LayoutKind.Explicit)]
-    private ref struct Systemtime
-    {
-        [FieldOffset(6)]  public ushort wDay;
-        [FieldOffset(4)]  public ushort wDayOfWeek;
-        [FieldOffset(8)]  public ushort wHour;
-        [FieldOffset(14)] public ushort wMilliseconds;
-        [FieldOffset(10)] public ushort wMinute;
-        [FieldOffset(2)]  public ushort wMonth;
-        [FieldOffset(12)] public ushort wSecond;
-        [FieldOffset(0)]  public ushort wYear;
-    }
 
     private const           int    _MAX_DEGREE_OF_PARALLELISM = 10;
     private const           int    _NTP_PORT                  = 123;
     private const           string _OUTPUT_TEMP               = "{0,-30}         {1,20}    {2,20}";
-    private static readonly object _lockObj                   = new();
+    private static readonly object _lock                      = new();
     private                 int    _procedCnt;
     private readonly        int    _serverCnt;
 
@@ -101,7 +89,7 @@ public sealed class Main : ToolBase<Option>
 
     private static void DrawTextInConsole(int left, int top, string text)
     {
-        lock (_lockObj) {
+        lock (_lock) {
             Console.SetCursorPosition(left, top);
             Console.Write(text);
         }
@@ -177,22 +165,19 @@ public sealed class Main : ToolBase<Option>
     }
 
 
-    [DllImport("Kernel32.dll")]
-    private static extern void SetLocalTime(Systemtime st);
-
     private static void SetSysteTime(DateTime time)
     {
-        var timeToSet = new Systemtime {
-                                           wDay          = (ushort)time.Day
-                                         , wDayOfWeek    = (ushort)time.DayOfWeek
-                                         , wHour         = (ushort)time.Hour
-                                         , wMilliseconds = (ushort)time.Millisecond
-                                         , wMinute       = (ushort)time.Minute
-                                         , wMonth        = (ushort)time.Month
-                                         , wSecond       = (ushort)time.Second
-                                         , wYear         = (ushort)time.Year
-                                       };
-        SetLocalTime(timeToSet);
+        var timeToSet = new Win32.Systemtime {
+                                                 wDay          = (ushort)time.Day
+                                               , wDayOfWeek    = (ushort)time.DayOfWeek
+                                               , wHour         = (ushort)time.Hour
+                                               , wMilliseconds = (ushort)time.Millisecond
+                                               , wMinute       = (ushort)time.Minute
+                                               , wMonth        = (ushort)time.Month
+                                               , wSecond       = (ushort)time.Second
+                                               , wYear         = (ushort)time.Year
+                                             };
+        Win32.SetLocalTime(timeToSet);
     }
 
     [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
