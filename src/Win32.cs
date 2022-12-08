@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Dot.Color;
+namespace Dot;
 
 public static partial class Win32
 {

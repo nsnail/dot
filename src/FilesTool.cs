@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using Panel = Spectre.Console.Panel;
 
 namespace Dot;
@@ -121,7 +121,8 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
         var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))
                              .AddColumn(new GridColumn().Alignment(Justify.Right));
 
-        foreach (var kv in _writeStats) grid.AddRow(kv.Key, kv.Value.ToString());
+        foreach (var kv in _writeStats.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            grid.AddRow(kv.Key, kv.Value.ToString());
 
         AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
     }
