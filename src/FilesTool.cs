@@ -61,8 +61,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
                              _childTask = ctx.AddTask("-/-", false);
                              fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
                              _totalCnt  = fileList.Count();
-                             taskSearchfile.IsIndeterminate(false);
-                             taskSearchfile.Increment(100);
+                             taskSearchfile.StopTask();
 
                              _childTask.MaxValue = _totalCnt;
                              _childTask.StartTask();

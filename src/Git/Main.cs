@@ -51,19 +51,19 @@ public class Main : ToolBase<Option>
             p.BeginErrorReadLine();
             await p.WaitForExitAsync();
 
-            payload.Value.IsIndeterminate(false);
             if (p.ExitCode == 0) {
                 payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
                 _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Succeed
                                       , (_, _) => TaskStatusColumn.Statues.Succeed);
-                payload.Value.Increment(100);
+                payload.Value.StopTask();
             }
             else {
                 payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
                 _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Failed
                                       , (_, _) => TaskStatusColumn.Statues.Failed);
-                payload.Value.Increment(0);
             }
+
+            payload.Value.StopTask();
         }
     }
 
@@ -101,8 +101,7 @@ public class Main : ToolBase<Option>
                                  tasks.Add(path, task);
                              }
 
-                             taskFinder.IsIndeterminate(false);
-                             taskFinder.Increment(100);
+                             taskFinder.StopTask();
                              taskFinder.State.Status(TaskStatusColumn.Statues.Succeed);
 
                              await Parallel.ForEachAsync(tasks, DirHandle);

@@ -78,15 +78,14 @@ public sealed class Main : ToolBase<Option>
         var offset = GetNtpOffset(payload.Key);
         if (offset == TimeSpan.Zero) {
             payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
-            payload.Value.IsIndeterminate(false).Increment(0);
         }
         else {
             payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
             payload.Value.State.Result(offset);
             Interlocked.Increment(ref _successCnt);
-            payload.Value.IsIndeterminate(false).Increment(100);
         }
 
+        payload.Value.StopTask();
         return ValueTask.CompletedTask;
     }
 
@@ -117,11 +116,9 @@ public sealed class Main : ToolBase<Option>
                                 , new TaskStatusColumn()      //
                                 , new TaskResultColumn())
                          .StartAsync(async ctx => {
-                             var tasks = new Dictionary<string, ProgressTask>();
-                             foreach (var server in _ntpServers) {
-                                 var t = ctx.AddTask(server, false).IsIndeterminate();
-                                 tasks.Add(server, t);
-                             }
+                             var tasks = _ntpServers.ToDictionary(server => server
+                                                                , server => ctx.AddTask(server, false)
+                                                                               .IsIndeterminate());
 
                              await Parallel.ForEachAsync(
                                  tasks, new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
