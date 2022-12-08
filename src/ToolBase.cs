@@ -27,6 +27,8 @@ public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
         }
     }
 
+    protected abstract Task Core();
+
 
     protected static Task LoadingAnimate(int x, int y, out CancellationTokenSource cts)
     {
@@ -50,6 +52,12 @@ public abstract class ToolBase<TOption> : ITool where TOption : OptionBase
         });
     }
 
-
-    public abstract Task Run();
+    public virtual async Task Run()
+    {
+        await Core();
+        if (Opt.KeepSession) {
+            AnsiConsole.MarkupLine(Str.PressAnyKey);
+            AnsiConsole.Console.Input.ReadKey(true);
+        }
+    }
 }

@@ -8,7 +8,7 @@ public sealed class Main : ToolBase<Option>
 {
     public Main(Option opt) : base(opt) { }
 
-    public override async Task Run()
+    protected override async Task Core()
     {
         foreach (var item in NetworkInterface.GetAllNetworkInterfaces()) {
             if (item.NetworkInterfaceType != NetworkInterfaceType.Ethernet ||

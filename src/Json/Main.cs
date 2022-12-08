@@ -53,7 +53,7 @@ public class Main : ToolBase<Option>
         return text.Replace("\\\"", "\"");
     }
 
-    public override async Task Run()
+    protected override async Task Core()
     {
         string result = null;
         if (Opt.Compress)

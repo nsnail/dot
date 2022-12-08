@@ -1,98 +1,37 @@
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 
 namespace Dot.Time;
 
 public sealed class Main : ToolBase<Option>
 {
-    private record Server
-    {
-        public int           ConsoleRowIndex;
-        public TimeSpan      Offset;
-        public ServerStatues Status;
-    }
+    private const int _MAX_DEGREE_OF_PARALLELISM = 10;
+    private const int _NTP_PORT                  = 123;
 
-    private enum ServerStatues : byte
-    {
-        Ready
-      , Connecting
-      , Succeed
-      , Failed
-    }
+    private readonly string[] _ntpServers = {
+                                                "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn", "cn.pool.ntp.org"
+                                              , "time.pool.aliyun.com", "time1.aliyun.com", "time2.aliyun.com"
+                                              , "time3.aliyun.com", "time4.aliyun.com", "time5.aliyun.com"
+                                              , "time6.aliyun.com", "time7.aliyun.com", "time1.cloud.tencent.com"
+                                              , "time2.cloud.tencent.com", "time3.cloud.tencent.com"
+                                              , "time4.cloud.tencent.com", "time5.cloud.tencent.com", "ntp.sjtu.edu.cn"
+                                              , "ntp.neu.edu.cn", "ntp.bupt.edu.cn", "ntp.shu.edu.cn", "pool.ntp.org"
+                                              , "0.pool.ntp.org", "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"
+                                              , "asia.pool.ntp.org", "time1.google.com", "time2.google.com"
+                                              , "time3.google.com", "time4.google.com", "time.apple.com"
+                                              , "time1.apple.com", "time2.apple.com", "time3.apple.com"
+                                              , "time4.apple.com", "time5.apple.com", "time6.apple.com"
+                                              , "time7.apple.com", "time.windows.com", "time.nist.gov"
+                                              , "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov"
+                                              , "stdtime.gov.hk"
+                                            };
 
-
-    private const           int    _MAX_DEGREE_OF_PARALLELISM = 10;
-    private const           int    _NTP_PORT                  = 123;
-    private const           string _OUTPUT_TEMP               = "{0,-30}         {1,20}    {2,20}";
-    private static readonly object _lock                      = new();
-    private                 int    _procedCnt;
-    private readonly        int    _serverCnt;
-
-    private readonly string[] _srvAddr = {
-                                             "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn", "cn.pool.ntp.org"
-                                           , "time.pool.aliyun.com", "time1.aliyun.com", "time2.aliyun.com"
-                                           , "time3.aliyun.com", "time4.aliyun.com", "time5.aliyun.com"
-                                           , "time6.aliyun.com", "time7.aliyun.com", "time1.cloud.tencent.com"
-                                           , "time2.cloud.tencent.com", "time3.cloud.tencent.com"
-                                           , "time4.cloud.tencent.com", "time5.cloud.tencent.com", "ntp.sjtu.edu.cn"
-                                           , "ntp.neu.edu.cn", "ntp.bupt.edu.cn", "ntp.shu.edu.cn", "pool.ntp.org"
-                                           , "0.pool.ntp.org", "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"
-                                           , "asia.pool.ntp.org", "time1.google.com", "time2.google.com"
-                                           , "time3.google.com", "time4.google.com", "time.apple.com", "time1.apple.com"
-                                           , "time2.apple.com", "time3.apple.com", "time4.apple.com", "time5.apple.com"
-                                           , "time6.apple.com", "time7.apple.com", "time.windows.com", "time.nist.gov"
-                                           , "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov", "stdtime.gov.hk"
-                                         };
-
-    private readonly Dictionary<string, Server> _srvStatus;
-    private          int                        _successCnt;
+    private double _offsetAvg;
 
 
-    public Main(Option opt) : base(opt)
-    {
-        _serverCnt = _srvAddr.Length;
-        var i = 0;
-        _srvStatus = _srvAddr.ToDictionary(
-            x => x, _ => new Server { Status = ServerStatues.Ready, ConsoleRowIndex = ++i });
-    }
+    private int _successCnt;
 
-    private static void ChangeStatus(KeyValuePair<string, Server> server, ServerStatues status
-                                   , TimeSpan                     offset = default)
-    {
-        server.Value.Status = status;
-        server.Value.Offset = offset;
-        DrawTextInConsole(0, server.Value.ConsoleRowIndex
-                     ,       string.Format(_OUTPUT_TEMP, server.Key, server.Value.Status
-                                      , status == ServerStatues.Succeed ? server.Value.Offset : string.Empty));
-    }
 
-    private async Task DrawLoading()
-    {
-        char[] loading      = { '-', '\\', '|', '/' };
-        var    loadingIndex = 0;
-        while (true) {
-            if (Volatile.Read(ref _procedCnt) == _serverCnt) break;
-            await Task.Delay(100);
-            ++loadingIndex;
-            for (var i = 0; i != _serverCnt; ++i)
-                DrawTextInConsole(
-                    34, i + 1
-              ,         _srvStatus[_srvAddr[i]].Status is ServerStatues.Succeed or ServerStatues.Failed
-                        ? " "
-                        : loading[loadingIndex % 4].ToString());
-        }
-
-        Debug.WriteLine(Environment.CurrentManagedThreadId + ":" + DateTime.Now.ToString("O"));
-    }
-
-    private static void DrawTextInConsole(int left, int top, string text)
-    {
-        lock (_lock) {
-            Console.SetCursorPosition(left, top);
-            Console.Write(text);
-        }
-    }
+    public Main(Option opt) : base(opt) { }
 
 
     private TimeSpan GetNtpOffset(string server)
@@ -132,32 +71,20 @@ public sealed class Main : ToolBase<Option>
         }
     }
 
-    private void PrintTemplate()
+    private ValueTask ServerHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
     {
-        Console.Clear();
-        Console.CursorVisible = false;
-        var row =               //
-            _srvStatus.Select(x //
-                                  => string.Format(_OUTPUT_TEMP, x.Key, x.Value.Status
-                                                 , x.Value.Offset == TimeSpan.Zero ? string.Empty : x.Value.Offset));
-
-
-        Console.WriteLine(_OUTPUT_TEMP, Str.Server, Str.Status, Str.LocalClockOffset);
-        Console.WriteLine(string.Join(Environment.NewLine, row));
-    }
-
-    private ValueTask ServerHandle(KeyValuePair<string, Server> server)
-    {
-        ChangeStatus(server, ServerStatues.Connecting);
-        var offset = GetNtpOffset(server.Key);
-        Interlocked.Increment(ref _procedCnt);
-
+        payload.Value.StartTask();
+        payload.Value.State.Status(TaskStatusColumn.Statues.Connecting);
+        var offset = GetNtpOffset(payload.Key);
         if (offset == TimeSpan.Zero) {
-            ChangeStatus(server, ServerStatues.Failed);
+            payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
+            payload.Value.IsIndeterminate(false).Increment(0);
         }
         else {
+            payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
+            payload.Value.State.Result(offset);
             Interlocked.Increment(ref _successCnt);
-            ChangeStatus(server, ServerStatues.Succeed, offset);
+            payload.Value.IsIndeterminate(false).Increment(100);
         }
 
         return ValueTask.CompletedTask;
@@ -179,46 +106,67 @@ public sealed class Main : ToolBase<Option>
         Win32.SetLocalTime(timeToSet);
     }
 
-    [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
+
+    protected override async Task Core()
+    {
+        await AnsiConsole.Progress()
+                         .Columns(new TaskDescriptionColumn() //
+                                , new ProgressBarColumn()     //
+                                , new ElapsedTimeColumn()     //
+                                , new SpinnerColumn()         //
+                                , new TaskStatusColumn()      //
+                                , new TaskResultColumn())
+                         .StartAsync(async ctx => {
+                             var tasks = new Dictionary<string, ProgressTask>();
+                             foreach (var server in _ntpServers) {
+                                 var t = ctx.AddTask(server, false).IsIndeterminate();
+                                 tasks.Add(server, t);
+                             }
+
+                             await Parallel.ForEachAsync(
+                                 tasks, new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
+                               , ServerHandle);
+
+                             _offsetAvg = tasks.Where(x => x.Value.State.Status() == TaskStatusColumn.Statues.Succeed)
+                                               .Average(x => x.Value.State.Result().TotalMilliseconds);
+                         });
+
+        AnsiConsole.MarkupLine(Str.NtpReceiveDone, $"[green]{_successCnt}[/]", _ntpServers.Length
+                             , $"[yellow]{_offsetAvg:f2}[/]");
+
+
+        if (Opt.Sync) {
+            SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
+            AnsiConsole.MarkupLine($"[green]{Str.LocalTimeSyncDone}[/]");
+        }
+    }
+
     public override async Task Run()
     {
-        PrintTemplate();
-        var tLoading = DrawLoading();
+        await Core();
+        if (Opt.KeepSession) {
+            var table = new Table().HideHeaders()
+                                   .AddColumn(new TableColumn(string.Empty))
+                                   .AddColumn(new TableColumn(string.Empty))
+                                   .Caption(Str.PressAnyKey)
+                                   .AddRow(Str.NtpClock,   DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
+                                   .AddRow(Str.LocalClock, DateTime.Now.ToString("O"));
 
+            var cts = new CancellationTokenSource();
+            var task = AnsiConsole.Live(table)
+                                  .StartAsync(async ctx => {
+                                      while (!cts.IsCancellationRequested) {
+                                          ctx.UpdateTarget(
+                                              table.UpdateCell(
+                                                       0, 1, DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
+                                                   .UpdateCell(1, 1, DateTime.Now.ToString("O")));
+                                          await Task.Delay(100);
+                                      }
+                                  });
 
-        await Parallel.ForEachAsync(_srvStatus
-                                  , new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
-                                  , (server, _) => ServerHandle(server));
-
-        await tLoading;
-
-
-        var avgOffset = TimeSpan.FromTicks((long)_srvStatus //
-                                                 .Where(x => x.Value.Status == ServerStatues.Succeed)
-                                                 .Average(x => x.Value.Offset.Ticks));
-
-        Console.SetCursorPosition(0, _serverCnt + 1);
-        Console.WriteLine(Str.NtpReceiveDone, _successCnt, _serverCnt, avgOffset.TotalMilliseconds);
-
-        if (!Opt.Sync) {
-            if (!Opt.KeepSession) return;
-
-            var waitObj = new ManualResetEvent(false);
-            var _ = Task.Run(async () => {
-                var top = Console.GetCursorPosition().Top;
-                while (true) {
-                    Console.SetCursorPosition(0, top);
-                    Console.Write(Str.NtpServerTime, (DateTime.Now - avgOffset).ToString("O"));
-                    waitObj.Set();
-                    await Task.Delay(100);
-                }
-                // ReSharper disable once FunctionNeverReturns
-            });
-            waitObj.WaitOne();
-            return;
+            await AnsiConsole.Console.Input.ReadKeyAsync(true, cts.Token);
+            cts.Cancel();
+            await task;
         }
-
-        SetSysteTime(DateTime.Now - avgOffset);
-        Console.WriteLine(Str.LocalTimeSyncDone);
     }
 }

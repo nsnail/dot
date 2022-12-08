@@ -45,6 +45,39 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
         return fileList;
     }
 
+    protected override async Task Core()
+    {
+        if (!Opt.WriteMode) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
+        IEnumerable<string> fileList;
+        await AnsiConsole.Progress()
+                         .Columns(new ProgressBarColumn()                                //
+                                , new ElapsedTimeColumn()                                //
+                                , new PercentageColumn()                                 //
+                                , new SpinnerColumn()                                    //
+                                , new TaskDescriptionColumn { Alignment = Justify.Left } //
+                         )
+                         .StartAsync(async ctx => {
+                             var taskSearchfile = ctx.AddTask(Str.SearchingFile).IsIndeterminate();
+                             _childTask = ctx.AddTask("-/-", false);
+                             fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
+                             _totalCnt  = fileList.Count();
+                             taskSearchfile.IsIndeterminate(false);
+                             taskSearchfile.Increment(100);
+
+                             _childTask.MaxValue = _totalCnt;
+                             _childTask.StartTask();
+                             await Parallel.ForEachAsync(fileList, FileHandle);
+                         });
+
+        var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))
+                             .AddColumn(new GridColumn().Alignment(Justify.Right));
+
+        foreach (var kv in _writeStats.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            grid.AddRow(kv.Key, kv.Value.ToString());
+
+        AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
+    }
+
 
     protected FileStream CreateTempFile(out string file)
     {
@@ -93,38 +126,5 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     protected void UpdateStats(string key)
     {
         _writeStats.AddOrUpdate(key, 1, (_, oldValue) => oldValue + 1);
-    }
-
-    public override async Task Run()
-    {
-        if (!Opt.WriteMode) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
-        IEnumerable<string> fileList;
-        await AnsiConsole.Progress()
-                         .Columns(new ProgressBarColumn()                                //
-                                , new ElapsedTimeColumn()                                //
-                                , new PercentageColumn()                                 //
-                                , new SpinnerColumn()                                    //
-                                , new TaskDescriptionColumn { Alignment = Justify.Left } //
-                         )
-                         .StartAsync(async ctx => {
-                             var taskSearchfile = ctx.AddTask(Str.SearchingFile).IsIndeterminate();
-                             _childTask = ctx.AddTask("-/-", false);
-                             fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
-                             _totalCnt  = fileList.Count();
-                             taskSearchfile.IsIndeterminate(false);
-                             taskSearchfile.Increment(100);
-
-                             _childTask.MaxValue = _totalCnt;
-                             _childTask.StartTask();
-                             await Parallel.ForEachAsync(fileList, FileHandle);
-                         });
-
-        var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))
-                             .AddColumn(new GridColumn().Alignment(Justify.Right));
-
-        foreach (var kv in _writeStats.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
-            grid.AddRow(kv.Key, kv.Value.ToString());
-
-        AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
     }
 }

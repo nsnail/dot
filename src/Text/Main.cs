@@ -99,7 +99,7 @@ html-decode:       {o.HtmlDecode}
         Console.WriteLine(outputTemp);
     }
 
-    public override async Task Run()
+    protected override async Task Core()
     {
         if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
         if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);

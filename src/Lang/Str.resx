@@ -82,6 +82,9 @@
     <data name="SyncToLocalTime" xml:space="preserve">
         <value>同步本机时间</value>
     </data>
+    <data name="LocalClock" xml:space="preserve">
+        <value>本机时钟</value>
+    </data>
     <data name="ServerTime" xml:space="preserve">
         <value>同步本机时间</value>
     </data>
@@ -161,8 +164,8 @@
     <data name="LocalTimeOffset" xml:space="preserve">
         <value>{0}, 本机时钟偏移: {1} ms</value>
     </data>
-    <data name="NtpServerTime" xml:space="preserve">
-        <value>NTP 服务器标准时钟: {0}</value>
+    <data name="NtpClock" xml:space="preserve">
+        <value>NTP 标准时钟</value>
     </data>
     <data name="LocalTimeSyncDone" xml:space="preserve">
         <value>本机时间已同步</value>
@@ -186,7 +189,7 @@
         <value>OK</value>
     </data>
     <data name="FindGitReps" xml:space="preserve">
-        <value>查找 "{0}" 下所有git仓库目录... </value>
+        <value>查找 "{0}" 下所有git仓库目录 </value>
     </data>
     <data name="ExerciseMode" xml:space="preserve">
         <value>只读模式, 不会真实修改文件!</value>
@@ -204,5 +207,17 @@
     </data>
     <data name="WriteFileStats" xml:space="preserve">
         <value>写入统计</value>
+    </data>
+    <data name="Repository" xml:space="preserve">
+        <value>仓库</value>
+    </data>
+    <data name="Command" xml:space="preserve">
+        <value>命令</value>
+    </data>
+    <data name="Response" xml:space="preserve">
+        <value>响应</value>
+    </data>
+    <data name="ZeroCode" xml:space="preserve">
+        <value>Git退出码为零的</value>
     </data>
 </root>

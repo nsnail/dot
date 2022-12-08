@@ -14,13 +14,8 @@ Type[] LoadVerbs()
 async Task Run(object args)
 {
     if (args is not OptionBase option) return;
-
     var tool = ToolsFactory.Create(option);
     await tool.Run();
-    if (option!.KeepSession) {
-        AnsiConsole.MarkupLine(Str.PressAnyKey);
-        AnsiConsole.Console.Input.ReadKey(true);
-    }
 }
 
 

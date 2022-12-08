@@ -1,0 +1,17 @@
+Hotkey,^d,start
+return
+start:
+loop,100{
+	send,{AppsKey}
+	Sleep,100
+	send,{Up}
+	Sleep,100
+	send,{Up}
+	Sleep,100
+	Send,{Enter}
+	Sleep,500
+	Send,{Esc},
+	Sleep,100
+	Send,{Down}
+	Sleep,100
+}

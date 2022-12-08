@@ -15,7 +15,7 @@ public sealed class Main : ToolBase<Option>
 
     public Main(Option opt) : base(opt) { }
 
-    public override Task Run()
+    protected override Task Core()
     {
         unsafe {
             var pSource   = stackalloc char[_charTable.Sum(x => x.Length)];

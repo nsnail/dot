@@ -5,7 +5,7 @@ public sealed class Main : ToolBase<Option>
 {
     public Main(Option opt) : base(opt) { }
 
-    public override Task Run()
+    protected override Task Core()
     {
         Application.Run(new WinMain());
         return Task.CompletedTask;
