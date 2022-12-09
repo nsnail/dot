@@ -1,3 +1,4 @@
+#if NET7_0_WINDOWS
 namespace Dot.Color;
 
 public sealed class Main : ToolBase<Option>
@@ -11,3 +12,5 @@ public sealed class Main : ToolBase<Option>
         return Task.CompletedTask;
     }
 }
+
+#endif

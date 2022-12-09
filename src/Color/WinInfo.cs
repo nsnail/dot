@@ -1,3 +1,4 @@
+#if NET7_0_WINDOWS
 using System.Drawing.Drawing2D;
 using Size = System.Drawing.Size;
 
@@ -82,3 +83,4 @@ public class WinInfo : Form
         _pbox.Refresh();
     }
 }
+#endif

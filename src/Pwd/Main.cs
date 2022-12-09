@@ -1,5 +1,8 @@
 using NSExt.Extensions;
+#if NET7_0_WINDOWS
 using TextCopy;
+#endif
+
 
 namespace Dot.Pwd;
 
@@ -46,8 +49,10 @@ public sealed class Main : ToolBase<Option>
                 *(pDest + i) = *(pSource + randScope.Rand());
 
             var result = new string(pDest, 0, Opt.Length);
-            ClipboardService.SetText(result);
             Console.WriteLine(Str.Copied, result);
+            #if NET7_0_WINDOWS
+            ClipboardService.SetText(result);
+            #endif
         }
 
         return Task.CompletedTask;

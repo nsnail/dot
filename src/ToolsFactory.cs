@@ -14,11 +14,13 @@ public static class ToolsFactory
                  , Text.Option o    => new Text.Main(o)
                  , Guid.Option o    => new Guid.Main(o)
                  , Time.Option o    => new Time.Main(o)
-                 , Color.Option o   => new Color.Main(o)
-                 , IP.Option o      => new IP.Main(o)
-                 , Git.Option o     => new Git.Main(o)
-                 , Json.Option o    => new Json.Main(o)
-                 , _                => throw new ArgumentOutOfRangeException(nameof(option))
+                   #if NET7_0_WINDOWS
+                 , Color.Option o => new Color.Main(o)
+                   #endif
+                 , IP.Option o   => new IP.Main(o)
+                 , Git.Option o  => new Git.Main(o)
+                 , Json.Option o => new Json.Main(o)
+                 , _             => throw new ArgumentOutOfRangeException(nameof(option))
                };
     }
 }

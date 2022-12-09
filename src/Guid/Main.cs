@@ -1,4 +1,6 @@
+#if NET7_0_WINDOWS
 using TextCopy;
+#endif
 
 namespace Dot.Guid;
 
@@ -11,8 +13,10 @@ public sealed class Main : ToolBase<Option>
     {
         var guid            = System.Guid.NewGuid().ToString();
         if (Opt.Upper) guid = guid.ToUpper();
-        ClipboardService.SetText(guid);
         Console.WriteLine(Str.Copied, guid);
+        #if NET7_0_WINDOWS
+        ClipboardService.SetText(guid);
+        #endif
         return Task.CompletedTask;
     }
 }

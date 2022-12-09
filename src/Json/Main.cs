@@ -1,6 +1,9 @@
 using System.Text.Json;
 using NSExt.Extensions;
+#if NET7_0_WINDOWS
 using TextCopy;
+#endif
+
 
 namespace Dot.Json;
 
@@ -10,7 +13,11 @@ public class Main : ToolBase<Option>
 
     public Main(Option opt) : base(opt)
     {
-        var inputText = ClipboardService.GetText();
+        var inputText = Opt.InputText;
+
+        #if NET7_0_WINDOWS
+        if (inputText.NullOrWhiteSpace()) inputText = ClipboardService.GetText();
+        #endif
         if (inputText.NullOrWhiteSpace()) throw new ArgumentException(Str.InputTextIsEmpty);
 
         try {
@@ -63,6 +70,8 @@ public class Main : ToolBase<Option>
         else if (Opt.Format) result = await JsonFormat();
 
         if (result.NullOrWhiteSpace()) return;
+        #if NET7_0_WINDOWS
         await ClipboardService.SetTextAsync(result!);
+        #endif
     }
 }

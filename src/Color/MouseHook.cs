@@ -1,3 +1,4 @@
+#if NET7_0_WINDOWS
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -73,3 +74,4 @@ public class MouseHook : IDisposable
         GC.SuppressFinalize(this);
     }
 }
+#endif

@@ -1,8 +1,10 @@
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
+#if NET7_0_WINDOWS
 using TextCopy;
+using System.Diagnostics;
+#endif
 
 namespace Dot.Text;
 
@@ -98,14 +100,18 @@ html-encode:       {o.HtmlEncode}
 html-decode:       {o.HtmlDecode}
 """;
         Console.WriteLine(outputTemp);
+        #if NET7_0_WINDOWS
         var file = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.html");
         File.WriteAllText(file, outputTemp.Text2Html());
         Process.Start("explorer", file);
+        #endif
     }
 
     protected override async Task Core()
     {
+        #if NET7_0_WINDOWS
         if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
+        #endif
         if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);
 
 

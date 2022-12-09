@@ -12,4 +12,7 @@ public class Option : OptionBase
 
     [Option('f', "format", HelpText = nameof(Str.FormatJson), Default = true, ResourceType = typeof(Str))]
     public bool Format { get; set; }
+
+    [Value(0, HelpText = nameof(Str.TextTobeProcessed), ResourceType = typeof(Str))]
+    public string InputText { get; set; }
 }

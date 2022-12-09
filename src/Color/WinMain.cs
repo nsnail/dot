@@ -1,3 +1,4 @@
+#if NET7_0_WINDOWS
 using TextCopy;
 
 namespace Dot.Color;
@@ -53,8 +54,7 @@ public class WinMain : Form
     protected override void OnMouseDown(MouseEventArgs e)
     {
         var color = _bmp.GetPixel(e.X, e.Y);
-        ClipboardService.SetText(
-            $"{e.X},{e.Y} #{color.R.ToString("X2")}{color.G.ToString("X2")}{color.B.ToString("X2")}({color.R},{color.G},{color.B})");
+        ClipboardService.SetText($"{e.X},{e.Y} #{color.R:X2}{color.G:X2}{color.B:X2}({color.R},{color.G},{color.B})");
         Application.Exit();
     }
 
@@ -70,3 +70,5 @@ public class WinMain : Form
         Opacity = 1;
     }
 }
+
+#endif
