@@ -15,11 +15,6 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     private                 int                               _writeCnt;           //写入文件数
     private readonly        ConcurrentDictionary<string, int> _writeStats = new(); //写入统计：后缀，数量
 
-    protected FilesTool()
-    {
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
-    }
 
     private string[] EnumerateFiles(string path, string searchPattern, out int excludeCnt)
     {
@@ -47,6 +42,9 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
 
     protected override async Task Core()
     {
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
+
         if (!Opt.WriteMode) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
         IEnumerable<string> fileList;
         await AnsiConsole.Progress()
