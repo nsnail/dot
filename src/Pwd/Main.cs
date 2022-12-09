@@ -6,6 +6,8 @@ using TextCopy;
 
 namespace Dot.Pwd;
 
+[Description(nameof(Str.RandomPasswordGenerator))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 {
     private readonly char[][] _charTable = {
@@ -15,8 +17,6 @@ public sealed class Main : ToolBase<Option>
                                              , "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".ToCharArray()
                                            };
 
-
-    public Main(Option opt) : base(opt) { }
 
     protected override Task Core()
     {

@@ -1,11 +1,11 @@
 #if NET7_0_WINDOWS
 namespace Dot.Color;
 
+[Description(nameof(Str.ScreenPixelTool))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 
 {
-    public Main(Option opt) : base(opt) { }
-
     protected override Task Core()
     {
         Application.Run(new WinMain());

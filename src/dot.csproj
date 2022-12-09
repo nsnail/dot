@@ -5,13 +5,8 @@
         <UseWindowsForms Condition="'$(TargetFramework)' == 'net7.0-windows'">true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Dot</RootNamespace>
-        <AssemblyName>dot</AssemblyName>
-        <Version>1.1.5</Version>
-        <Authors>nsnail</Authors>
-        <Copyright>Copyright (c) 2022 nsnail</Copyright>
-        <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <AssemblyTitle>功能全面的实用工具 - 程序员的瑞士军刀</AssemblyTitle>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <NoWarn>CA1416;</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
@@ -23,8 +18,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
-        <PackageReference Include="NSExt" Version="1.0.8"/>
         <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.46"/>
         <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
@@ -33,6 +26,15 @@
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\ForkedGitReps\ns-ext\src\NSExt.csproj"/>
+        <ProjectReference Include="..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console.Cli\Spectre.Console.Cli.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Spectre.Console">
+            <HintPath>..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console\bin\Debug\net6.0\Spectre.Console.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <Import Project="../GenerateResx.targets"/>
 </Project>

@@ -1,7 +1,10 @@
 namespace Dot;
 
-public abstract class OptionBase : IOption
+public abstract class OptionBase : CommandSettings, IOption
 {
-    [Option('k', "keep-session", HelpText = nameof(Str.KeepSession), Default = false, ResourceType = typeof(Str))]
+    [CommandOption("-k|--keep--session")]
+    [Description(nameof(Str.KeepSession))]
+    [Localization(typeof(Str))]
+    [DefaultValue(false)]
     public virtual bool KeepSession { get; set; }
 }

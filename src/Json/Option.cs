@@ -1,18 +1,30 @@
 namespace Dot.Json;
 
-[Verb("json", HelpText = nameof(Str.Json), ResourceType = typeof(Str))]
 public class Option : OptionBase
 {
-    [Option('c', "compress", HelpText = nameof(Str.CompressJson), Default = false, ResourceType = typeof(Str))]
+    [CommandOption("-c|--compress")]
+    [Description(nameof(Str.CompressJson))]
+    [Localization(typeof(Str))]
+    [DefaultValue(false)]
     public bool Compress { get; set; }
 
 
-    [Option('s', "convert-to-string", HelpText = nameof(Str.FormatJson), Default = false, ResourceType = typeof(Str))]
+    [CommandOption("-s|--convert-to-string")]
+    [Description(nameof(Str.JsonToString))]
+    [Localization(typeof(Str))]
+    [DefaultValue(false)]
     public bool ConvertToString { get; set; }
 
-    [Option('f', "format", HelpText = nameof(Str.FormatJson), Default = true, ResourceType = typeof(Str))]
+
+    [CommandOption("-f|--format")]
+    [Description(nameof(Str.FormatJson))]
+    [Localization(typeof(Str))]
+    [DefaultValue(true)]
     public bool Format { get; set; }
 
-    [Value(0, HelpText = nameof(Str.TextTobeProcessed), ResourceType = typeof(Str))]
+
+    [CommandArgument(0, "[input text]")]
+    [Description(nameof(Str.TextTobeProcessed))]
+    [Localization(typeof(Str))]
     public string InputText { get; set; }
 }

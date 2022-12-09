@@ -1,8 +1,9 @@
 namespace Dot.Text;
 
-[Verb("text", HelpText = nameof(Str.TextTool), ResourceType = typeof(Str))]
 public class Option : OptionBase
 {
-    [Value(0, HelpText = nameof(Str.TextTobeProcessed), ResourceType = typeof(Str))]
+    [CommandArgument(0, "[input text]")]
+    [Description(nameof(Str.TextTobeProcessed))]
+    [Localization(typeof(Str))]
     public string Text { get; set; }
 }

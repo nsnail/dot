@@ -2,21 +2,36 @@ namespace Dot;
 
 public class DirOption : OptionBase
 {
-    [Option('e', "exclude", HelpText = nameof(Str.ExcludePathRegexes), ResourceType = typeof(Str))]
+    [CommandOption("-e|--exclude")]
+    [Description(nameof(Str.ExcludePathRegexes))]
+    [Localization(typeof(Str))]
     public IEnumerable<string> ExcludeRegexes { get; set; }
 
-    [Option('f', "filter", HelpText = nameof(Str.FileSearchPattern), Default = "*", ResourceType = typeof(Str))]
+
+    [CommandOption("-f|--filter")]
+    [Description(nameof(Str.FileSearchPattern))]
+    [Localization(typeof(Str))]
+    [DefaultValue("*")]
     public string Filter { get; set; }
 
 
-    [Option('d', "max-depth", HelpText = nameof(Str.MaxRecursionDepth), Default = int.MaxValue
-          , ResourceType = typeof(Str))]
+    [CommandOption("-d|--max-depth")]
+    [Description(nameof(Str.MaxRecursionDepth))]
+    [Localization(typeof(Str))]
+    [DefaultValue(int.MaxValue)]
     public int MaxRecursionDepth { get; set; }
 
-    [Value(0, HelpText = nameof(Str.FolderPath), Default = ".", ResourceType = typeof(Str))]
+
+    [CommandArgument(0, "[path]")]
+    [Description(nameof(Str.FolderPath))]
+    [Localization(typeof(Str))]
+    [DefaultValue(".")]
     public string Path { get; set; }
 
 
-    [Option('w', "write", HelpText = nameof(Str.WriteMode), Default = false, ResourceType = typeof(Str))]
+    [CommandOption("-w|--write")]
+    [Description(nameof(Str.WriteMode))]
+    [Localization(typeof(Str))]
+    [DefaultValue(false)]
     public bool WriteMode { get; set; }
 }

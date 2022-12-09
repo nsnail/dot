@@ -2,6 +2,8 @@ using System.Net.Sockets;
 
 namespace Dot.Time;
 
+[Description(nameof(Str.TimeTool))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 {
     private const int _MAX_DEGREE_OF_PARALLELISM = 10;
@@ -29,9 +31,6 @@ public sealed class Main : ToolBase<Option>
 
 
     private int _successCnt;
-
-
-    public Main(Option opt) : base(opt) { }
 
 
     private TimeSpan GetNtpOffset(string server)

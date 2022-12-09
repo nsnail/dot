@@ -15,7 +15,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     private                 int                               _writeCnt;           //写入文件数
     private readonly        ConcurrentDictionary<string, int> _writeStats = new(); //写入统计：后缀，数量
 
-    protected FilesTool(TOption opt) : base(opt)
+    protected FilesTool()
     {
         if (!Directory.Exists(Opt.Path))
             throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));

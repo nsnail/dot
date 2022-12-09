@@ -1,11 +1,10 @@
 namespace Dot.RmBom;
 
+[Description(nameof(Str.TrimUtf8Bom))]
+[Localization(typeof(Str))]
 public sealed class Main : FilesTool<Option>
 {
     private readonly byte[] _utf8Bom = { 0xef, 0xbb, 0xbf };
-
-
-    public Main(Option opt) : base(opt) { }
 
 
     private bool CloneFileWithoutBom(Stream fsr, ref string tempFile)

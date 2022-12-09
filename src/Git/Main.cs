@@ -5,19 +5,13 @@ using NSExt.Extensions;
 
 namespace Dot.Git;
 
+[Description(nameof(Str.GitTool))]
+[Localization(typeof(Str))]
 public class Main : ToolBase<Option>
 {
-    private readonly Encoding                                               _gitOutputEnc; //git command rsp 编码
-    private          ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
-    private          ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
-
-    public Main(Option opt) : base(opt)
-    {
-        _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path) //
-                                      , string.Format(Str.PathNotFound, Opt.Path));
-    }
+    private Encoding                                               _gitOutputEnc; //git command rsp 编码
+    private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
+    private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
 
     private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
@@ -67,9 +61,14 @@ public class Main : ToolBase<Option>
         }
     }
 
-
     protected override async Task Core()
     {
+        _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path) //
+                                      , string.Format(Str.PathNotFound, Opt.Path));
+
+
         var progressBar = new ProgressBarColumn { Width = 10 };
         await AnsiConsole.Progress()
                          .Columns(progressBar                                            //

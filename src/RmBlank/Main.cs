@@ -2,10 +2,10 @@ using NSExt.Extensions;
 
 namespace Dot.RmBlank;
 
+[Description(nameof(Str.RemoveTrailingWhiteSpaces))]
+[Localization(typeof(Str))]
 public sealed class Main : FilesTool<Option>
 {
-    public Main(Option opt) : base(opt) { }
-
     private static int GetSpacesCnt(Stream fsr)
     {
         var trimLen = 0;

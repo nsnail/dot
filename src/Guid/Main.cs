@@ -4,11 +4,10 @@ using TextCopy;
 
 namespace Dot.Guid;
 
+[Description(nameof(Str.GuidTool))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 {
-    public Main(Option opt) : base(opt) { }
-
-
     protected override Task Core()
     {
         var guid            = System.Guid.NewGuid().ToString();

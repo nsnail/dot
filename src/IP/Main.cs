@@ -3,11 +3,11 @@ using System.Net.Sockets;
 
 namespace Dot.IP;
 
+[Description(nameof(Str.Ip))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 
 {
-    public Main(Option opt) : base(opt) { }
-
     protected override async Task Core()
     {
         foreach (var item in NetworkInterface.GetAllNetworkInterfaces()) {

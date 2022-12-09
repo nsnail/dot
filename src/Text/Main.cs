@@ -8,6 +8,8 @@ using System.Diagnostics;
 
 namespace Dot.Text;
 
+[Description(nameof(Str.TextTool))]
+[Localization(typeof(Str))]
 public sealed class Main : ToolBase<Option>
 {
     private ref struct Output
@@ -28,7 +30,6 @@ public sealed class Main : ToolBase<Option>
         public ReadOnlySpan<char> UrlEncode;
     }
 
-    public Main(Option opt) : base(opt) { }
 
     private static Output BuildOutput(string text, Encoding enc)
     {
@@ -107,7 +108,11 @@ html-decode:       {o.HtmlDecode}
         #endif
     }
 
+    #if NET7_0_WINDOWS
     protected override async Task Core()
+        #else
+    protected override Task Core()
+        #endif
     {
         #if NET7_0_WINDOWS
         if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
@@ -116,5 +121,8 @@ html-decode:       {o.HtmlDecode}
 
 
         ParseAndShow(Opt.Text);
+        #if !NET7_0_WINDOWS
+        return Task.CompletedTask;
+        #endif
     }
 }

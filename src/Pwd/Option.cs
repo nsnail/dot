@@ -1,6 +1,5 @@
 namespace Dot.Pwd;
 
-[Verb("pwd", HelpText = nameof(Str.RandomPasswordGenerator), ResourceType = typeof(Str))]
 public class Option : OptionBase
 {
     [Flags]
@@ -12,10 +11,15 @@ public class Option : OptionBase
       , SpecialCharacter = 0b1000
     }
 
-    [Value(1, Required = true, HelpText = nameof(Str.PwdLength), ResourceType = typeof(Str))]
+
+    [CommandArgument(1, "<password length>")]
+    [Description(nameof(Str.PwdLength))]
+    [Localization(typeof(Str))]
     public int Length { get; set; }
 
 
-    [Value(0, Required = true, HelpText = nameof(Str.PwdGenerateTypes), ResourceType = typeof(Str))]
+    [CommandArgument(0, "<generate type>")]
+    [Description(nameof(Str.PwdGenerateTypes))]
+    [Localization(typeof(Str))]
     public GenerateTypes Type { get; set; }
 }

@@ -7,33 +7,11 @@ using TextCopy;
 
 namespace Dot.Json;
 
+[Description(nameof(Str.Json))]
+[Localization(typeof(Str))]
 public class Main : ToolBase<Option>
 {
-    private readonly object _inputObj;
-
-    public Main(Option opt) : base(opt)
-    {
-        var inputText = Opt.InputText;
-
-        #if NET7_0_WINDOWS
-        if (inputText.NullOrWhiteSpace()) inputText = ClipboardService.GetText();
-        #endif
-        if (inputText.NullOrWhiteSpace()) throw new ArgumentException(Str.InputTextIsEmpty);
-
-        try {
-            _inputObj = inputText.Object<object>();
-        }
-        catch (JsonException) {
-            try {
-                inputText = UnescapeString(inputText);
-                _inputObj = inputText.Object<object>();
-                return;
-            }
-            catch (JsonException) { }
-
-            throw new ArgumentException(Str.InvalidJsonString);
-        }
-    }
+    private object _inputObj;
 
 
     private async Task<string> ConvertToString()
@@ -62,6 +40,28 @@ public class Main : ToolBase<Option>
 
     protected override async Task Core()
     {
+        var inputText = Opt.InputText;
+
+        #if NET7_0_WINDOWS
+        if (inputText.NullOrWhiteSpace()) inputText = ClipboardService.GetText();
+        #endif
+        if (inputText.NullOrWhiteSpace()) throw new ArgumentException(Str.InputTextIsEmpty);
+
+        try {
+            _inputObj = inputText.Object<object>();
+        }
+        catch (JsonException) {
+            try {
+                inputText = UnescapeString(inputText);
+                _inputObj = inputText.Object<object>();
+                return;
+            }
+            catch (JsonException) { }
+
+            throw new ArgumentException(Str.InvalidJsonString);
+        }
+
+
         string result = null;
         if (Opt.Compress)
             result = await JsonCompress();

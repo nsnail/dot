@@ -1,11 +1,17 @@
 namespace Dot.Time;
 
-[Verb("time", HelpText = nameof(Str.TimeTool), ResourceType = typeof(Str))]
 public class Option : OptionBase
 {
-    [Option('s', "sync", HelpText = nameof(Str.SyncToLocalTime), Default = false, ResourceType = typeof(Str))]
+    [CommandOption("-s|--sync")]
+    [Description(nameof(Str.SyncToLocalTime))]
+    [Localization(typeof(Str))]
+    [DefaultValue(false)]
     public bool Sync { get; set; }
 
-    [Option('t', "timeout", HelpText = nameof(Str.TimeoutMillSecs), Default = 2000, ResourceType = typeof(Str))]
+
+    [CommandOption("-t|--timeout")]
+    [Description(nameof(Str.TimeoutMillSecs))]
+    [Localization(typeof(Str))]
+    [DefaultValue(2000)]
     public int Timeout { get; set; }
 }

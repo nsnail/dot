@@ -1,9 +1,9 @@
 namespace Dot.ToLf;
 
+[Description(nameof(Str.ConvertEndOfLineToLF))]
+[Localization(typeof(Str))]
 public sealed class Main : FilesTool<Option>
 {
-    public Main(Option opt) : base(opt) { }
-
     protected override async ValueTask FileHandle(string file, CancellationToken _)
     {
         ShowMessage(1, 0, 0);
