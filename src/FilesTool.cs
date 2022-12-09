@@ -19,7 +19,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     private string[] EnumerateFiles(string path, string searchPattern, out int excludeCnt)
     {
         var exCnt = 0;
-        if (!Opt.ExcludeRegexes.Any()) //默认排除.git 、 node_modules 目录
+        if (Opt.ExcludeRegexes?.FirstOrDefault() is null) //默认排除.git 、 node_modules 目录
             Opt.ExcludeRegexes = new[] { @"\.git", "node_modules" };
         var excludeRegexes = Opt.ExcludeRegexes.Select(x => new Regex(x));
         var fileList = Directory.EnumerateFiles(path, searchPattern
