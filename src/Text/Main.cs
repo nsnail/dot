@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
@@ -97,6 +98,9 @@ html-encode:       {o.HtmlEncode}
 html-decode:       {o.HtmlDecode}
 """;
         Console.WriteLine(outputTemp);
+        var file = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.html");
+        File.WriteAllText(file, outputTemp.Text2Html());
+        Process.Start("explorer", file);
     }
 
     protected override async Task Core()

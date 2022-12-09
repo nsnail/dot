@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0-windows</TargetFramework>
@@ -14,30 +13,23 @@
         <RepositoryType>git</RepositoryType>
         <AssemblyTitle>功能全面的实用工具 - 程序员的瑞士军刀</AssemblyTitle>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
-        <PackageReference Include="NSExt" Version="1.0.6"/>
+        <PackageReference Include="NSExt" Version="1.0.8"/>
         <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.46"/>
         <PackageReference Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
-
-
     <ItemGroup>
         <EmbeddedResource Update="Lang\Str.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-
     <Import Project="../GenerateResx.targets"/>
-
 </Project>

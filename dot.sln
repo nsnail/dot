@@ -25,6 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AD79881E-7
 		README.md = README.md
 		README.zh-CN.md = README.zh-CN.md
 		safe-delete-unused-resx.ahk = safe-delete-unused-resx.ahk
+		switch-nuget.ps1 = switch-nuget.ps1
+		switch-project.ps1 = switch-project.ps1
+		switcher.json = switcher.json
 	EndProjectSection
 EndProject
 Global
