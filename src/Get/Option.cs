@@ -5,7 +5,7 @@ public class Option : OptionBase
     [CommandOption("-b|--buffer-size")]
     [Description(nameof(Str.BufferSize))]
     [Localization(typeof(Str))]
-    [DefaultValue(8)]
+    [DefaultValue(8096)]
     public int BufferSize { get; set; }
 
     [CommandOption("-c|--chunk-number")]

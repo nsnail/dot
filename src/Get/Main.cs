@@ -83,7 +83,7 @@ public partial class Main : ToolBase<Option>
         }
     }
 
-    private void WriteParts(HttpResponseMessage rsp,      string mainFilePath //
+    private void WritePart(HttpResponseMessage rsp,      string mainFilePath //
                           , long                startPos, long   endPos       //
                           , Action<int>         rateHandle)
     {
@@ -167,7 +167,7 @@ public partial class Main : ToolBase<Option>
                                                   // ReSharper disable once AccessToDisposedClosure
                                                   using var getRsp
                                                       = http.Send(getReq, HttpCompletionOption.ResponseHeadersRead);
-                                                  WriteParts(getRsp, mainFilePath, startPos, endPos, x => {
+                                                  WritePart(getRsp, mainFilePath, startPos, endPos, x => {
                                                       tChild.Increment(x);
                                                       tParent.Increment(x);
                                                   });

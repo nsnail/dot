@@ -21,7 +21,7 @@ app.Configure(config => {
     config.AddCommand<Dot.Text.Main>(nameof(Dot.Text).ToLower());
     config.AddCommand<Dot.Time.Main>(nameof(Dot.Time).ToLower());
     config.AddCommand<Dot.ToLf.Main>(nameof(Dot.ToLf).ToLower());
-    config.AddCommand<Dot.Get.Main>("get");
+    config.AddCommand<Dot.Get.Main>(nameof(Dot.Get).ToLower());
 
 
     config.ValidateExamples();
