@@ -15,7 +15,7 @@ namespace Dot;
 
 public static class AssemblyInfo
 {
-    private const string _VERSION                          = "1.1.5";
+    private const string _VERSION                          = "1.1.6";
     public const  string ASSEMBLY_COMPANY                  = "nsnail";
     public const  string ASSEMBLY_COPYRIGHT                = $"Copyright (c) 2022 {ASSEMBLY_COMPANY}";
     public const  string ASSEMBLY_FILE_VERSION             = _VERSION;

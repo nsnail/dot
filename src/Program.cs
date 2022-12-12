@@ -21,6 +21,7 @@ app.Configure(config => {
     config.AddCommand<Dot.Text.Main>("text");
     config.AddCommand<Dot.Time.Main>("time");
     config.AddCommand<Dot.ToLf.Main>("tolf");
+    config.AddCommand<Dot.Get.Main>("get");
 
 
     config.ValidateExamples();

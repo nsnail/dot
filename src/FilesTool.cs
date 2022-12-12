@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
-using Panel = Spectre.Console.Panel;
 
 namespace Dot;
 
