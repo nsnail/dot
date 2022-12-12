@@ -24,25 +24,76 @@
         <value>The input text is empty</value>
     </data>
     <data name="SearchingFile" xml:space="preserve">
-        <value>Find files...</value>
+        <value>Find file</value>
     </data>
     <data name="PathNotFound" xml:space="preserve">
         <value>The specified path "{0}" does not exist</value>
     </data>
+    <data name="InvalidJsonString" xml:space="preserve">
+        <value>The clipboard does not contain the correct Json string</value>
+    </data>
     <data name="SearchingFileOK" xml:space="preserve">
-         <value>{0} files</value>
+        <value>{0} files</value>
     </data>
     <data name="ShowMessageTemp" xml:space="preserve">
         <value>Read: {0}/{1}, processed: {2}, skipped: {3}</value>
     </data>
+    <data name="TimeTool" xml:space="preserve">
+        <value>Time synchronization tool</value>
+    </data>
+    <data name="Ip" xml:space="preserve">
+        <value>IP tools</value>
+    </data>
+    <data name="Json" xml:space="preserve">
+        <value>Json tool</value>
+    </data>
+    <data name="ScreenPixelTool" xml:space="preserve">
+        <value>Screen coordinate color selection tool</value>
+    </data>
+    <data name="DownloadTool" xml:space="preserve">
+        <value>Multithreaded download tool</value>
+    </data>
+    <data name="TextTool" xml:space="preserve">
+        <value>Text encoding tool</value>
+    </data>
+    <data name="TextTobeProcessed" xml:space="preserve">
+        <value>Text to be processed (clipboard value is taken by default)</value>
+    </data>
     <data name="Copied" xml:space="preserve">
         <value>{0}(copied to clipboard)</value>
+    </data>
+    <data name="GitOutputEncoding" xml:space="preserve">
+        <value>Git output encoding</value>
+    </data>
+    <data name="MaxRecursionDepth" xml:space="preserve">
+        <value>Directory search depth</value>
     </data>
     <data name="FileSearchPattern" xml:space="preserve">
         <value>File wildcards</value>
     </data>
+    <data name="KeepSession" xml:space="preserve">
+        <value>Keep the session after executing the command</value>
+    </data>
+    <data name="TimeoutMillSecs" xml:space="preserve">
+        <value>Timeout for connecting to the NTP server (milliseconds)</value>
+    </data>
+    <data name="SyncToLocalTime" xml:space="preserve">
+        <value>Synchronize local time</value>
+    </data>
+    <data name="LocalClock" xml:space="preserve">
+        <value>Native clock</value>
+    </data>
+    <data name="ServerTime" xml:space="preserve">
+        <value>Synchronize local time</value>
+    </data>
     <data name="FolderPath" xml:space="preserve">
         <value>Directory path to be processed</value>
+    </data>
+    <data name="OutputPath" xml:space="preserve">
+        <value>Output file path</value>
+    </data>
+    <data name="Url" xml:space="preserve">
+        <value>URL</value>
     </data>
     <data name="ConvertEndOfLineToLF" xml:space="preserve">
         <value>Convert newline characters to LF</value>
@@ -50,8 +101,26 @@
     <data name="GuidTool" xml:space="preserve">
         <value>GUID tool</value>
     </data>
+    <data name="GitTool" xml:space="preserve">
+        <value>Git batch operation tool</value>
+    </data>
     <data name="UseUppercase" xml:space="preserve">
         <value>Use uppercase output</value>
+    </data>
+    <data name="GitArgs" xml:space="preserve">
+        <value>Parameters passed to Git</value>
+    </data>
+    <data name="CompressJson" xml:space="preserve">
+        <value>Compress Json text</value>
+    </data>
+    <data name="FormatJson" xml:space="preserve">
+        <value>Format Json text</value>
+    </data>
+    <data name="GeneratorClass" xml:space="preserve">
+        <value>Generate entity class</value>
+    </data>
+    <data name="JsonToString" xml:space="preserve">
+        <value>Escape Json text into a string</value>
     </data>
     <data name="RandomPasswordGenerator" xml:space="preserve">
         <value>Random password generator</value>
@@ -68,20 +137,20 @@
     <data name="TrimUtf8Bom" xml:space="preserve">
         <value>Remove the uf8 bom of the file</value>
     </data>
-    <data name="TextTobeProcessed" xml:space="preserve">
-        <value>Text to be processed (clipboard value is taken by default)</value>
-    </data>
     <data name="PressAnyKey" xml:space="preserve">
         <value>Press any key to continue...</value>
+    </data>
+    <data name="WriteMode" xml:space="preserve">
+        <value>Enable write mode</value>
     </data>
     <data name="NoFileToBeProcessed" xml:space="preserve">
         <value>No documents to be processed</value>
     </data>
-    <data name="TimeoutMillSecs" xml:space="preserve">
-        <value>Timeout for connecting to the NTP server (milliseconds)</value>
+    <data name="ExcludePathRegexes" xml:space="preserve">
+        <value>Regular expressions for excluding paths</value>
     </data>
-    <data name="SyncToLocalTime" xml:space="preserve">
-        <value>Synchronize local time</value>
+    <data name="Exclude" xml:space="preserve">
+        <value>exclude</value>
     </data>
     <data name="NtpReceiveDone" xml:space="preserve">
         <value>Success {0}/{1}, the average value of the clock offset of the machine:{2}ms</value>
@@ -95,6 +164,9 @@
     <data name="LocalTimeOffset" xml:space="preserve">
         <value>{0}, local clock offset: {1} ms</value>
     </data>
+    <data name="NtpClock" xml:space="preserve">
+        <value>NTP standard clock</value>
+    </data>
     <data name="LocalTimeSyncDone" xml:space="preserve">
         <value>Local time has been synchronized</value>
     </data>
@@ -107,71 +179,17 @@
     <data name="LocalClockOffset" xml:space="preserve">
         <value>Local clock offset</value>
     </data>
-    <data name="TimeTool" xml:space="preserve">
-        <value>Time synchronization tool</value>
-    </data>
-    <data name="TextTool" xml:space="preserve">
-        <value>Text encoding tool</value>
-    </data>
-    <data name="ScreenPixelTool" xml:space="preserve">
-        <value>Screen coordinate color selection tool</value>
-    </data>
     <data name="ClickCopyColor" xml:space="preserve">
         <value>Click the left mouse button to copy the colors and coordinates to the clipboard</value>
     </data>
     <data name="PublicIP" xml:space="preserve">
-        <value>Public network ip: </value>
-    </data>
-    <data name="ServerTime" xml:space="preserve">
-        <value>Synchronize local time</value>
-    </data>
-    <data name="Ip" xml:space="preserve">
-        <value>IP tools</value>
-    </data>
-    <data name="KeepSession" xml:space="preserve">
-        <value>Keep the session after executing the command</value>
-    </data>
-    <data name="NtpClock" xml:space="preserve">
-        <value>NTP server standard clock: {0}</value>
-    </data>
-    <data name="GitTool" xml:space="preserve">
-        <value>Git batch operation tool</value>
-    </data>
-    <data name="GitArgs" xml:space="preserve">
-        <value>Parameters passed to Git</value>
+        <value>Public network ip... </value>
     </data>
     <data name="Ok" xml:space="preserve">
         <value>OK</value>
     </data>
     <data name="FindGitReps" xml:space="preserve">
-        <value>Find all git repository directories under "{0}"...</value>
-    </data>
-    <data name="GitOutputEncoding" xml:space="preserve">
-        <value>Git output encoding</value>
-    </data>
-    <data name="MaxRecursionDepth" xml:space="preserve">
-        <value>Directory search depth</value>
-    </data>
-    <data name="InvalidJsonString" xml:space="preserve">
-        <value>Clipboard does not contain correct Json string</value>
-    </data>
-    <data name="Json" xml:space="preserve">
-        <value>JsonTools</value>
-    </data>
-    <data name="CompressJson" xml:space="preserve">
-        <value>Compress Json text</value>
-    </data>
-    <data name="FormatJson" xml:space="preserve">
-        <value>Format JSON text</value>
-    </data>
-    <data name="GeneratorClass" xml:space="preserve">
-        <value>generate entity classes</value>
-    </data>
-    <data name="JsonToString" xml:space="preserve">
-        <value>Json text escaped into a string</value>
-    </data>
-    <data name="WriteMode" xml:space="preserve">
-        <value>Enable write mode</value>
+        <value>Find all git warehouse directories under "{0}" </value>
     </data>
     <data name="ExerciseMode" xml:space="preserve">
         <value>Read-only mode, the file will not be modified in real time!</value>
@@ -188,25 +206,52 @@
     <data name="WriteFileStats" xml:space="preserve">
         <value>Write statistics</value>
     </data>
-    <data name="LocalClock" xml:space="preserve">
-        <value>local clock</value>
-    </data>
-    <data name="ExcludePathRegexes" xml:space="preserve">
-        <value>Regular expression to exclude paths</value>
-    </data>
-    <data name="Exclude" xml:space="preserve">
-        <value>exclude</value>
-    </data>
     <data name="Repository" xml:space="preserve">
-        <value>storehouse</value>
+        <value>warehouse</value>
     </data>
     <data name="Command" xml:space="preserve">
-        <value>Order</value>
+        <value>command</value>
     </data>
     <data name="Response" xml:space="preserve">
         <value>response</value>
     </data>
     <data name="ZeroCode" xml:space="preserve">
         <value>Git exit code is zero</value>
+    </data>
+    <data name="DataIdentification" xml:space="preserve">
+        <value>Data identification</value>
+    </data>
+    <data name="DataContent" xml:space="preserve">
+        <value>Data content</value>
+    </data>
+    <data name="RemainingTime" xml:space="preserve">
+        <value>Remaining time</value>
+    </data>
+    <data name="TotalProgress" xml:space="preserve">
+        <value>Total progress</value>
+    </data>
+    <data name="Thread" xml:space="preserve">
+        <value>thread</value>
+    </data>
+    <data name="DownloadCompleted" xml:space="preserve">
+        <value>Download complete</value>
+    </data>
+    <data name="ElapsedTime" xml:space="preserve">
+        <value>Cumulative time-consuming</value>
+    </data>
+    <data name="FileSaveLocation" xml:space="preserve">
+        <value>File save location</value>
+    </data>
+    <data name="RequestMetaData" xml:space="preserve">
+        <value>Request metadata</value>
+    </data>
+    <data name="ChunkNumbers" xml:space="preserve">
+        <value>Number of download blocks</value>
+    </data>
+    <data name="MaxParallel" xml:space="preserve">
+        <value>Maximum number of concurrency</value>
+    </data>
+    <data name="BufferSize" xml:space="preserve">
+        <value>Buffer size (kilobytes)</value>
     </data>
 </root>

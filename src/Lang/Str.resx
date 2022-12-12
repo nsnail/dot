@@ -54,6 +54,9 @@
     <data name="ScreenPixelTool" xml:space="preserve">
         <value>屏幕坐标颜色选取工具</value>
     </data>
+    <data name="DownloadTool" xml:space="preserve">
+        <value>多线程下载工具</value>
+    </data>
     <data name="TextTool" xml:space="preserve">
         <value>文本编码工具</value>
     </data>
@@ -90,6 +93,12 @@
     </data>
     <data name="FolderPath" xml:space="preserve">
         <value>要处理的目录路径</value>
+    </data>
+    <data name="OutputPath" xml:space="preserve">
+        <value>输出文件路径</value>
+    </data>
+    <data name="Url" xml:space="preserve">
+        <value>URL</value>
     </data>
     <data name="ConvertEndOfLineToLF" xml:space="preserve">
         <value>转换换行符为LF</value>
@@ -219,5 +228,41 @@
     </data>
     <data name="ZeroCode" xml:space="preserve">
         <value>Git退出码为零的</value>
+    </data>
+    <data name="DataIdentification" xml:space="preserve">
+        <value>数据标识</value>
+    </data>
+    <data name="DataContent" xml:space="preserve">
+        <value>数据内容</value>
+    </data>
+    <data name="RemainingTime" xml:space="preserve">
+        <value>剩余时间</value>
+    </data>
+    <data name="TotalProgress" xml:space="preserve">
+        <value>总进度</value>
+    </data>
+    <data name="Thread" xml:space="preserve">
+        <value>线程</value>
+    </data>
+    <data name="DownloadCompleted" xml:space="preserve">
+        <value>下载完成</value>
+    </data>
+    <data name="ElapsedTime" xml:space="preserve">
+        <value>累计耗时</value>
+    </data>
+    <data name="FileSaveLocation" xml:space="preserve">
+        <value>文件保存位置</value>
+    </data>
+    <data name="RequestMetaData" xml:space="preserve">
+        <value>请求元数据</value>
+    </data>
+    <data name="ChunkNumbers" xml:space="preserve">
+        <value>下载分块数</value>
+    </data>
+    <data name="MaxParallel" xml:space="preserve">
+        <value>最大并发数量</value>
+    </data>
+    <data name="BufferSize" xml:space="preserve">
+        <value>缓冲区大小（千字节）</value>
     </data>
 </root>
