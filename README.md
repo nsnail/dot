@@ -1,5 +1,7 @@
 # dot
 
+[中](README.zh-CN.md) | **En**
+
 Cross-platform, all-around utility set with a beautiful character interface-the Swiss Army knife
 
 ### Brief introduction
