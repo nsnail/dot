@@ -137,7 +137,7 @@ public sealed class Main : ToolBase<Option>
         }
     }
 
-    public override async Task Run()
+    protected override async Task Run()
     {
         await Core();
         if (Opt.KeepSession) {

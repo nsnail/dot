@@ -1,6 +1,7 @@
+using Dot.RmBlank;
 using NSExt.Extensions;
 
-namespace Dot.RmBlank;
+namespace Dot.Trim;
 
 [Description(nameof(Str.RemoveTrailingWhiteSpaces))]
 [Localization(typeof(Str))]

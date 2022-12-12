@@ -1,4 +1,4 @@
-namespace Dot.RmBom;
+namespace Dot.Rbom;
 
 [Description(nameof(Str.TrimUtf8Bom))]
 [Localization(typeof(Str))]

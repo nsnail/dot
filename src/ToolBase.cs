@@ -2,7 +2,7 @@ namespace Dot;
 
 public abstract class ToolBase<TOption> : Command<TOption> where TOption : OptionBase
 {
-    protected          TOption Opt { get; set; }
+    protected          TOption Opt { get; private set; }
     protected abstract Task    Core();
 
     public override int Execute(CommandContext context, TOption option)
@@ -12,7 +12,7 @@ public abstract class ToolBase<TOption> : Command<TOption> where TOption : Optio
         return 0;
     }
 
-    public virtual async Task Run()
+    protected virtual async Task Run()
     {
         await Core();
         if (Opt.KeepSession) {
