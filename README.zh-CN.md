@@ -44,7 +44,7 @@ COMMANDS:
 dot git -a "pull" d:\repos
 ```
 
-![20221212212417](./doc/snapshots/20221212212417.png)
+![20221212212417](./assets/snapshots/20221212212417.png)
 
 类似地，你可以批量对一堆git仓库执行任何git命令：
 
@@ -52,7 +52,7 @@ dot git -a "pull" d:\repos
 dot git -a "config --get http.proxy" d:\repos
 ```
 
-![20221212213957](./doc/snapshots/20221212213957.png)
+![20221212213957](./assets/snapshots/20221212213957.png)
 
 - ##### 高精度时钟同步
 支持多个NTP时钟服务器并行请求，同时除去网络通信时长以设置本机时钟与NTP标准时间精确同步：
@@ -60,7 +60,7 @@ dot git -a "config --get http.proxy" d:\repos
 dot time -k
 ```
 
-![20221212214514](./doc/snapshots/20221212214514.png)
+![20221212214514](./assets/snapshots/20221212214514.png)
 
 - ##### 文本编解码
 复制你需要查看各种编解码的文本在剪贴板中，然后输入如下命令，即可查看
@@ -68,7 +68,7 @@ dot time -k
 dot text
 ```
 
-![20221212214904](./doc/snapshots/20221212214904.png)
+![20221212214904](./assets/snapshots/20221212214904.png)
 
 
 - ##### 多线程下载工具
@@ -77,7 +77,7 @@ dot text
 dot get https://github.com/nsnail/dot/releases/download/v1.1.1/dot-v1.1.1-win-x64.7z
 ```
 
-![20221212215259](./doc/snapshots/20221212215259.png)
+![20221212215259](./assets/snapshots/20221212215259.png)
 
 
 - ##### 移除文件末尾空白
@@ -86,4 +86,4 @@ dot get https://github.com/nsnail/dot/releases/download/v1.1.1/dot-v1.1.1-win-x6
 dot trim d:\repos
 ```
 
-![20221212215853](./doc/snapshots/20221212215853.png)
+![20221212215853](./assets/snapshots/20221212215853.png)

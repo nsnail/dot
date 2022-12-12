@@ -45,7 +45,7 @@ When you have a clone and a lot of git repositories, use this command to pull th
 dot git -a "pull" d:\repos
 ```
 
-![20221212212417](./doc/snapshots/20221212212417.png)
+![20221212212417](./assets/snapshots/20221212212417.png)
 
 Similarly, you can execute any git commands on a bunch of git repositories in bulk:
 
@@ -53,7 +53,7 @@ Similarly, you can execute any git commands on a bunch of git repositories in bu
 dot git -a "config --get http.proxy" d:\repos
 ```
 
-![20221212213957](./doc/snapshots/20221212213957.png)
+![20221212213957](./assets/snapshots/20221212213957.png)
 
 - ##### High-precision time-clock synchronization
 Supports parallel requests from multiple NTP clock servers, while removing the network communication duration to set the precise synchronization of the native clocks with the NTP standard time:
@@ -61,7 +61,7 @@ Supports parallel requests from multiple NTP clock servers, while removing the n
 dot time -k
 ```
 
-![20221212214514](./doc/snapshots/20221212214514.png)
+![20221212214514](./assets/snapshots/20221212214514.png)
 
 - ##### Text codec
 Copy you need to view various codec text in the clipboard, and then enter the following command to view
@@ -69,7 +69,7 @@ Copy you need to view various codec text in the clipboard, and then enter the fo
 dot text
 ```
 
-![20221212214904](./doc/snapshots/20221212214904.png)
+![20221212214904](./assets/snapshots/20221212214904.png)
 
 
 - ##### Multi-threading download tool
@@ -78,7 +78,7 @@ Support setting the block size, number of threads to replace the single thread w
 dot get https://github.com/nsnail/dot/releases/download/v1.1.1/dot-v1.1.1-win-x64.7z
 ```
 
-![20221212215259](./doc/snapshots/20221212215259.png)
+![20221212215259](./assets/snapshots/20221212215259.png)
 
 
 - ##### Remove the blank at the end of the file
@@ -87,4 +87,4 @@ Remove excess spaces and line breaks in the tail of all files in the specified d
 dot trim d:\repos
 ```
 
-![20221212215853](./doc/snapshots/20221212215853.png)
+![20221212215853](./assets/snapshots/20221212215853.png)
