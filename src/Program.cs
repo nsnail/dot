@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Dot;
 using Dot.Git;
@@ -28,4 +29,6 @@ app.Configure(config => {
 });
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
 return app.Run(args);
