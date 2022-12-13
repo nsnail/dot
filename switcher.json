@@ -11,11 +11,11 @@
             "packages": [
                 {
                     "packageName": "NSExt",
-                    "version": "1.0.8"
+                    "version": "1.0.9-alpha.0.1"
                 },
                 {
-                    "packageName": "Spectre.Console.Cli",
-                    "version": "0.45.1-preview.0.46"
+                    "packageName": "Spectre.Console.Cli.NS",
+                    "version": "0.45.1-preview.0.48"
                 }
             ]
         }

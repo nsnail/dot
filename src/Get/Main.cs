@@ -85,14 +85,14 @@ internal partial class Main : ToolBase<Option>
         }
     }
 
-    private void WritePart(HttpResponseMessage rsp,      string mainFilePath //
-                         , long                startPos, long   endPos       //
+    private void WritePart(HttpResponseMessage rsp, string mainFilePath          //
+                         , int                 no,  long   startPos, long endPos //
                          , Action<int>         rateHandle)
     {
         Span<byte> buf    = stackalloc byte[Opt.BufferSize];
         using var  stream = rsp.Content.ReadAsStream();
         int        read;
-        var        file = $"{mainFilePath}.{startPos}-{endPos}.{_PART}";
+        var        file = $"{mainFilePath}.{no}.{startPos}-{endPos}.{_PART}";
         using var  fs   = new FileStream(file, FileMode.Create, FileAccess.Write, FileShare.None);
         while ((read = stream.Read(buf)) != 0) {
             fs.Write(read == Opt.BufferSize ? buf : buf[..read]);
@@ -169,7 +169,7 @@ internal partial class Main : ToolBase<Option>
                                                   // ReSharper disable once AccessToDisposedClosure
                                                   using var getRsp
                                                       = http.Send(getReq, HttpCompletionOption.ResponseHeadersRead);
-                                                  WritePart(getRsp, mainFilePath, startPos, endPos, x => {
+                                                  WritePart(getRsp, mainFilePath, i, startPos, endPos, x => {
                                                       tChild.Increment(x);
                                                       tParent.Increment(x);
                                                   });

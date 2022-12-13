@@ -12,7 +12,9 @@
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.46"/>
+        <PackageReference Include="NSExt" Version="1.0.9-alpha.0.1"/>
+        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.48"/>
+        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.48"/>
         <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
     <ItemGroup>
@@ -20,10 +22,6 @@
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\..\..\ForkedGitReps\ns-ext\src\NSExt.csproj"/>
-        <ProjectReference Include="..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console.Cli\Spectre.Console.Cli.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Spectre.Console">
