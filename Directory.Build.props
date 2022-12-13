@@ -1,7 +1,10 @@
 <Project>
     <PropertyGroup>
-        <BaseOutputPath>../build/temp/bin</BaseOutputPath>
-        <BaseIntermediateOutputPath>../build/temp/obj</BaseIntermediateOutputPath>
-        <MSBuildProjectExtensionsPath>../build/temp/obj</MSBuildProjectExtensionsPath>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <BaseOutputPath>../build</BaseOutputPath>
+        <BaseIntermediateOutputPath>../build</BaseIntermediateOutputPath>
+        <OutputPath>$(BaseOutputPath)/$(MSBuildProjectName)/bin</OutputPath>
+        <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</IntermediateOutputPath>
+        <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</MSBuildProjectExtensionsPath>
     </PropertyGroup>
 </Project>

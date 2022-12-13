@@ -3,19 +3,13 @@
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net7.0-windows;net7.0</TargetFrameworks>
         <UseWindowsForms Condition="'$(TargetFramework)' == 'net7.0-windows'">true</UseWindowsForms>
-        <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Dot</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <NoWarn>CA1416;</NoWarn>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.46"/>
