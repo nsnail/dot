@@ -1,6 +1,8 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Dot;
 
-public class DirOption : OptionBase
+internal class DirOption : OptionBase
 {
     [CommandOption("-e|--exclude")]
     [Description(nameof(Str.ExcludePathRegexes))]

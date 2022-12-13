@@ -1,6 +1,9 @@
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Dot.Get;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [CommandOption("-b|--buffer-size")]
     [Description(nameof(Str.BufferSize))]

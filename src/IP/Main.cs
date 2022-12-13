@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
@@ -5,7 +7,7 @@ namespace Dot.IP;
 
 [Description(nameof(Str.Ip))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 
 {
     protected override async Task Core()

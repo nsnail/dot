@@ -1,7 +1,7 @@
 namespace Dot;
 
 // ReSharper disable once UnusedType.Global
-public class CsxEditor
+internal class CsxEditor
 {
     // ReSharper disable once UnusedMember.Local
     #pragma warning disable CA1822

@@ -1,10 +1,12 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 #if NET7_0_WINDOWS
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Dot.Color;
 
-public class MouseHook : IDisposable
+internal class MouseHook : IDisposable
 {
     [StructLayout(LayoutKind.Explicit)]
     private struct Msllhookstruct
@@ -18,6 +20,7 @@ public class MouseHook : IDisposable
     }
 
 
+    // ReSharper disable once EventNeverSubscribedTo.Global
     public event MouseEventHandler MouseEvent      = delegate { };
     private const    int           _WH_MOUSE_LL    = 14;
     private const    int           _WM_LBUTTONDOWN = 0x0201;

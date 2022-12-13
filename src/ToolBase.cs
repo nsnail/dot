@@ -1,16 +1,9 @@
 namespace Dot;
 
-public abstract class ToolBase<TOption> : Command<TOption> where TOption : OptionBase
+internal abstract class ToolBase<TOption> : Command<TOption> where TOption : OptionBase
 {
     protected          TOption Opt { get; private set; }
     protected abstract Task    Core();
-
-    public override int Execute(CommandContext context, TOption option)
-    {
-        Opt = option;
-        Run().Wait();
-        return 0;
-    }
 
     protected virtual async Task Run()
     {
@@ -19,5 +12,12 @@ public abstract class ToolBase<TOption> : Command<TOption> where TOption : Optio
             AnsiConsole.MarkupLine(Str.PressAnyKey);
             AnsiConsole.Console.Input.ReadKey(true);
         }
+    }
+
+    public override int Execute(CommandContext context, TOption option)
+    {
+        Opt = option;
+        Run().Wait();
+        return 0;
     }
 }

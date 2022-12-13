@@ -1,6 +1,9 @@
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Dot.Json;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [CommandOption("-c|--compress")]
     [Description(nameof(Str.CompressJson))]

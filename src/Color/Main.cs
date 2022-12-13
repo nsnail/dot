@@ -1,9 +1,11 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 #if NET7_0_WINDOWS
 namespace Dot.Color;
 
 [Description(nameof(Str.ScreenPixelTool))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 
 {
     protected override Task Core()

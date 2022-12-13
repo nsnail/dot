@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 using NSExt.Extensions;
 #if NET7_0_WINDOWS
 using TextCopy;
@@ -8,7 +10,7 @@ namespace Dot.Pwd;
 
 [Description(nameof(Str.RandomPasswordGenerator))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     private readonly char[][] _charTable = {
                                                "0123456789".ToCharArray() //

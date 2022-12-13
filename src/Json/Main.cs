@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 using System.Text.Json;
 using NSExt.Extensions;
 #if NET7_0_WINDOWS
@@ -9,7 +11,7 @@ namespace Dot.Json;
 
 [Description(nameof(Str.Json))]
 [Localization(typeof(Str))]
-public class Main : ToolBase<Option>
+internal class Main : ToolBase<Option>
 {
     private object _inputObj;
 
@@ -43,7 +45,7 @@ public class Main : ToolBase<Option>
         var inputText = Opt.InputText;
 
         #if NET7_0_WINDOWS
-        if (inputText.NullOrWhiteSpace()) inputText = ClipboardService.GetText();
+        if (inputText.NullOrWhiteSpace()) inputText = await ClipboardService.GetTextAsync();
         #endif
         if (inputText.NullOrWhiteSpace()) throw new ArgumentException(Str.InputTextIsEmpty);
 

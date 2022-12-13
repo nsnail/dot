@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace Dot.IP;
 
-public class Option : OptionBase { }
+internal class Option : OptionBase { }

@@ -4,7 +4,7 @@ using Size = System.Drawing.Size;
 
 namespace Dot.Color;
 
-public class WinInfo : Form
+internal class WinInfo : Form
 {
     private const    int        _WINDOW_SIZE = 480; //窗口大小
     private const    int        _ZOOM_RATE   = 16;  //缩放倍率

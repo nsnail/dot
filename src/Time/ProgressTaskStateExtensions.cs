@@ -1,6 +1,6 @@
 namespace Dot.Time;
 
-public static class ProgressTaskStateExtensions
+internal static class ProgressTaskStateExtensions
 {
     public static TimeSpan Result(this ProgressTaskState me)
     {

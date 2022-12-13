@@ -4,11 +4,13 @@ using Panel = Spectre.Console.Panel;
 
 namespace Dot;
 
-public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : DirOption
+internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : DirOption
 {
-    private                 int                               _breakCnt;           //跳过文件数
-    private                 ProgressTask                      _childTask;          //子任务进度
-    private                 int                               _excludeCnt;         //排除文件数
+    private int          _breakCnt;   //跳过文件数
+    private ProgressTask _childTask;  //子任务进度
+    private int          _excludeCnt; //排除文件数
+
+    // ReSharper disable once StaticMemberInGenericType
     private static readonly object                            _lock = new();       //线程锁
     private                 int                               _readCnt;            //读取文件数
     private                 int                               _totalCnt;           //总文件数
@@ -16,6 +18,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     private readonly        ConcurrentDictionary<string, int> _writeStats = new(); //写入统计：后缀，数量
 
 
+    // ReSharper disable once ReturnTypeCanBeEnumerable.Local
     private string[] EnumerateFiles(string path, string searchPattern, out int excludeCnt)
     {
         var exCnt = 0;
@@ -76,7 +79,7 @@ public abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : Dir
     }
 
 
-    protected FileStream CreateTempFile(out string file)
+    protected static FileStream CreateTempFile(out string file)
     {
         file = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.tmp");
         return OpenFileStream(file, FileMode.OpenOrCreate, FileAccess.Write);

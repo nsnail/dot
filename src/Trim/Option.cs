@@ -1,3 +1,6 @@
-namespace Dot.RmBlank;
+// ReSharper disable ClassNeverInstantiated.Global
 
-public class Option : DirOption { }
+
+namespace Dot.Trim;
+
+internal class Option : DirOption { }

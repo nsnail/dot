@@ -1,3 +1,6 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
@@ -10,7 +13,7 @@ namespace Dot.Text;
 
 [Description(nameof(Str.TextTool))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     private ref struct Output
     {

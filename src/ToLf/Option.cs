@@ -1,3 +1,6 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 namespace Dot.ToLf;
 
-public class Option : DirOption { }
+internal class Option : DirOption { }

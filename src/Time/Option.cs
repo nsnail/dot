@@ -1,6 +1,9 @@
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Dot.Time;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [CommandOption("-s|--sync")]
     [Description(nameof(Str.SyncToLocalTime))]

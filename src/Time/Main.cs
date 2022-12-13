@@ -1,10 +1,13 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 using System.Net.Sockets;
 
 namespace Dot.Time;
 
 [Description(nameof(Str.TimeTool))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     private const int _MAX_DEGREE_OF_PARALLELISM = 10;
     private const int _NTP_PORT                  = 123;

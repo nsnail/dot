@@ -1,8 +1,11 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 namespace Dot.Rbom;
 
 [Description(nameof(Str.TrimUtf8Bom))]
 [Localization(typeof(Str))]
-public sealed class Main : FilesTool<Option>
+internal sealed class Main : FilesTool<Option>
 {
     private readonly byte[] _utf8Bom = { 0xef, 0xbb, 0xbf };
 

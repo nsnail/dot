@@ -1,11 +1,13 @@
-using Dot.RmBlank;
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 using NSExt.Extensions;
 
 namespace Dot.Trim;
 
 [Description(nameof(Str.RemoveTrailingWhiteSpaces))]
 [Localization(typeof(Str))]
-public sealed class Main : FilesTool<Option>
+internal sealed class Main : FilesTool<Option>
 {
     private static int GetSpacesCnt(Stream fsr)
     {

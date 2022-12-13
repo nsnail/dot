@@ -1,3 +1,6 @@
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+
 using System.Runtime.InteropServices;
 
 namespace Dot;

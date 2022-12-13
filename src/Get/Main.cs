@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using NSExt.Extensions;
@@ -6,7 +8,7 @@ namespace Dot.Get;
 
 [Description(nameof(Str.DownloadTool))]
 [Localization(typeof(Str))]
-public partial class Main : ToolBase<Option>
+internal partial class Main : ToolBase<Option>
 {
     private const string _PART = "part";
 
@@ -84,8 +86,8 @@ public partial class Main : ToolBase<Option>
     }
 
     private void WritePart(HttpResponseMessage rsp,      string mainFilePath //
-                          , long                startPos, long   endPos       //
-                          , Action<int>         rateHandle)
+                         , long                startPos, long   endPos       //
+                         , Action<int>         rateHandle)
     {
         Span<byte> buf    = stackalloc byte[Opt.BufferSize];
         using var  stream = rsp.Content.ReadAsStream();

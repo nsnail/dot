@@ -1,6 +1,9 @@
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace Dot.Pwd;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [Flags]
     public enum GenerateTypes

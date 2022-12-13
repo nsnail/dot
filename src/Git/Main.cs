@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
@@ -7,7 +9,7 @@ namespace Dot.Git;
 
 [Description(nameof(Str.GitTool))]
 [Localization(typeof(Str))]
-public class Main : ToolBase<Option>
+internal class Main : ToolBase<Option>
 {
     private Encoding                                               _gitOutputEnc; //git command rsp 编码
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
@@ -43,7 +45,7 @@ public class Main : ToolBase<Option>
             p.ErrorDataReceived   += ExecRspReceived;
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
-            await p.WaitForExitAsync();
+            await p.WaitForExitAsync(CancellationToken.None);
 
             if (p.ExitCode == 0) {
                 payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);

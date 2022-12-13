@@ -1,6 +1,9 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace Dot.Git;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [CommandOption("-a|--args")]
     [Description(nameof(Str.GitArgs))]

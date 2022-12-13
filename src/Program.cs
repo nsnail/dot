@@ -29,6 +29,6 @@ app.Configure(config => {
 });
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+CultureInfo.CurrentCulture   = CultureInfo.GetCultureInfo("en-US");
 CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
 return app.Run(args);

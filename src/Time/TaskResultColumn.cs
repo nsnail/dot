@@ -1,8 +1,11 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 using Spectre.Console.Rendering;
 
 namespace Dot.Time;
 
-public class TaskResultColumn : ProgressColumn
+internal class TaskResultColumn : ProgressColumn
 {
     /// <summary>
     ///     Gets or sets the alignment of the task description.

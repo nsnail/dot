@@ -1,13 +1,18 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
+
 using NSExt.Extensions;
 using Spectre.Console.Rendering;
 
 namespace Dot.Time;
 
-public class TaskStatusColumn : ProgressColumn
+internal class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {
         [Description($"[gray]{nameof(Ready)}[/]")]
+        // ReSharper disable once UnusedMember.Global
         Ready
 
       , [Description($"[yellow]{nameof(Connecting)}[/]")]

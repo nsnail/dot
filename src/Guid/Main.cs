@@ -1,3 +1,6 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 #if NET7_0_WINDOWS
 using TextCopy;
 #endif
@@ -6,7 +9,7 @@ namespace Dot.Guid;
 
 [Description(nameof(Str.GuidTool))]
 [Localization(typeof(Str))]
-public sealed class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     protected override Task Core()
     {

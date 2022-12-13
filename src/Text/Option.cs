@@ -1,6 +1,9 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 namespace Dot.Text;
 
-public class Option : OptionBase
+internal class Option : OptionBase
 {
     [CommandArgument(0, "[input text]")]
     [Description(nameof(Str.TextTobeProcessed))]

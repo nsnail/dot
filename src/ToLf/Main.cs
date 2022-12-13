@@ -1,8 +1,11 @@
+// ReSharper disable ClassNeverInstantiated.Global
+
+
 namespace Dot.ToLf;
 
 [Description(nameof(Str.ConvertEndOfLineToLF))]
 [Localization(typeof(Str))]
-public sealed class Main : FilesTool<Option>
+internal sealed class Main : FilesTool<Option>
 {
     protected override async ValueTask FileHandle(string file, CancellationToken _)
     {
@@ -11,7 +14,8 @@ public sealed class Main : FilesTool<Option>
         var    hasWrote = false;
         var    isBin    = false;
         string tmpFile;
-        int    data;
+        // ReSharper disable once TooWideLocalVariableScope
+        int data;
 
         await using (var fsr = OpenFileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
             if (fsr is null) {

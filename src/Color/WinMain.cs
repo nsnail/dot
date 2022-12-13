@@ -3,7 +3,7 @@ using TextCopy;
 
 namespace Dot.Color;
 
-public class WinMain : Form
+internal class WinMain : Form
 {
     private readonly Bitmap  _bmp;
     private          bool    _disposed;
