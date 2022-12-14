@@ -35,7 +35,6 @@ internal partial class Main : ToolBase<Option>
         return path;
     }
 
-
     private static bool GetUseablePath(ref string path)
     {
         var dir  = Path.GetDirectoryName(path);
@@ -54,7 +53,6 @@ internal partial class Main : ToolBase<Option>
 
         return ret;
     }
-
 
     private static void MergeParts(string mainFilePath)
     {
@@ -120,7 +118,6 @@ internal partial class Main : ToolBase<Option>
                          });
         AnsiConsole.Write(table);
 
-
         var timer        = DateTime.Now;
         var mainFilePath = BuildFilePath(Opt.Output, attachment);
         await AnsiConsole.Progress()
@@ -154,7 +151,6 @@ internal partial class Main : ToolBase<Option>
                                  tParent.IsIndeterminate(false);
                                  tParent.MaxValue = contentLength;
                                  var chunkSize = contentLength / Opt.ChunkNumbers;
-
 
                                  Parallel.For(0, Opt.ChunkNumbers
                                             , new ParallelOptions { MaxDegreeOfParallelism = Opt.MaxParallel } //

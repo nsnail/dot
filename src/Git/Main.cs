@@ -15,7 +15,6 @@ internal class Main : ToolBase<Option>
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
-
     private async Task CoreInternal()
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
@@ -63,7 +62,6 @@ internal class Main : ToolBase<Option>
                                    $"{Str.ZeroCode}: [green]{_repoStatus.Count(x => x.Value == TaskStatusColumn.Statues
                                                                                    .Succeed)}[/]/{_repoStatus.Count}");
 
-
         foreach (var repo in _repoRsp) {
             var status = _repoStatus[repo.Key].Desc();
             table.AddRow(status.Replace(_repoStatus[repo.Key].ToString(), new DirectoryInfo(repo.Key).Name), Opt.Args
@@ -72,7 +70,6 @@ internal class Main : ToolBase<Option>
 
         AnsiConsole.Write(table);
     }
-
 
     private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
     {

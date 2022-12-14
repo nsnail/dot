@@ -11,7 +11,6 @@ internal class Option : OptionBase
     [DefaultValue(false)]
     public bool Sync { get; set; }
 
-
     [CommandOption("-t|--timeout")]
     [Description(nameof(Str.TimeoutMillSecs))]
     [Localization(typeof(Str))]

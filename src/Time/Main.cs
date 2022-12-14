@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 using System.Net.Sockets;
 
 namespace Dot.Time;
@@ -32,9 +31,7 @@ internal sealed class Main : ToolBase<Option>
 
     private double _offsetAvg;
 
-
     private int _successCnt;
-
 
     private TimeSpan GetNtpOffset(string server)
     {
@@ -44,7 +41,6 @@ internal sealed class Main : ToolBase<Option>
             = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) {
                   ReceiveTimeout = Opt.Timeout
               };
-
 
         try {
             socket.Connect(server, _NTP_PORT);
@@ -91,7 +87,6 @@ internal sealed class Main : ToolBase<Option>
         return ValueTask.CompletedTask;
     }
 
-
     private static void SetSysteTime(DateTime time)
     {
         var timeToSet = new Win32.Systemtime {
@@ -106,7 +101,6 @@ internal sealed class Main : ToolBase<Option>
                                              };
         Win32.SetLocalTime(timeToSet);
     }
-
 
     protected override async Task Core()
     {
@@ -132,7 +126,6 @@ internal sealed class Main : ToolBase<Option>
 
         AnsiConsole.MarkupLine(Str.NtpReceiveDone, $"[green]{_successCnt}[/]", _ntpServers.Length
                              , $"[yellow]{_offsetAvg:f2}[/]");
-
 
         if (Opt.Sync) {
             SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));

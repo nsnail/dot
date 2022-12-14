@@ -51,7 +51,6 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
         AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
     }
 
-
     // ReSharper disable once ReturnTypeCanBeEnumerable.Local
     private string[] EnumerateFiles(string path, string searchPattern, out int excludeCnt)
     {
@@ -84,16 +83,13 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
         return CoreInternal();
     }
 
-
     protected static FileStream CreateTempFile(out string file)
     {
         file = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.tmp");
         return OpenFileStream(file, FileMode.OpenOrCreate, FileAccess.Write);
     }
 
-
     protected abstract ValueTask FileHandle(string file, CancellationToken cancelToken);
-
 
     protected static FileStream OpenFileStream(string    file, FileMode mode, FileAccess access
                                              , FileShare share = FileShare.Read)
@@ -129,7 +125,6 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
                 = $"{Str.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_writeCnt}[/], {Str.Break}: [gray]{_breakCnt}[/], {Str.Exclude}: [yellow]{_excludeCnt}[/]";
         }
     }
-
 
     protected void UpdateStats(string key)
     {

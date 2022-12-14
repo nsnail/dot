@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 using NSExt.Extensions;
 
 namespace Dot.Trim;
@@ -27,14 +26,12 @@ internal sealed class Main : FilesTool<Option>
         return trimLen;
     }
 
-
     protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
     {
         ShowMessage(1, 0, 0);
         int spacesCnt;
 
         await using var fsrw = OpenFileStream(file, FileMode.Open, FileAccess.ReadWrite);
-
 
         if (fsrw is null || fsrw.Length == 0 || (spacesCnt = GetSpacesCnt(fsrw)) == 0) {
             ShowMessage(0, 0, 1);
@@ -46,7 +43,6 @@ internal sealed class Main : FilesTool<Option>
             ShowMessage(0, 0, 1);
             return;
         }
-
 
         if (Opt.WriteMode) fsrw.SetLength(fsrw.Length - spacesCnt);
         ShowMessage(0, 1, 0);

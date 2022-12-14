@@ -27,17 +27,14 @@ public static partial class Win32
     private const string _USER32_DLL   = "user32.dll";
     public const  int    SW_HIDE       = 0;
 
-
     [LibraryImport(_USER32_DLL)]
     internal static partial nint CallNextHookEx(nint hhk, int nCode, nint wParam, nint lParam);
 
     [LibraryImport(_KERNEL32_DLL)]
     internal static partial nint GetConsoleWindow();
 
-
     [LibraryImport(_USER32_DLL)]
     internal static partial nint GetDesktopWindow();
-
 
     [LibraryImport(_KERNEL32_DLL, StringMarshalling = StringMarshalling.Utf16)]
     internal static partial nint GetModuleHandle(string lpModuleName);
@@ -50,7 +47,6 @@ public static partial class Win32
 
     [LibraryImport(_USER32_DLL)]
     internal static partial int ReleaseDC(nint hWnd, nint dc);
-
 
     [LibraryImport(_KERNEL32_DLL)]
     internal static partial void SetLocalTime(Systemtime st);

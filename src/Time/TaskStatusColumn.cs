@@ -1,7 +1,6 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-
 using NSExt.Extensions;
 using Spectre.Console.Rendering;
 

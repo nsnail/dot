@@ -33,7 +33,6 @@ internal class WinInfo : Form
         Controls.Add(_pbox);
     }
 
-
     ~WinInfo()
     {
         Dispose(false);
@@ -57,7 +56,6 @@ internal class WinInfo : Form
 
         _disposed = true;
     }
-
 
     public void UpdateImage(Bitmap img, int x, int y)
     {

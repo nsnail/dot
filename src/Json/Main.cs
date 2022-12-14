@@ -6,7 +6,6 @@ using NSExt.Extensions;
 using TextCopy;
 #endif
 
-
 namespace Dot.Json;
 
 [Description(nameof(Str.Json))]
@@ -14,7 +13,6 @@ namespace Dot.Json;
 internal class Main : ToolBase<Option>
 {
     private object _inputObj;
-
 
     private async Task<string> ConvertToString()
     {
@@ -80,7 +78,6 @@ internal class Main : ToolBase<Option>
 
             throw new ArgumentException(Str.InvalidJsonString);
         }
-
 
         return CoreInternal();
     }

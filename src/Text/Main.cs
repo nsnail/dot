@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
@@ -33,7 +32,6 @@ internal sealed class Main : ToolBase<Option>
         public ReadOnlySpan<char> UrlEncode;
     }
 
-
     private static Output BuildOutput(string text, Encoding enc)
     {
         Output ret;
@@ -53,7 +51,6 @@ internal sealed class Main : ToolBase<Option>
         ret.HtmlDecode      = text.HtmlDe();
         ret.HtmlEncode      = text.Html();
 
-
         if (!text.IsBase64String()) return ret;
         byte[] base64DeHex = null;
         try {
@@ -67,7 +64,6 @@ internal sealed class Main : ToolBase<Option>
         ret.Base64DeCodeHex = base64DeHex.String();
         ret.Base64DeCode    = enc.GetString(base64DeHex);
 
-
         return ret;
     }
 
@@ -77,7 +73,6 @@ internal sealed class Main : ToolBase<Option>
         var utf8                = BuildOutput(text, Encoding.UTF8);
         var unicodeLittleEndian = BuildOutput(text, Encoding.Unicode);
         var unicodeBigEndian    = BuildOutput(text, Encoding.BigEndianUnicode);
-
 
         PrintOutput(ansi);
         PrintOutput(utf8);
@@ -121,7 +116,6 @@ html-decode:       {o.HtmlDecode}
         if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
         #endif
         if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);
-
 
         ParseAndShow(Opt.Text);
         #if !NET7_0_WINDOWS

@@ -23,7 +23,6 @@ internal class Option : OptionBase
     [DefaultValue(int.MaxValue)]
     public int MaxRecursionDepth { get; set; }
 
-
     [CommandArgument(0, "[path]")]
     [Description(nameof(Str.FolderPath))]
     [Localization(typeof(Str))]

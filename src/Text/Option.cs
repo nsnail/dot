@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 namespace Dot.Text;
 
 internal class Option : OptionBase

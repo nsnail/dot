@@ -15,7 +15,6 @@ internal sealed class MouseHook : IDisposable
         [FieldOffset(4)] public readonly int Y;
     }
 
-
     // ReSharper disable once EventNeverSubscribedTo.Global
     public event MouseEventHandler MouseEvent      = delegate { };
     private const    int           _WH_MOUSE_LL    = 14;
@@ -34,7 +33,6 @@ internal sealed class MouseHook : IDisposable
         Dispose(false);
     }
 
-
     private void Dispose(bool disposing)
     {
         if (_disposed) return;
@@ -45,7 +43,6 @@ internal sealed class MouseHook : IDisposable
         if (_hookId != default) Win32.UnhookWindowsHookEx(_hookId);
         _disposed = true;
     }
-
 
     private nint HookCallback(int nCode, nint wParam, nint lParam)
     {
@@ -67,7 +64,6 @@ internal sealed class MouseHook : IDisposable
         using var curModule  = curProcess.MainModule!;
         return Win32.SetWindowsHookEx(_WH_MOUSE_LL, proc, Win32.GetModuleHandle(curModule.ModuleName), 0);
     }
-
 
     public void Dispose()
     {

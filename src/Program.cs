@@ -23,7 +23,6 @@ app.Configure(config => {
     config.AddCommand<Dot.ToLf.Main>(nameof(Dot.ToLf).ToLower());
     config.AddCommand<Dot.Get.Main>(nameof(Dot.Get).ToLower());
 
-
     config.ValidateExamples();
 });
 
