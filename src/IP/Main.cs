@@ -16,9 +16,12 @@ internal sealed class Main : ToolBase<Option>
             if (item.NetworkInterfaceType != NetworkInterfaceType.Ethernet ||
                 item.OperationalStatus    != OperationalStatus.Up)
                 continue;
-            foreach (var ip in item.GetIPProperties().UnicastAddresses)
-                if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                    Console.WriteLine(@$"{item.Name}: {ip.Address}");
+            var output = string.Join(Environment.NewLine
+                                   , item.GetIPProperties()
+                                         .UnicastAddresses
+                                         .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                                         .Select(x => @$"{item.Name}: {x.Address}"));
+            Console.WriteLine(output);
         }
 
         using var http = new HttpClient();

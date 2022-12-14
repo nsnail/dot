@@ -14,9 +14,9 @@ internal abstract class ToolBase<TOption> : Command<TOption> where TOption : Opt
         }
     }
 
-    public override int Execute(CommandContext context, TOption option)
+    public override int Execute(CommandContext context, TOption settings)
     {
-        Opt = option;
+        Opt = settings;
         Run().Wait();
         return 0;
     }

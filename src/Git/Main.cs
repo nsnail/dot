@@ -16,61 +16,9 @@ internal class Main : ToolBase<Option>
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
 
-    private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
-    {
-        payload.Value.StartTask();
-        payload.Value.State.Status(TaskStatusColumn.Statues.Executing);
-
-        // 打印 git command rsp
-        void ExecRspReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (e.Data is null) return;
-            var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
-            _repoRsp[payload.Key].Append(msg.EscapeMarkup());
-        }
-
-        // 启动git进程
-        {
-            var startInfo = new ProcessStartInfo {
-                                                     CreateNoWindow         = true
-                                                   , WorkingDirectory       = payload.Key
-                                                   , FileName               = "git"
-                                                   , Arguments              = Opt.Args
-                                                   , UseShellExecute        = false
-                                                   , RedirectStandardOutput = true
-                                                   , RedirectStandardError  = true
-                                                 };
-            using var p = Process.Start(startInfo);
-            p!.OutputDataReceived += ExecRspReceived;
-            p.ErrorDataReceived   += ExecRspReceived;
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-            await p.WaitForExitAsync(CancellationToken.None);
-
-            if (p.ExitCode == 0) {
-                payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
-                _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Succeed
-                                      , (_, _) => TaskStatusColumn.Statues.Succeed);
-                payload.Value.StopTask();
-            }
-            else {
-                payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
-                _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Failed
-                                      , (_, _) => TaskStatusColumn.Statues.Failed);
-            }
-
-            payload.Value.StopTask();
-        }
-    }
-
-    protected override async Task Core()
+    private async Task CoreInternal()
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path) //
-                                      , string.Format(Str.PathNotFound, Opt.Path));
-
-
         var progressBar = new ProgressBarColumn { Width = 10 };
         await AnsiConsole.Progress()
                          .Columns(progressBar                                            //
@@ -123,5 +71,60 @@ internal class Main : ToolBase<Option>
         }
 
         AnsiConsole.Write(table);
+    }
+
+
+    private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
+    {
+        payload.Value.StartTask();
+        payload.Value.State.Status(TaskStatusColumn.Statues.Executing);
+
+        // 打印 git command rsp
+        void ExecRspReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data is null) return;
+            var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
+            _repoRsp[payload.Key].Append(msg.EscapeMarkup());
+        }
+
+        // 启动git进程
+
+        var startInfo = new ProcessStartInfo {
+                                                 CreateNoWindow         = true
+                                               , WorkingDirectory       = payload.Key
+                                               , FileName               = "git"
+                                               , Arguments              = Opt.Args
+                                               , UseShellExecute        = false
+                                               , RedirectStandardOutput = true
+                                               , RedirectStandardError  = true
+                                             };
+        using var p = Process.Start(startInfo);
+        p!.OutputDataReceived += ExecRspReceived;
+        p.ErrorDataReceived   += ExecRspReceived;
+        p.BeginOutputReadLine();
+        p.BeginErrorReadLine();
+        await p.WaitForExitAsync(CancellationToken.None);
+
+        if (p.ExitCode == 0) {
+            payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
+            _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Succeed
+                                  , (_, _) => TaskStatusColumn.Statues.Succeed);
+            payload.Value.StopTask();
+        }
+        else {
+            payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
+            _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Failed
+                                  , (_, _) => TaskStatusColumn.Statues.Failed);
+        }
+
+        payload.Value.StopTask();
+    }
+
+    protected override Task Core()
+    {
+        if (!Directory.Exists(Opt.Path))
+            throw new ArgumentException(nameof(Opt.Path) //
+                                      , string.Format(Str.PathNotFound, Opt.Path));
+        return CoreInternal();
     }
 }

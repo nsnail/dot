@@ -5,7 +5,7 @@
         <UseWindowsForms Condition="'$(TargetFramework)' == 'net7.0-windows'">true</UseWindowsForms>
         <RootNamespace>Dot</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <NoWarn>CA1416;</NoWarn>
+        <NoWarn>CA1416;S1075</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
@@ -28,5 +28,6 @@
             <HintPath>..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console\bin\Debug\net6.0\Spectre.Console.dll</HintPath>
         </Reference>
     </ItemGroup>
+    <Import Project="../SonarqubleAnalyzer.props"/>
     <Import Project="../GenerateResx.targets"/>
 </Project>

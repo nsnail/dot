@@ -7,7 +7,7 @@ namespace Dot.ToLf;
 [Localization(typeof(Str))]
 internal sealed class Main : FilesTool<Option>
 {
-    protected override async ValueTask FileHandle(string file, CancellationToken _)
+    protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
     {
         ShowMessage(1, 0, 0);
 
@@ -50,7 +50,9 @@ internal sealed class Main : FilesTool<Option>
         }
 
 
+        #pragma warning disable S2583
         if (hasWrote && !isBin) {
+            #pragma warning restore S2583
             if (Opt.WriteMode) File.Copy(tmpFile, file, true);
             ShowMessage(0, 1, 0);
             UpdateStats(Path.GetExtension(file));

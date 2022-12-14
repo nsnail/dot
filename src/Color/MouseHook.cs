@@ -6,15 +6,11 @@ using System.Runtime.InteropServices;
 
 namespace Dot.Color;
 
-internal class MouseHook : IDisposable
+internal sealed class MouseHook : IDisposable
 {
     [StructLayout(LayoutKind.Explicit)]
     private struct Msllhookstruct
     {
-        // [FieldOffset(20)] private readonly nint        dwExtraInfo;
-        // [FieldOffset(12)] private readonly uint        flags;
-        // [FieldOffset(8)]  private readonly uint        mouseData;
-        // [FieldOffset(16)] private readonly uint        time;
         [FieldOffset(0)] public readonly int X;
         [FieldOffset(4)] public readonly int Y;
     }
@@ -42,7 +38,9 @@ internal class MouseHook : IDisposable
     private void Dispose(bool disposing)
     {
         if (_disposed) return;
+        #pragma warning disable S108
         if (disposing) { }
+        #pragma warning restore S108
 
         if (_hookId != default) Win32.UnhookWindowsHookEx(_hookId);
         _disposed = true;

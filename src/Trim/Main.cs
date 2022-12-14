@@ -28,7 +28,7 @@ internal sealed class Main : FilesTool<Option>
     }
 
 
-    protected override async ValueTask FileHandle(string file, CancellationToken _)
+    protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
     {
         ShowMessage(1, 0, 0);
         int spacesCnt;
