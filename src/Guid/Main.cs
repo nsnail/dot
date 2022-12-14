@@ -1,6 +1,7 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
 
+using System.Globalization;
 #if NET7_0_WINDOWS
 using TextCopy;
 #endif
@@ -13,8 +14,11 @@ internal sealed class Main : ToolBase<Option>
 {
     protected override Task Core()
     {
-        var guid            = System.Guid.NewGuid().ToString();
-        if (Opt.Upper) guid = guid.ToUpper();
+        var guid = System.Guid.NewGuid().ToString();
+        if (Opt.Upper) {
+            guid = guid.ToUpper(CultureInfo.InvariantCulture);
+        }
+
         Console.WriteLine(Str.Copied, guid);
         #if NET7_0_WINDOWS
         ClipboardService.SetText(guid);

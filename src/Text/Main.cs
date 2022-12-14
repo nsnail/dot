@@ -54,7 +54,10 @@ internal sealed class Main : ToolBase<Option>
         ret.HtmlEncode      = text.Html();
 
 
-        if (!text.IsBase64String()) return ret;
+        if (!text.IsBase64String()) {
+            return ret;
+        }
+
         byte[] base64DeHex = null;
         try {
             base64DeHex = text.Base64De();
@@ -63,7 +66,10 @@ internal sealed class Main : ToolBase<Option>
             // ignored
         }
 
-        if (base64DeHex == null) return ret;
+        if (base64DeHex == null) {
+            return ret;
+        }
+
         ret.Base64DeCodeHex = base64DeHex.String();
         ret.Base64DeCode    = enc.GetString(base64DeHex);
 
@@ -118,9 +124,13 @@ html-decode:       {o.HtmlDecode}
         #endif
     {
         #if NET7_0_WINDOWS
-        if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
+        if (Opt.Text.NullOrEmpty()) {
+            Opt.Text = await ClipboardService.GetTextAsync();
+        }
         #endif
-        if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);
+        if (Opt.Text.NullOrEmpty()) {
+            throw new ArgumentException(Str.InputTextIsEmpty);
+        }
 
 
         ParseAndShow(Opt.Text);

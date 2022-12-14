@@ -11,7 +11,7 @@ namespace Dot.Json;
 
 [Description(nameof(Str.Json))]
 [Localization(typeof(Str))]
-internal class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     private object _inputObj;
 
@@ -26,11 +26,15 @@ internal class Main : ToolBase<Option>
     private async Task CoreInternal()
     {
         string result = null;
-        if (Opt.Compress)
+        if (Opt.Compress) {
             result = await JsonCompress();
-        else if (Opt.ConvertToString)
-            result                  = await ConvertToString();
-        else if (Opt.Format) result = await JsonFormat();
+        }
+        else if (Opt.ConvertToString) {
+            result = await ConvertToString();
+        }
+        else if (Opt.Format) {
+            result = await JsonFormat();
+        }
 
         if (!result.NullOrWhiteSpace()) {
             #if NET7_0_WINDOWS
@@ -61,9 +65,13 @@ internal class Main : ToolBase<Option>
         var inputText = Opt.InputText;
 
         #if NET7_0_WINDOWS
-        if (inputText.NullOrWhiteSpace()) inputText = ClipboardService.GetText();
+        if (inputText.NullOrWhiteSpace()) {
+            inputText = ClipboardService.GetText();
+        }
         #endif
-        if (inputText.NullOrWhiteSpace()) throw new ArgumentException(Str.InputTextIsEmpty);
+        if (inputText.NullOrWhiteSpace()) {
+            throw new ArgumentException(Str.InputTextIsEmpty);
+        }
 
         try {
             _inputObj = inputText.Object<object>();

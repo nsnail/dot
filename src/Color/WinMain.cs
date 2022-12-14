@@ -1,13 +1,17 @@
 #if NET7_0_WINDOWS
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using TextCopy;
 
 namespace Dot.Color;
 
-internal class WinMain : Form
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
+internal sealed class WinMain : Form
 {
     private readonly Bitmap  _bmp;
     private          bool    _disposed;
     private readonly WinInfo _winInfo = new(); //小图窗口
+
 
     public WinMain()
     {
@@ -32,7 +36,10 @@ internal class WinMain : Form
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        if (_disposed) return;
+        if (_disposed) {
+            return;
+        }
+
         if (disposing) {
             _bmp?.Dispose();
             _winInfo?.Dispose();
@@ -43,7 +50,9 @@ internal class WinMain : Form
 
     protected override void OnKeyUp(KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.Escape) Application.Exit();
+        if (e.KeyCode == Keys.Escape) {
+            Application.Exit();
+        }
     }
 
     protected override void OnLoad(EventArgs e)

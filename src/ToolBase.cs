@@ -10,7 +10,7 @@ internal abstract class ToolBase<TOption> : Command<TOption> where TOption : Opt
         await Core();
         if (Opt.KeepSession) {
             AnsiConsole.MarkupLine(Str.PressAnyKey);
-            AnsiConsole.Console.Input.ReadKey(true);
+            _ = AnsiConsole.Console.Input.ReadKey(true);
         }
     }
 

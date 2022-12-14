@@ -3,7 +3,7 @@
 
 namespace Dot.Git;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandOption("-a|--args")]
     [Description(nameof(Str.GitArgs))]

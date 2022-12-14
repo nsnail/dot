@@ -1,10 +1,13 @@
 #if NET7_0_WINDOWS
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Size = System.Drawing.Size;
 
 namespace Dot.Color;
 
-internal class WinInfo : Form
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
+internal sealed class WinInfo : Form
 {
     private const    int        _WINDOW_SIZE = 480; //窗口大小
     private const    int        _ZOOM_RATE   = 16;  //缩放倍率
@@ -49,7 +52,10 @@ internal class WinInfo : Form
     {
         base.Dispose(disposing);
 
-        if (_disposed) return;
+        if (_disposed) {
+            return;
+        }
+
         if (disposing) {
             _graphics?.Dispose();
             _pbox?.Dispose();

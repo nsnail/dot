@@ -9,7 +9,7 @@ namespace Dot.Color;
 internal sealed class MouseHook : IDisposable
 {
     [StructLayout(LayoutKind.Explicit)]
-    private struct Msllhookstruct
+    private readonly struct Msllhookstruct
     {
         [FieldOffset(0)] public readonly int X;
         [FieldOffset(4)] public readonly int Y;
@@ -37,20 +37,29 @@ internal sealed class MouseHook : IDisposable
 
     private void Dispose(bool disposing)
     {
-        if (_disposed) return;
+        if (_disposed) {
+            return;
+        }
+
+
         #pragma warning disable S108
         if (disposing) { }
         #pragma warning restore S108
 
-        if (_hookId != default) Win32.UnhookWindowsHookEx(_hookId);
+        if (_hookId != default) {
+            Win32.UnhookWindowsHookEx(_hookId);
+        }
+
         _disposed = true;
     }
 
 
     private nint HookCallback(int nCode, nint wParam, nint lParam)
     {
-        if (nCode < 0 || (_WM_MOUSEMOVE != wParam && _WM_LBUTTONDOWN != wParam))
+        if (nCode < 0 || (_WM_MOUSEMOVE != wParam && _WM_LBUTTONDOWN != wParam)) {
             return Win32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+        }
+
         var hookStruct = (Msllhookstruct)Marshal.PtrToStructure(lParam, typeof(Msllhookstruct))!;
         MouseEvent(null, new MouseEventArgs(                                           //
                        wParam == _WM_MOUSEMOVE ? MouseButtons.None : MouseButtons.Left //

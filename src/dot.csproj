@@ -5,8 +5,14 @@
         <UseWindowsForms Condition="'$(TargetFramework)' == 'net7.0-windows'">true</UseWindowsForms>
         <RootNamespace>Dot</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <NoWarn>CA1416;S1075</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AnalysisLevel>preview-all</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+        <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
+        <MSBuildWarningsAsErrors>true</MSBuildWarningsAsErrors>
+        <WarningsAsErrors>true</WarningsAsErrors>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
@@ -23,11 +29,5 @@
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-    <ItemGroup>
-        <Reference Include="Spectre.Console">
-            <HintPath>..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console\bin\Debug\net6.0\Spectre.Console.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <Import Project="../SonarqubleAnalyzer.props"/>
     <Import Project="../GenerateResx.targets"/>
 </Project>

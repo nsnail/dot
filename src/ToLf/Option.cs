@@ -3,4 +3,4 @@
 
 namespace Dot.ToLf;
 
-internal class Option : DirOption { }
+internal sealed class Option : DirOption { }

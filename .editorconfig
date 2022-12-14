@@ -7,6 +7,18 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 
+[*.cs]
+dotnet_analyzer_diagnostic.severity = warning
+dotnet_diagnostic.IDE0008.severity = none
+dotnet_diagnostic.IDE0055.severity = none
+dotnet_diagnostic.IDE0160.severity = none
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.IDE0048.severity = none
+dotnet_diagnostic.IDE0058.severity = none
+dotnet_diagnostic.IDE0017.severity = none
+dotnet_diagnostic.CA5350.severity = none
+dotnet_diagnostic.CA5351.severity = none
+
 
 # ReSharper properties
 resharper_align_linq_query = true
@@ -35,6 +47,7 @@ resharper_indent_preprocessor_other = usual_indent
 resharper_int_align = true
 resharper_keep_existing_arrangement = false
 resharper_place_linq_into_on_new_line = false
+resharper_place_simple_embedded_statement_on_same_line = false
 resharper_place_simple_switch_expression_on_single_line = true
 resharper_wrap_before_eq = true
 resharper_wrap_chained_method_calls = chop_if_long

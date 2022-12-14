@@ -34,7 +34,7 @@ internal sealed class Main : FilesTool<Option>
                         continue;
                     case 0x0d: //cr macos
                         fsw.WriteByte(0x0a);
-                        fsr.Seek(-1, SeekOrigin.Current);
+                        _        = fsr.Seek(-1, SeekOrigin.Current);
                         hasWrote = true;
                         continue;
                     case 0x00 or 0xff: //非文本文件
@@ -53,7 +53,10 @@ internal sealed class Main : FilesTool<Option>
         #pragma warning disable S2583
         if (hasWrote && !isBin) {
             #pragma warning restore S2583
-            if (Opt.WriteMode) File.Copy(tmpFile, file, true);
+            if (Opt.WriteMode) {
+                File.Copy(tmpFile, file, true);
+            }
+
             ShowMessage(0, 1, 0);
             UpdateStats(Path.GetExtension(file));
         }

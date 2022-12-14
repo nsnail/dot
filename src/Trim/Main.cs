@@ -12,17 +12,21 @@ internal sealed class Main : FilesTool<Option>
     private static int GetSpacesCnt(Stream fsr)
     {
         var trimLen = 0;
-        fsr.Seek(-1, SeekOrigin.End);
+        _ = fsr.Seek(-1, SeekOrigin.End);
         int data;
-        while ((data = fsr.ReadByte()) != -1)
+        while ((data = fsr.ReadByte()) != -1) {
             if (new[] { 0x20, 0x0d, 0x0a }.Contains(data)) {
                 ++trimLen;
-                if (fsr.Position - 2 < 0) break;
-                fsr.Seek(-2, SeekOrigin.Current);
+                if (fsr.Position - 2 < 0) {
+                    break;
+                }
+
+                _ = fsr.Seek(-2, SeekOrigin.Current);
             }
             else {
                 break;
             }
+        }
 
         return trimLen;
     }
@@ -41,14 +45,17 @@ internal sealed class Main : FilesTool<Option>
             return;
         }
 
-        fsrw.Seek(0, SeekOrigin.Begin);
+        _ = fsrw.Seek(0, SeekOrigin.Begin);
         if (!fsrw.IsTextStream()) {
             ShowMessage(0, 0, 1);
             return;
         }
 
 
-        if (Opt.WriteMode) fsrw.SetLength(fsrw.Length - spacesCnt);
+        if (Opt.WriteMode) {
+            fsrw.SetLength(fsrw.Length - spacesCnt);
+        }
+
         ShowMessage(0, 1, 0);
         UpdateStats(Path.GetExtension(file));
     }

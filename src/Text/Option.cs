@@ -3,7 +3,7 @@
 
 namespace Dot.Text;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandArgument(0, "[input text]")]
     [Description(nameof(Str.TextTobeProcessed))]

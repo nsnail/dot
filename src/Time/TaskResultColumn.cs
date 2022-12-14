@@ -5,7 +5,7 @@ using Spectre.Console.Rendering;
 
 namespace Dot.Time;
 
-internal class TaskResultColumn : ProgressColumn
+internal sealed class TaskResultColumn : ProgressColumn
 {
     /// <summary>
     ///     Gets or sets the alignment of the task description.

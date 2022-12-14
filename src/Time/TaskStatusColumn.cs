@@ -7,7 +7,7 @@ using Spectre.Console.Rendering;
 
 namespace Dot.Time;
 
-internal class TaskStatusColumn : ProgressColumn
+internal sealed class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {

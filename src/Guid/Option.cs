@@ -3,7 +3,7 @@
 
 namespace Dot.Guid;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandOption("-u|--upper")]
     [Description(nameof(Str.UseUppercase))]

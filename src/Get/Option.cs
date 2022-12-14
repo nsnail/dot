@@ -3,7 +3,7 @@
 
 namespace Dot.Get;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandOption("-b|--buffer-size")]
     [Description(nameof(Str.BufferSize))]

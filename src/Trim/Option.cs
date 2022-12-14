@@ -3,4 +3,4 @@
 
 namespace Dot.Trim;
 
-internal class Option : DirOption { }
+internal sealed class Option : DirOption { }

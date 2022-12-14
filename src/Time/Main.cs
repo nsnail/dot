@@ -1,6 +1,7 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
 
+using System.Globalization;
 using System.Net.Sockets;
 
 namespace Dot.Time;
@@ -48,9 +49,9 @@ internal sealed class Main : ToolBase<Option>
 
         try {
             socket.Connect(server, _NTP_PORT);
-            socket.Send(ntpData);
+            _ = socket.Send(ntpData);
             var timeBefore = DateTime.Now;
-            socket.Receive(ntpData);
+            _ = socket.Receive(ntpData);
             var transferTime = DateTime.Now - timeBefore;
 
             var intPart = ((ulong)ntpData[40]   << 24) //
@@ -130,8 +131,8 @@ internal sealed class Main : ToolBase<Option>
                                                .Average(x => x.Value.State.Result().TotalMilliseconds);
                          });
 
-        AnsiConsole.MarkupLine(Str.NtpReceiveDone, $"[green]{_successCnt}[/]", _ntpServers.Length
-                             , $"[yellow]{_offsetAvg:f2}[/]");
+        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, Str.NtpReceiveDone, $"[green]{_successCnt}[/]"
+                             , _ntpServers.Length, $"[yellow]{_offsetAvg:f2}[/]");
 
 
         if (Opt.Sync) {
@@ -159,11 +160,11 @@ internal sealed class Main : ToolBase<Option>
                                               table.UpdateCell(
                                                        0, 1, DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
                                                    .UpdateCell(1, 1, DateTime.Now.ToString("O")));
-                                          await Task.Delay(100);
+                                          await Task.Delay(100, CancellationToken.None);
                                       }
                                   });
 
-            await AnsiConsole.Console.Input.ReadKeyAsync(true, cts.Token);
+            _ = await AnsiConsole.Console.Input.ReadKeyAsync(true, cts.Token);
             cts.Cancel();
             await task;
         }

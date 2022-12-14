@@ -8,7 +8,7 @@ namespace Dot.Get;
 
 [Description(nameof(Str.DownloadTool))]
 [Localization(typeof(Str))]
-internal partial class Main : ToolBase<Option>
+internal sealed partial class Main : ToolBase<Option>
 {
     private const string _PART = "part";
 
@@ -22,7 +22,9 @@ internal partial class Main : ToolBase<Option>
     {
         if (GetUseablePath(ref path))
             // path 是一个存在的文件，已追加尾标
+        {
             return path;
+        }
 
         // ReSharper disable once InvertIf
         if (Directory.Exists(path)) {        //path 是一个存在的目录。
@@ -115,8 +117,9 @@ internal partial class Main : ToolBase<Option>
                              contentLength = content.Headers.ContentLength ?? 0;
                              attachment = content.Headers.ContentDisposition?.FileName ??
                                              Opt.Url[(Opt.Url.LastIndexOf('/') + 1)..];
-                             foreach (var kv in content.Headers)
+                             foreach (var kv in content.Headers) {
                                  table.AddRow(kv.Key, string.Join(Environment.NewLine, kv.Value));
+                             }
                          });
         AnsiConsole.Write(table);
 
@@ -161,10 +164,13 @@ internal partial class Main : ToolBase<Option>
                                             , i => {
                                                   var tChild = ctx.AddTask(
                                                       $"{Str.Thread}{i} {Str.RemainingTime}:", maxValue: chunkSize);
-                                                  using var getReq = new HttpRequestMessage(HttpMethod.Get, Opt.Url);
+                                                  using var getReq   = new HttpRequestMessage(HttpMethod.Get, Opt.Url);
                                                   var       startPos = i * chunkSize;
-                                                  var       endPos = startPos + chunkSize - 1;
-                                                  if (i == Opt.ChunkNumbers - 1) endPos += contentLength % chunkSize;
+                                                  var       endPos   = startPos + chunkSize - 1;
+                                                  if (i == Opt.ChunkNumbers - 1) {
+                                                      endPos += contentLength % chunkSize;
+                                                  }
+
                                                   getReq.Headers.Range = new RangeHeaderValue(startPos, endPos);
                                                   // ReSharper disable once AccessToDisposedClosure
                                                   using var getRsp

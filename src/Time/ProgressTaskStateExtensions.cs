@@ -9,7 +9,7 @@ internal static class ProgressTaskStateExtensions
 
     public static void Result(this ProgressTaskState me, TimeSpan value)
     {
-        me.Update<TimeSpan>(nameof(TaskResultColumn), _ => value);
+        _ = me.Update<TimeSpan>(nameof(TaskResultColumn), _ => value);
     }
 
     public static TaskStatusColumn.Statues Status(this ProgressTaskState me)
@@ -19,6 +19,6 @@ internal static class ProgressTaskStateExtensions
 
     public static void Status(this ProgressTaskState me, TaskStatusColumn.Statues value)
     {
-        me.Update<TaskStatusColumn.Statues>(nameof(TaskStatusColumn), _ => value);
+        _ = me.Update<TaskStatusColumn.Statues>(nameof(TaskStatusColumn), _ => value);
     }
 }

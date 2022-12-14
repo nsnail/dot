@@ -6,7 +6,7 @@ using Spectre.Console.Rendering;
 
 namespace Dot.Git;
 
-internal class TaskStatusColumn : ProgressColumn
+internal sealed class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {

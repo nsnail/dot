@@ -14,11 +14,18 @@ internal sealed class Main : FilesTool<Option>
     {
         Span<byte> buffer  = stackalloc byte[_utf8Bom.Length];
         var        readLen = fsr.Read(buffer);
-        if (readLen != _utf8Bom.Length || !buffer.SequenceEqual(_utf8Bom)) return false;
+        if (readLen != _utf8Bom.Length || !buffer.SequenceEqual(_utf8Bom)) {
+            return false;
+        }
 
         using var fsw = CreateTempFile(out tempFile);
         int       data;
-        while ((data = fsr.ReadByte()) != -1) fsw.WriteByte((byte)data);
+
+
+        while ((data = fsr.ReadByte()) != -1) {
+            fsw.WriteByte((byte)data);
+        }
+
         return true;
     }
 
@@ -35,7 +42,10 @@ internal sealed class Main : FilesTool<Option>
             }
 
             if (CloneFileWithoutBom(fsr, ref tmpFile)) {
-                if (Opt.WriteMode) File.Copy(tmpFile, file, true);
+                if (Opt.WriteMode) {
+                    File.Copy(tmpFile, file, true);
+                }
+
                 ShowMessage(0, 1, 0);
                 UpdateStats(Path.GetExtension(file));
             }
@@ -44,6 +54,8 @@ internal sealed class Main : FilesTool<Option>
             }
         }
 
-        if (tmpFile != default) File.Delete(tmpFile);
+        if (tmpFile != default) {
+            File.Delete(tmpFile);
+        }
     }
 }

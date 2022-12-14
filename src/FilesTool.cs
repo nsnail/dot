@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Text.RegularExpressions;
 // ReSharper disable once RedundantUsingDirective
 using Panel = Spectre.Console.Panel;
@@ -21,7 +22,10 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
 
     private async Task CoreInternal()
     {
-        if (!Opt.WriteMode) AnsiConsole.MarkupLine("[gray]{0}[/]", Str.ExerciseMode);
+        if (!Opt.WriteMode) {
+            AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, "[gray]{0}[/]", Str.ExerciseMode);
+        }
+
         IEnumerable<string> fileList;
         await AnsiConsole.Progress()
                          .Columns(new ProgressBarColumn()                                //
@@ -45,8 +49,9 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
         var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))
                              .AddColumn(new GridColumn().Alignment(Justify.Right));
 
-        foreach (var kv in _writeStats.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
-            grid.AddRow(kv.Key, kv.Value.ToString());
+        foreach (var kv in _writeStats.OrderByDescending(x => x.Value).ThenBy(x => x.Key)) {
+            _ = grid.AddRow(kv.Key, kv.Value.ToString(CultureInfo.InvariantCulture));
+        }
 
         AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
     }
@@ -57,7 +62,11 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
     {
         var exCnt = 0;
         if (Opt.ExcludeRegexes?.FirstOrDefault() is null) //默认排除.git 、 node_modules 目录
+        {
             Opt.ExcludeRegexes = new[] { @"\.git", "node_modules" };
+        }
+
+
         var excludeRegexes = Opt.ExcludeRegexes.Select(x => new Regex(x));
         var fileList = Directory.EnumerateFiles(path, searchPattern
                                               , new EnumerationOptions {
@@ -68,7 +77,10 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
                                                                          , MaxRecursionDepth  = Opt.MaxRecursionDepth
                                                                        })
                                 .Where(x => {
-                                    if (!excludeRegexes.Any(y => y.IsMatch(x))) return true;
+                                    if (!excludeRegexes.Any(y => y.IsMatch(x))) {
+                                        return true;
+                                    }
+
                                     ++exCnt;
                                     return false;
                                 })
@@ -79,9 +91,10 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
 
     protected override Task Core()
     {
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path), string.Format(Str.PathNotFound, Opt.Path));
-        return CoreInternal();
+        return !Directory.Exists(Opt.Path)
+            ? throw new ArgumentException(nameof(Opt.Path)
+                                        , string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
+            : CoreInternal();
     }
 
 
@@ -124,7 +137,10 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
             _readCnt  += readCnt;
             _writeCnt += writeCnt;
             _breakCnt += breakCnt;
-            if (readCnt > 0) _childTask.Increment(1);
+            if (readCnt > 0) {
+                _childTask.Increment(1);
+            }
+
             _childTask.Description
                 = $"{Str.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_writeCnt}[/], {Str.Break}: [gray]{_breakCnt}[/], {Str.Exclude}: [yellow]{_excludeCnt}[/]";
         }
@@ -133,6 +149,6 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption> where TOption : D
 
     protected void UpdateStats(string key)
     {
-        _writeStats.AddOrUpdate(key, 1, (_, oldValue) => oldValue + 1);
+        _ = _writeStats.AddOrUpdate(key, 1, (_, oldValue) => oldValue + 1);
     }
 }
