@@ -6,12 +6,12 @@ using Spectre.Console.Rendering;
 
 namespace Dot.Time;
 
-internal class TaskStatusColumn : ProgressColumn
+internal sealed class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {
-        [Description($"[gray]{nameof(Ready)}[/]")]
         // ReSharper disable once UnusedMember.Global
+        [Description($"[gray]{nameof(Ready)}[/]")]
         Ready
 
       , [Description($"[yellow]{nameof(Connecting)}[/]")]
@@ -27,6 +27,9 @@ internal class TaskStatusColumn : ProgressColumn
     /// <summary>
     ///     Gets or sets the alignment of the task description.
     /// </summary>
+    /// <value>
+    ///     The alignment of the task description.
+    /// </value>
     public Justify Alignment { get; set; } = Justify.Right;
 
     /// <inheritdoc />

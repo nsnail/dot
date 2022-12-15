@@ -2,4 +2,4 @@
 
 namespace Dot.Rbom;
 
-internal class Option : DirOption { }
+internal sealed class Option : DirOption { }

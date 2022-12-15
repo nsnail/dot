@@ -3,7 +3,7 @@
 
 namespace Dot.Json;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandOption("-c|--compress")]
     [Description(nameof(Str.CompressJson))]

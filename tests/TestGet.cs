@@ -5,12 +5,6 @@ namespace Dot.Tests;
 
 public class TestGet
 {
-    private static string GetFileSha1(string file)
-    {
-        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        return BitConverter.ToString(SHA1.HashData(fs));
-    }
-
     [Test]
     public void DownloadFile()
     {
@@ -35,4 +29,10 @@ public class TestGet
 
     [SetUp]
     public void Setup() { }
+
+    private static string GetFileSha1(string file)
+    {
+        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        return BitConverter.ToString(SHA1.HashData(fs));
+    }
 }

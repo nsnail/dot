@@ -2,6 +2,7 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using NSExt.Extensions;
 
@@ -9,33 +10,44 @@ namespace Dot.Git;
 
 [Description(nameof(Str.GitTool))]
 [Localization(typeof(Str))]
-internal class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     private Encoding                                               _gitOutputEnc; //git command rsp 编码
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
+
+    protected override Task Core()
+    {
+        return !Directory.Exists(Opt.Path)
+            ? throw new ArgumentException( //
+                nameof(Opt.Path)           //
+              , string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
+            : CoreInternal();
+    }
 
     private async Task CoreInternal()
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
         var progressBar = new ProgressBarColumn { Width = 10 };
         await AnsiConsole.Progress()
-                         .Columns(progressBar                                            //
-                                , new ElapsedTimeColumn()                                //
-                                , new SpinnerColumn()                                    //
-                                , new TaskStatusColumn()                                 //
-                                , new TaskDescriptionColumn { Alignment = Justify.Left } //
-                         )
+                         .Columns(                                                   //
+                             progressBar                                             //
+                           , new ElapsedTimeColumn()                                 //
+                           , new SpinnerColumn()                                     //
+                           , new TaskStatusColumn()                                  //
+                           , new TaskDescriptionColumn { Alignment = Justify.Left }) //
                          .StartAsync(async ctx => {
-                             var taskFinder = ctx.AddTask(string.Format(Str.FindGitReps, Opt.Path)).IsIndeterminate();
+                             var taskFinder = ctx
+                                              .AddTask(string.Format(CultureInfo.InvariantCulture, Str.FindGitReps
+                                                                   , Opt.Path))
+                                              .IsIndeterminate();
                              var paths = Directory.GetDirectories(Opt.Path, ".git"       //
                                                                 , new EnumerationOptions //
                                                                   {
-                                                                      MaxRecursionDepth     = Opt.MaxRecursionDepth
+                                                                      MaxRecursionDepth = Opt.MaxRecursionDepth
                                                                     , RecurseSubdirectories = true
-                                                                    , IgnoreInaccessible    = true
-                                                                    , AttributesToSkip
-                                                                          = FileAttributes.ReparsePoint
+                                                                    , IgnoreInaccessible = true
+                                                                    , AttributesToSkip = FileAttributes.ReparsePoint
                                                                   })
                                                   .Select(x => Directory.GetParent(x)!.FullName);
 
@@ -43,8 +55,8 @@ internal class Main : ToolBase<Option>
                              _repoStatus = new ConcurrentDictionary<string, TaskStatusColumn.Statues>();
                              var tasks = new Dictionary<string, ProgressTask>();
                              foreach (var path in paths) {
-                                 _repoRsp.TryAdd(path, new StringBuilder());
-                                 _repoStatus.TryAdd(path, default);
+                                 _ = _repoRsp.TryAdd(path, new StringBuilder());
+                                 _ = _repoStatus.TryAdd(path, default);
                                  var task = ctx.AddTask(new DirectoryInfo(path).Name, false).IsIndeterminate();
                                  tasks.Add(path, task);
                              }
@@ -79,13 +91,15 @@ internal class Main : ToolBase<Option>
         // 打印 git command rsp
         void ExecRspReceived(object sender, DataReceivedEventArgs e)
         {
-            if (e.Data is null) return;
+            if (e.Data is null) {
+                return;
+            }
+
             var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
             _repoRsp[payload.Key].Append(msg.EscapeMarkup());
         }
 
         // 启动git进程
-
         var startInfo = new ProcessStartInfo {
                                                  CreateNoWindow         = true
                                                , WorkingDirectory       = payload.Key
@@ -115,13 +129,5 @@ internal class Main : ToolBase<Option>
         }
 
         payload.Value.StopTask();
-    }
-
-    protected override Task Core()
-    {
-        if (!Directory.Exists(Opt.Path))
-            throw new ArgumentException(nameof(Opt.Path) //
-                                      , string.Format(Str.PathNotFound, Opt.Path));
-        return CoreInternal();
     }
 }

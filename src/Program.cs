@@ -1,30 +1,43 @@
+using System.Globalization;
 using System.Text;
-using Dot;
 using Dot.Git;
+#if NET7_0_WINDOWS
+using System.Runtime.InteropServices;
+#endif
 
-var app = new CommandApp();
+namespace Dot;
 
-app.Configure(config => {
-    config.SetApplicationName(AssemblyInfo.ASSEMBLY_PRODUCT);
-    config.SetApplicationVersion(AssemblyInfo.ASSEMBLY_VERSION);
+internal sealed class Program
+{
+    public static int Main(string[] args)
+    {
+        var app = new CommandApp();
 
-    config.AddCommand<Main>(nameof(Dot.Git).ToLower());
-    #if NET7_0_WINDOWS
-    config.AddCommand<Dot.Color.Main>(nameof(Dot.Color).ToLower());
-    #endif
-    config.AddCommand<Dot.Guid.Main>(nameof(Dot.Guid).ToLower());
-    config.AddCommand<Dot.IP.Main>(nameof(Dot.IP).ToLower());
-    config.AddCommand<Dot.Json.Main>(nameof(Dot.Json).ToLower());
-    config.AddCommand<Dot.Pwd.Main>(nameof(Dot.Pwd).ToLower());
-    config.AddCommand<Dot.Rbom.Main>(nameof(Dot.Rbom).ToLower());
-    config.AddCommand<Dot.Trim.Main>(nameof(Dot.Trim).ToLower());
-    config.AddCommand<Dot.Text.Main>(nameof(Dot.Text).ToLower());
-    config.AddCommand<Dot.Time.Main>(nameof(Dot.Time).ToLower());
-    config.AddCommand<Dot.ToLf.Main>(nameof(Dot.ToLf).ToLower());
-    config.AddCommand<Dot.Get.Main>(nameof(Dot.Get).ToLower());
+        app.Configure(config => {
+            config.SetApplicationName(AssemblyInfo.ASSEMBLY_PRODUCT);
+            config.SetApplicationVersion(AssemblyInfo.ASSEMBLY_VERSION);
 
-    config.ValidateExamples();
-});
+            config.AddCommand<Main>(nameof(Git).ToLower(CultureInfo.InvariantCulture));
+            #if NET7_0_WINDOWS
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                config.AddCommand<Color.Main>(nameof(Color).ToLower(CultureInfo.InvariantCulture));
+            }
+            #endif
+            config.AddCommand<Guid.Main>(nameof(Guid).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<IP.Main>(nameof(IP).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Json.Main>(nameof(Json).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Pwd.Main>(nameof(Pwd).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Rbom.Main>(nameof(Rbom).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Trim.Main>(nameof(Trim).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Text.Main>(nameof(Text).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Time.Main>(nameof(Time).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<ToLf.Main>(nameof(ToLf).ToLower(CultureInfo.InvariantCulture));
+            config.AddCommand<Get.Main>(nameof(Get).ToLower(CultureInfo.InvariantCulture));
 
-Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-return app.Run(args);
+            config.ValidateExamples();
+        });
+
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        return app.Run(args);
+    }
+}

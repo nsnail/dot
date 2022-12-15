@@ -1,3 +1,3 @@
 namespace Dot;
 
-public interface IOption { }
+internal interface IOption { }

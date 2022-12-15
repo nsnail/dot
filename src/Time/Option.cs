@@ -3,7 +3,7 @@
 
 namespace Dot.Time;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [CommandOption("-s|--sync")]
     [Description(nameof(Str.SyncToLocalTime))]

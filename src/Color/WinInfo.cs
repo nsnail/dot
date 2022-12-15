@@ -1,16 +1,19 @@
 #if NET7_0_WINDOWS
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Size = System.Drawing.Size;
 
 namespace Dot.Color;
 
-internal class WinInfo : Form
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
+internal sealed class WinInfo : Form
 {
     private const    int        _WINDOW_SIZE = 480; //窗口大小
     private const    int        _ZOOM_RATE   = 16;  //缩放倍率
-    private          bool       _disposed;
     private readonly Graphics   _graphics;
     private readonly PictureBox _pbox;
+    private          bool       _disposed;
 
     public WinInfo()
     {
@@ -38,25 +41,6 @@ internal class WinInfo : Form
         Dispose(false);
     }
 
-    private void PboxOnMouseEnter(object sender, EventArgs e)
-    {
-        // 信息窗口避开鼠标指针指向区域
-        Location = new Point(Location.X, Location.Y == 0 ? Screen.PrimaryScreen!.Bounds.Height - _WINDOW_SIZE : 0);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        if (_disposed) return;
-        if (disposing) {
-            _graphics?.Dispose();
-            _pbox?.Dispose();
-        }
-
-        _disposed = true;
-    }
-
     public void UpdateImage(Bitmap img, int x, int y)
     {
         // 计算复制小图的区域
@@ -72,13 +56,38 @@ internal class WinInfo : Form
 
         // 取鼠标位置颜色
         var posColor = img.GetPixel(x, y);
+
         // 绘制底部文字信息
         _graphics.FillRectangle(Brushes.Black, 0, _WINDOW_SIZE - 30, _WINDOW_SIZE, 30);
-        _graphics.DrawString($"{Str.ClickCopyColor}  X: {x} Y: {y} RGB({posColor.R},{posColor.G},{posColor.B})"
-                           , new Font(FontFamily.GenericSerif, 10) //
-                           , Brushes.White, 0, _WINDOW_SIZE - 20);
+        _graphics.DrawString( //
+            $"{Str.ClickCopyColor}  X: {x} Y: {y} RGB({posColor.R},{posColor.G},{posColor.B})"
+          , new Font(FontFamily.GenericSerif, 10) //
+          , Brushes.White, 0, _WINDOW_SIZE - 20);
+
         // 触发重绘
         _pbox.Refresh();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (_disposed) {
+            return;
+        }
+
+        if (disposing) {
+            _graphics?.Dispose();
+            _pbox?.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    private void PboxOnMouseEnter(object sender, EventArgs e)
+    {
+        // 信息窗口避开鼠标指针指向区域
+        Location = new Point(Location.X, Location.Y == 0 ? Screen.PrimaryScreen!.Bounds.Height - _WINDOW_SIZE : 0);
     }
 }
 #endif

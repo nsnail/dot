@@ -13,9 +13,8 @@ using Dot;
 
 namespace Dot;
 
-public static class AssemblyInfo
+internal static class AssemblyInfo
 {
-    private const string _VERSION                          = "1.1.6";
     public const  string ASSEMBLY_COMPANY                  = "nsnail";
     public const  string ASSEMBLY_COPYRIGHT                = $"Copyright (c) 2022 {ASSEMBLY_COMPANY}";
     public const  string ASSEMBLY_FILE_VERSION             = _VERSION;
@@ -25,4 +24,5 @@ public static class AssemblyInfo
     public const  string ASSEMBLY_PRODUCT                  = "dot";
     public const  string ASSEMBLY_TITLE                    = "功能全面的实用工具 - 程序员的瑞士军刀";
     public const  string ASSEMBLY_VERSION                  = _VERSION;
+    private const string _VERSION                          = "1.1.6";
 }

@@ -8,19 +8,20 @@ namespace Dot.IP;
 [Description(nameof(Str.Ip))]
 [Localization(typeof(Str))]
 internal sealed class Main : ToolBase<Option>
-
 {
     protected override async Task Core()
     {
         foreach (var item in NetworkInterface.GetAllNetworkInterfaces()) {
             if (item.NetworkInterfaceType != NetworkInterfaceType.Ethernet ||
-                item.OperationalStatus    != OperationalStatus.Up)
+                item.OperationalStatus    != OperationalStatus.Up) {
                 continue;
-            var output = string.Join(Environment.NewLine
-                                   , item.GetIPProperties()
-                                         .UnicastAddresses
-                                         .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
-                                         .Select(x => @$"{item.Name}: {x.Address}"));
+            }
+
+            var output = string.Join( //
+                Environment.NewLine
+              , item.GetIPProperties()
+                    .UnicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Select(x => @$"{item.Name}: {x.Address}"));
             Console.WriteLine(output);
         }
 

@@ -2,4 +2,4 @@
 
 namespace Dot.Color;
 
-internal class Option : OptionBase { }
+internal sealed class Option : OptionBase { }

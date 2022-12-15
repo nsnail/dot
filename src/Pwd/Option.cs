@@ -3,7 +3,7 @@
 
 namespace Dot.Pwd;
 
-internal class Option : OptionBase
+internal sealed class Option : OptionBase
 {
     [Flags]
     public enum GenerateTypes

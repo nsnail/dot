@@ -2,4 +2,4 @@
 
 namespace Dot.IP;
 
-internal class Option : OptionBase { }
+internal sealed class Option : OptionBase { }

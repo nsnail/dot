@@ -3,12 +3,13 @@ using System.Diagnostics;
 namespace Dot;
 
 // ReSharper disable once UnusedType.Global
-internal class CsxEditor
+// ReSharper disable once UnusedMember.Global
+internal sealed class CsxEditor
 {
     // ReSharper disable once UnusedMember.Local
-    #pragma warning disable CA1822
-    private void Run()
-        #pragma warning restore CA1822
+    #pragma warning disable IDE0051
+    private static void Run()
+        #pragma warning restore IDE0051
     {
         /*
             for %%i in (*.png) do pngquant %%i --force --output %%i --skip-if-larger
@@ -24,14 +25,14 @@ internal class CsxEditor
                                                                     })
                              .ToArray();
 
-        Parallel.ForEach(files, file => {
+        _ = Parallel.ForEach(files, file => {
             var startInfo = new ProcessStartInfo {
                                                      FileName = "pngquant"
                                                    , Arguments
                                                          = $"\"{file}\" --force --output \"{file}\" --skip-if-larger"
                                                  };
             using var p = Process.Start(startInfo);
-            p.WaitForExit();
+            p!.WaitForExit();
             Console.WriteLine(p.ExitCode);
         });
 
@@ -45,13 +46,13 @@ internal class CsxEditor
                                                        }))
                 .ToArray();
 
-        Parallel.ForEach(files, file => {
+        _ = Parallel.ForEach(files, file => {
             var startInfo = new ProcessStartInfo {
                                                      FileName  = "jpegtran"
                                                    , Arguments = $"-copy none -optimize -perfect \"{file}\" \"{file}\""
                                                  };
             using var p = Process.Start(startInfo);
-            p.WaitForExit();
+            p!.WaitForExit();
             Console.WriteLine(p.ExitCode);
         });
     }

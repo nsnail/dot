@@ -1,13 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <OutputType>Exe</OutputType>
+        <RootNamespace>Dot</RootNamespace>
         <TargetFrameworks>net7.0-windows;net7.0</TargetFrameworks>
         <UseWindowsForms Condition="'$(TargetFramework)' == 'net7.0-windows'">true</UseWindowsForms>
-        <RootNamespace>Dot</RootNamespace>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <NoWarn>CA1416;S1075</NoWarn>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <CodeAnalysisRuleSet>../StyleCopAnalyzers.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
@@ -16,10 +15,6 @@
         <PackageReference Include="NSExt" Version="1.0.9-alpha.0.1"/>
         <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.48"/>
         <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.48"/>
-        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.0"/>
     </ItemGroup>
     <ItemGroup>
@@ -28,11 +23,6 @@
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-    <ItemGroup>
-        <Reference Include="Spectre.Console">
-            <HintPath>..\..\..\..\..\ForkedGitReps\spectre.console\src\Spectre.Console\bin\Debug\net6.0\Spectre.Console.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <Import Project="../SonarqubleAnalyzer.props"/>
+    <Import Project="../CodeQuality.props"/>
     <Import Project="../GenerateResx.targets"/>
 </Project>

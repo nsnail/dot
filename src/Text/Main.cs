@@ -4,32 +4,35 @@ using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
 #if NET7_0_WINDOWS
-using TextCopy;
 using System.Diagnostics;
+using TextCopy;
 #endif
 
 namespace Dot.Text;
 
 [Description(nameof(Str.TextTool))]
 [Localization(typeof(Str))]
-internal sealed class Main : ToolBase<Option>
+internal sealed partial class Main : ToolBase<Option>
 {
-    private ref struct Output
+    #if NET7_0_WINDOWS
+    protected override async Task Core()
+        #else
+    protected override Task Core()
+        #endif
     {
-        public ReadOnlySpan<char> Base64;
-        public ReadOnlySpan<char> Base64DeCode;
-        public ReadOnlySpan<char> Base64DeCodeHex;
-        public ReadOnlySpan<char> EncodingName;
-        public ReadOnlySpan<char> Hex;
-        public ReadOnlySpan<char> HtmlDecode;
-        public ReadOnlySpan<char> HtmlEncode;
-        public ReadOnlySpan<char> Md5;
-        public ReadOnlySpan<char> OriginText;
-        public ReadOnlySpan<char> Sha1;
-        public ReadOnlySpan<char> Sha256;
-        public ReadOnlySpan<char> Sha512;
-        public ReadOnlySpan<char> UrlDecode;
-        public ReadOnlySpan<char> UrlEncode;
+        #if NET7_0_WINDOWS
+        if (Opt.Text.NullOrEmpty()) {
+            Opt.Text = await ClipboardService.GetTextAsync();
+        }
+        #endif
+        if (Opt.Text.NullOrEmpty()) {
+            throw new ArgumentException(Str.InputTextIsEmpty);
+        }
+
+        ParseAndShow(Opt.Text);
+        #if !NET7_0_WINDOWS
+        return Task.CompletedTask;
+        #endif
     }
 
     private static Output BuildOutput(string text, Encoding enc)
@@ -51,7 +54,10 @@ internal sealed class Main : ToolBase<Option>
         ret.HtmlDecode      = text.HtmlDe();
         ret.HtmlEncode      = text.Html();
 
-        if (!text.IsBase64String()) return ret;
+        if (!text.IsBase64String()) {
+            return ret;
+        }
+
         byte[] base64DeHex = null;
         try {
             base64DeHex = text.Base64De();
@@ -60,7 +66,10 @@ internal sealed class Main : ToolBase<Option>
             // ignored
         }
 
-        if (base64DeHex == null) return ret;
+        if (base64DeHex == null) {
+            return ret;
+        }
+
         ret.Base64DeCodeHex = base64DeHex.String();
         ret.Base64DeCode    = enc.GetString(base64DeHex);
 
@@ -103,23 +112,6 @@ html-decode:       {o.HtmlDecode}
         var file = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.html");
         File.WriteAllText(file, outputTemp.Text2Html());
         Process.Start("explorer", file);
-        #endif
-    }
-
-    #if NET7_0_WINDOWS
-    protected override async Task Core()
-        #else
-    protected override Task Core()
-        #endif
-    {
-        #if NET7_0_WINDOWS
-        if (Opt.Text.NullOrEmpty()) Opt.Text = await ClipboardService.GetTextAsync();
-        #endif
-        if (Opt.Text.NullOrEmpty()) throw new ArgumentException(Str.InputTextIsEmpty);
-
-        ParseAndShow(Opt.Text);
-        #if !NET7_0_WINDOWS
-        return Task.CompletedTask;
         #endif
     }
 }
