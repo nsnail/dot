@@ -1,23 +1,26 @@
 root = true
 
 [*]
-indent_style = space
-indent_size = 4
-end_of_line = lf
 charset = utf-8
+end_of_line = lf
+ij_xml_attribute_wrap = off
+ij_xml_text_wrap = off
+indent_size = 4
+indent_style = space
+insert_final_newline = false
 trim_trailing_whitespace = true
 
 [*.cs]
 dotnet_analyzer_diagnostic.severity = warning
-dotnet_diagnostic.IDE0008.severity = none
-dotnet_diagnostic.IDE0055.severity = none
-dotnet_diagnostic.IDE0160.severity = none
 dotnet_diagnostic.CA1707.severity = none
-dotnet_diagnostic.IDE0048.severity = none
-dotnet_diagnostic.IDE0058.severity = none
-dotnet_diagnostic.IDE0017.severity = none
 dotnet_diagnostic.CA5350.severity = none
 dotnet_diagnostic.CA5351.severity = none
+dotnet_diagnostic.IDE0008.severity = none
+dotnet_diagnostic.IDE0017.severity = none
+dotnet_diagnostic.IDE0048.severity = none
+dotnet_diagnostic.IDE0055.severity = none
+dotnet_diagnostic.IDE0058.severity = none
+dotnet_diagnostic.IDE0160.severity = none
 
 
 # ReSharper properties
@@ -41,8 +44,8 @@ resharper_csharp_outdent_commas = true
 resharper_csharp_place_type_constraints_on_same_line = false
 resharper_csharp_stick_comment = false
 resharper_csharp_wrap_before_comma = true
-resharper_indent_nested_foreach_stmt = true
 resharper_indent_nested_for_stmt = true
+resharper_indent_nested_foreach_stmt = true
 resharper_indent_nested_while_stmt = true
 resharper_indent_preprocessor_if = usual_indent
 resharper_indent_preprocessor_other = usual_indent

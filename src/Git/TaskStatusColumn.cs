@@ -28,6 +28,9 @@ internal sealed class TaskStatusColumn : ProgressColumn
     /// <summary>
     ///     Gets or sets the alignment of the task description.
     /// </summary>
+    /// <value>
+    ///     The alignment of the task description.
+    /// </value>
     public Justify Alignment { get; set; } = Justify.Right;
 
     /// <inheritdoc />

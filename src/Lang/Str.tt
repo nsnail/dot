@@ -68,7 +68,8 @@ namespace Dot.Lang {
       <#
     var xml = new XmlDocument();
     xml.Load("Str.resx");
-    foreach (XmlNode data in xml.SelectNodes("//root/data")!) {
+    foreach (XmlNode data in xml.SelectNodes("//root/data")!)
+    {
 #>
         /// <summary>
         ///   <#= data.SelectSingleNode("value")?.InnerText #>

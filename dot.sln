@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AD79881E-7
 		build.cake = build.cake
 		code-format.cmd = code-format.cmd
 		CodeCleanupOnSave.csx = CodeCleanupOnSave.csx
+		CodeQuality.props = CodeQuality.props
 		Directory.Build.props = Directory.Build.props
 		dot.sln.DotSettings = dot.sln.DotSettings
 		dot.sln.DotSettings.user = dot.sln.DotSettings.user
