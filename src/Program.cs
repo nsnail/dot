@@ -1,7 +1,9 @@
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using Dot.Git;
+#if NET7_0_WINDOWS
+using System.Runtime.InteropServices;
+#endif
 
 namespace Dot;
 
@@ -10,7 +12,6 @@ internal sealed class Program
     public static int Main(string[] args)
     {
         var app = new CommandApp();
-
 
         app.Configure(config => {
             config.SetApplicationName(AssemblyInfo.ASSEMBLY_PRODUCT);
@@ -32,7 +33,6 @@ internal sealed class Program
             config.AddCommand<Time.Main>(nameof(Time).ToLower(CultureInfo.InvariantCulture));
             config.AddCommand<ToLf.Main>(nameof(ToLf).ToLower(CultureInfo.InvariantCulture));
             config.AddCommand<Get.Main>(nameof(Get).ToLower(CultureInfo.InvariantCulture));
-
 
             config.ValidateExamples();
         });

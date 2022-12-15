@@ -11,6 +11,7 @@ internal sealed class TaskStatusColumn : ProgressColumn
     public enum Statues : byte
     {
         [Description($"[gray]{nameof(Ready)}[/]")]
+
         // ReSharper disable once UnusedMember.Global
         Ready
 

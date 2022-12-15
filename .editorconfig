@@ -35,8 +35,10 @@ resharper_align_multline_type_parameter_constrains = true
 resharper_align_multline_type_parameter_list = true
 resharper_align_tuple_components = true
 resharper_allow_comment_after_lbrace = true
+resharper_blank_lines_before_single_line_comment = 1
 resharper_csharp_empty_block_style = together_same_line
 resharper_csharp_outdent_commas = true
+resharper_csharp_place_type_constraints_on_same_line = false
 resharper_csharp_stick_comment = false
 resharper_csharp_wrap_before_comma = true
 resharper_indent_nested_foreach_stmt = true
@@ -52,6 +54,7 @@ resharper_place_simple_switch_expression_on_single_line = true
 resharper_wrap_before_eq = true
 resharper_wrap_chained_method_calls = chop_if_long
 resharper_wrap_switch_expression = chop_if_long
+
 
 # Microsoft .NET properties
 csharp_indent_braces = false

@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 namespace Dot.ToLf;
 
 [Description(nameof(Str.ConvertEndOfLineToLF))]
@@ -14,6 +13,7 @@ internal sealed class Main : FilesTool<Option>
         var    hasWrote = false;
         var    isBin    = false;
         string tmpFile;
+
         // ReSharper disable once TooWideLocalVariableScope
         int data;
 
@@ -22,7 +22,6 @@ internal sealed class Main : FilesTool<Option>
                 ShowMessage(0, 0, 1);
                 return;
             }
-
 
             await using var fsw = CreateTempFile(out tmpFile);
 
@@ -49,10 +48,7 @@ internal sealed class Main : FilesTool<Option>
             }
         }
 
-
-        #pragma warning disable S2583
         if (hasWrote && !isBin) {
-            #pragma warning restore S2583
             if (Opt.WriteMode) {
                 File.Copy(tmpFile, file, true);
             }

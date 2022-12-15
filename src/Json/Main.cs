@@ -6,7 +6,6 @@ using NSExt.Extensions;
 using TextCopy;
 #endif
 
-
 namespace Dot.Json;
 
 [Description(nameof(Str.Json))]
@@ -15,6 +14,42 @@ internal sealed class Main : ToolBase<Option>
 {
     private object _inputObj;
 
+    protected override Task Core()
+    {
+        var inputText = Opt.InputText;
+
+        #if NET7_0_WINDOWS
+        if (inputText.NullOrWhiteSpace()) {
+            inputText = ClipboardService.GetText();
+        }
+        #endif
+        if (inputText.NullOrWhiteSpace()) {
+            throw new ArgumentException(Str.InputTextIsEmpty);
+        }
+
+        try {
+            _inputObj = inputText.Object<object>();
+        }
+        catch (JsonException) {
+            try {
+                inputText = UnescapeString(inputText);
+                _inputObj = inputText.Object<object>();
+                return Task.CompletedTask;
+            }
+            catch (JsonException) {
+                // ignored
+            }
+
+            throw new ArgumentException(Str.InvalidJsonString);
+        }
+
+        return CoreInternal();
+    }
+
+    private static string UnescapeString(string text)
+    {
+        return text.Replace("\\\"", "\"");
+    }
 
     private async Task<string> ConvertToString()
     {
@@ -53,43 +88,5 @@ internal sealed class Main : ToolBase<Option>
     {
         var ret = _inputObj.Json(true);
         return Task.FromResult(ret);
-    }
-
-    private static string UnescapeString(string text)
-    {
-        return text.Replace("\\\"", "\"");
-    }
-
-    protected override Task Core()
-    {
-        var inputText = Opt.InputText;
-
-        #if NET7_0_WINDOWS
-        if (inputText.NullOrWhiteSpace()) {
-            inputText = ClipboardService.GetText();
-        }
-        #endif
-        if (inputText.NullOrWhiteSpace()) {
-            throw new ArgumentException(Str.InputTextIsEmpty);
-        }
-
-        try {
-            _inputObj = inputText.Object<object>();
-        }
-        catch (JsonException) {
-            try {
-                inputText = UnescapeString(inputText);
-                _inputObj = inputText.Object<object>();
-                return Task.CompletedTask;
-            }
-            catch (JsonException) {
-                // ignored
-            }
-
-            throw new ArgumentException(Str.InvalidJsonString);
-        }
-
-
-        return CoreInternal();
     }
 }

@@ -5,7 +5,6 @@ using NSExt.Extensions;
 using TextCopy;
 #endif
 
-
 namespace Dot.Pwd;
 
 [Description(nameof(Str.RandomPasswordGenerator))]
@@ -18,7 +17,6 @@ internal sealed class Main : ToolBase<Option>
                                              , "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray()
                                              , "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".ToCharArray()
                                            };
-
 
     protected override Task Core()
     {
@@ -33,7 +31,6 @@ internal sealed class Main : ToolBase<Option>
                 }
             }
 
-
             if (Opt.Type.HasFlag(Option.GenerateTypes.LowerCaseLetter)) {
                 foreach (var c in _charTable[1]) {
                     *(pSource + sourceLen++) = c;
@@ -46,17 +43,14 @@ internal sealed class Main : ToolBase<Option>
                 }
             }
 
-
             if (Opt.Type.HasFlag(Option.GenerateTypes.SpecialCharacter)) {
                 foreach (var c in _charTable[3]) {
                     *(pSource + sourceLen++) = c;
                 }
             }
 
-
             var randScope = new[] { 0, sourceLen };
-            for (var i = 0; i != Opt.Length; ++i) //
-            {
+            for (var i = 0; i != Opt.Length; ++i) {
                 *(pDest + i) = *(pSource + randScope.Rand());
             }
 

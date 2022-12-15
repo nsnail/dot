@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 using System.Globalization;
 using System.Net.Sockets;
 
@@ -33,9 +32,82 @@ internal sealed class Main : ToolBase<Option>
 
     private double _offsetAvg;
 
-
     private int _successCnt;
 
+    protected override async Task Core()
+    {
+        await AnsiConsole.Progress()
+                         .Columns(                       //
+                             new TaskDescriptionColumn() //
+                           , new ProgressBarColumn()     //
+                           , new ElapsedTimeColumn()     //
+                           , new SpinnerColumn()         //
+                           , new TaskStatusColumn()      //
+                           , new TaskResultColumn())
+                         .StartAsync(async ctx => {
+                             var tasks = _ntpServers.ToDictionary( //
+                                 server => server, server => ctx.AddTask(server, false).IsIndeterminate());
+
+                             await Parallel.ForEachAsync(
+                                 tasks, new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
+                               , ServerHandle);
+
+                             _offsetAvg = tasks.Where(x => x.Value.State.Status() == TaskStatusColumn.Statues.Succeed)
+                                               .Average(x => x.Value.State.Result().TotalMilliseconds);
+                         });
+
+        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, Str.NtpReceiveDone, $"[green]{_successCnt}[/]"
+                             , _ntpServers.Length, $"[yellow]{_offsetAvg:f2}[/]");
+
+        if (Opt.Sync) {
+            SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
+            AnsiConsole.MarkupLine($"[green]{Str.LocalTimeSyncDone}[/]");
+        }
+    }
+
+    protected override async Task Run()
+    {
+        await Core();
+        if (Opt.KeepSession) {
+            var table = new Table().HideHeaders()
+                                   .AddColumn(new TableColumn(string.Empty))
+                                   .AddColumn(new TableColumn(string.Empty))
+                                   .Caption(Str.PressAnyKey)
+                                   .AddRow(Str.NtpClock,   DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
+                                   .AddRow(Str.LocalClock, DateTime.Now.ToString("O"));
+
+            var cts = new CancellationTokenSource();
+            var task = AnsiConsole.Live(table)
+                                  .StartAsync(async ctx => {
+                                      while (!cts.IsCancellationRequested) {
+                                          ctx.UpdateTarget(
+                                              table.UpdateCell(
+                                                       0, 1, DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
+                                                   .UpdateCell(1, 1, DateTime.Now.ToString("O")));
+                                          await Task.Delay(100, CancellationToken.None);
+                                      }
+                                  });
+
+            _ = await AnsiConsole.Console.Input.ReadKeyAsync(true, cts.Token);
+            cts.Cancel();
+            await task;
+        }
+    }
+
+    private static void SetSysteTime(DateTime time)
+    {
+        var timeToSet = new Win32.Systemtime {
+                                                 wDay          = (ushort)time.Day
+                                               , wDayOfWeek    = (ushort)time.DayOfWeek
+                                               , wHour         = (ushort)time.Hour
+                                               , wMilliseconds = (ushort)time.Millisecond
+                                               , wMinute       = (ushort)time.Minute
+                                               , wMonth        = (ushort)time.Month
+                                               , wSecond       = (ushort)time.Second
+                                               , wYear         = (ushort)time.Year
+                                             };
+        Win32.SetLocalTime(timeToSet);
+    }
 
     private TimeSpan GetNtpOffset(string server)
     {
@@ -45,7 +117,6 @@ internal sealed class Main : ToolBase<Option>
             = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) {
                   ReceiveTimeout = Opt.Timeout
               };
-
 
         try {
             socket.Connect(server, _NTP_PORT);
@@ -90,83 +161,5 @@ internal sealed class Main : ToolBase<Option>
 
         payload.Value.StopTask();
         return ValueTask.CompletedTask;
-    }
-
-
-    private static void SetSysteTime(DateTime time)
-    {
-        var timeToSet = new Win32.Systemtime {
-                                                 wDay          = (ushort)time.Day
-                                               , wDayOfWeek    = (ushort)time.DayOfWeek
-                                               , wHour         = (ushort)time.Hour
-                                               , wMilliseconds = (ushort)time.Millisecond
-                                               , wMinute       = (ushort)time.Minute
-                                               , wMonth        = (ushort)time.Month
-                                               , wSecond       = (ushort)time.Second
-                                               , wYear         = (ushort)time.Year
-                                             };
-        Win32.SetLocalTime(timeToSet);
-    }
-
-
-    protected override async Task Core()
-    {
-        await AnsiConsole.Progress()
-                         .Columns(new TaskDescriptionColumn() //
-                                , new ProgressBarColumn()     //
-                                , new ElapsedTimeColumn()     //
-                                , new SpinnerColumn()         //
-                                , new TaskStatusColumn()      //
-                                , new TaskResultColumn())
-                         .StartAsync(async ctx => {
-                             var tasks = _ntpServers.ToDictionary(server => server
-                                                                , server => ctx.AddTask(server, false)
-                                                                               .IsIndeterminate());
-
-                             await Parallel.ForEachAsync(
-                                 tasks, new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
-                               , ServerHandle);
-
-                             _offsetAvg = tasks.Where(x => x.Value.State.Status() == TaskStatusColumn.Statues.Succeed)
-                                               .Average(x => x.Value.State.Result().TotalMilliseconds);
-                         });
-
-        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, Str.NtpReceiveDone, $"[green]{_successCnt}[/]"
-                             , _ntpServers.Length, $"[yellow]{_offsetAvg:f2}[/]");
-
-
-        if (Opt.Sync) {
-            SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
-            AnsiConsole.MarkupLine($"[green]{Str.LocalTimeSyncDone}[/]");
-        }
-    }
-
-    protected override async Task Run()
-    {
-        await Core();
-        if (Opt.KeepSession) {
-            var table = new Table().HideHeaders()
-                                   .AddColumn(new TableColumn(string.Empty))
-                                   .AddColumn(new TableColumn(string.Empty))
-                                   .Caption(Str.PressAnyKey)
-                                   .AddRow(Str.NtpClock,   DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
-                                   .AddRow(Str.LocalClock, DateTime.Now.ToString("O"));
-
-            var cts = new CancellationTokenSource();
-            var task = AnsiConsole.Live(table)
-                                  .StartAsync(async ctx => {
-                                      while (!cts.IsCancellationRequested) {
-                                          ctx.UpdateTarget(
-                                              table.UpdateCell(
-                                                       0, 1, DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
-                                                   .UpdateCell(1, 1, DateTime.Now.ToString("O")));
-                                          await Task.Delay(100, CancellationToken.None);
-                                      }
-                                  });
-
-            _ = await AnsiConsole.Console.Input.ReadKeyAsync(true, cts.Token);
-            cts.Cancel();
-            await task;
-        }
     }
 }

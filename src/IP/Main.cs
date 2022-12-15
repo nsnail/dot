@@ -8,7 +8,6 @@ namespace Dot.IP;
 [Description(nameof(Str.Ip))]
 [Localization(typeof(Str))]
 internal sealed class Main : ToolBase<Option>
-
 {
     protected override async Task Core()
     {
@@ -18,11 +17,11 @@ internal sealed class Main : ToolBase<Option>
                 continue;
             }
 
-            var output = string.Join(Environment.NewLine
-                                   , item.GetIPProperties()
-                                         .UnicastAddresses
-                                         .Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
-                                         .Select(x => @$"{item.Name}: {x.Address}"));
+            var output = string.Join( //
+                Environment.NewLine
+              , item.GetIPProperties()
+                    .UnicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Select(x => @$"{item.Name}: {x.Address}"));
             Console.WriteLine(output);
         }
 

@@ -16,18 +16,26 @@ internal sealed class Main : ToolBase<Option>
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
+    protected override Task Core()
+    {
+        return !Directory.Exists(Opt.Path)
+            ? throw new ArgumentException( //
+                nameof(Opt.Path)           //
+              , string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
+            : CoreInternal();
+    }
 
     private async Task CoreInternal()
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
         var progressBar = new ProgressBarColumn { Width = 10 };
         await AnsiConsole.Progress()
-                         .Columns(progressBar                                            //
-                                , new ElapsedTimeColumn()                                //
-                                , new SpinnerColumn()                                    //
-                                , new TaskStatusColumn()                                 //
-                                , new TaskDescriptionColumn { Alignment = Justify.Left } //
-                         )
+                         .Columns(                                                   //
+                             progressBar                                             //
+                           , new ElapsedTimeColumn()                                 //
+                           , new SpinnerColumn()                                     //
+                           , new TaskStatusColumn()                                  //
+                           , new TaskDescriptionColumn { Alignment = Justify.Left }) //
                          .StartAsync(async ctx => {
                              var taskFinder = ctx
                                               .AddTask(string.Format(CultureInfo.InvariantCulture, Str.FindGitReps
@@ -36,11 +44,10 @@ internal sealed class Main : ToolBase<Option>
                              var paths = Directory.GetDirectories(Opt.Path, ".git"       //
                                                                 , new EnumerationOptions //
                                                                   {
-                                                                      MaxRecursionDepth     = Opt.MaxRecursionDepth
+                                                                      MaxRecursionDepth = Opt.MaxRecursionDepth
                                                                     , RecurseSubdirectories = true
-                                                                    , IgnoreInaccessible    = true
-                                                                    , AttributesToSkip
-                                                                          = FileAttributes.ReparsePoint
+                                                                    , IgnoreInaccessible = true
+                                                                    , AttributesToSkip = FileAttributes.ReparsePoint
                                                                   })
                                                   .Select(x => Directory.GetParent(x)!.FullName);
 
@@ -67,7 +74,6 @@ internal sealed class Main : ToolBase<Option>
                                    $"{Str.ZeroCode}: [green]{_repoStatus.Count(x => x.Value == TaskStatusColumn.Statues
                                                                                    .Succeed)}[/]/{_repoStatus.Count}");
 
-
         foreach (var repo in _repoRsp) {
             var status = _repoStatus[repo.Key].Desc();
             table.AddRow(status.Replace(_repoStatus[repo.Key].ToString(), new DirectoryInfo(repo.Key).Name), Opt.Args
@@ -76,7 +82,6 @@ internal sealed class Main : ToolBase<Option>
 
         AnsiConsole.Write(table);
     }
-
 
     private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
     {
@@ -95,7 +100,6 @@ internal sealed class Main : ToolBase<Option>
         }
 
         // 启动git进程
-
         var startInfo = new ProcessStartInfo {
                                                  CreateNoWindow         = true
                                                , WorkingDirectory       = payload.Key
@@ -125,13 +129,5 @@ internal sealed class Main : ToolBase<Option>
         }
 
         payload.Value.StopTask();
-    }
-
-    protected override Task Core()
-    {
-        return !Directory.Exists(Opt.Path)
-            ? throw new ArgumentException(nameof(Opt.Path) //
-                                        , string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
-            : CoreInternal();
     }
 }

@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-
 namespace Dot.Rbom;
 
 [Description(nameof(Str.TrimUtf8Bom))]
@@ -8,27 +7,6 @@ namespace Dot.Rbom;
 internal sealed class Main : FilesTool<Option>
 {
     private readonly byte[] _utf8Bom = { 0xef, 0xbb, 0xbf };
-
-
-    private bool CloneFileWithoutBom(Stream fsr, ref string tempFile)
-    {
-        Span<byte> buffer  = stackalloc byte[_utf8Bom.Length];
-        var        readLen = fsr.Read(buffer);
-        if (readLen != _utf8Bom.Length || !buffer.SequenceEqual(_utf8Bom)) {
-            return false;
-        }
-
-        using var fsw = CreateTempFile(out tempFile);
-        int       data;
-
-
-        while ((data = fsr.ReadByte()) != -1) {
-            fsw.WriteByte((byte)data);
-        }
-
-        return true;
-    }
-
 
     protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
     {
@@ -57,5 +35,23 @@ internal sealed class Main : FilesTool<Option>
         if (tmpFile != default) {
             File.Delete(tmpFile);
         }
+    }
+
+    private bool CloneFileWithoutBom(Stream fsr, ref string tempFile)
+    {
+        Span<byte> buffer  = stackalloc byte[_utf8Bom.Length];
+        var        readLen = fsr.Read(buffer);
+        if (readLen != _utf8Bom.Length || !buffer.SequenceEqual(_utf8Bom)) {
+            return false;
+        }
+
+        using var fsw = CreateTempFile(out tempFile);
+        int       data;
+
+        while ((data = fsr.ReadByte()) != -1) {
+            fsw.WriteByte((byte)data);
+        }
+
+        return true;
     }
 }

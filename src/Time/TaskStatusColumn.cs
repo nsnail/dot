@@ -1,7 +1,6 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
-
 using NSExt.Extensions;
 using Spectre.Console.Rendering;
 
@@ -11,8 +10,8 @@ internal sealed class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {
-        [Description($"[gray]{nameof(Ready)}[/]")]
         // ReSharper disable once UnusedMember.Global
+        [Description($"[gray]{nameof(Ready)}[/]")]
         Ready
 
       , [Description($"[yellow]{nameof(Connecting)}[/]")]

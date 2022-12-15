@@ -14,12 +14,10 @@ internal sealed class Option : OptionBase
       , SpecialCharacter = 0b1000
     }
 
-
     [CommandArgument(1, "<password length>")]
     [Description(nameof(Str.PwdLength))]
     [Localization(typeof(Str))]
     public int Length { get; set; }
-
 
     [CommandArgument(0, "<generate type>")]
     [Description(nameof(Str.PwdGenerateTypes))]

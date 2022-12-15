@@ -9,9 +9,9 @@ namespace Dot.Color;
 internal sealed class WinMain : Form
 {
     private readonly Bitmap  _bmp;
-    private          bool    _disposed;
     private readonly WinInfo _winInfo = new(); //小图窗口
 
+    private bool _disposed;
 
     public WinMain()
     {

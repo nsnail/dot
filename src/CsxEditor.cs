@@ -25,7 +25,6 @@ internal sealed class CsxEditor
                                                                     })
                              .ToArray();
 
-
         _ = Parallel.ForEach(files, file => {
             var startInfo = new ProcessStartInfo {
                                                      FileName = "pngquant"
