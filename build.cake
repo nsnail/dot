@@ -9,7 +9,7 @@ var runtime = Argument("runtime","win-x64");
 Task("Clean")
     .Does(context =>
 {
-    context.CleanDirectory("./build");
+    context.CleanDirectory("./dist");
 });
 
 Task("Build")

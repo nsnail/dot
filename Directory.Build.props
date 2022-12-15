@@ -1,11 +1,10 @@
 <Project>
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
-        <BaseOutputPath>../build</BaseOutputPath>
-        <BaseIntermediateOutputPath>../build</BaseIntermediateOutputPath>
+        <BaseOutputPath>../dist</BaseOutputPath>
+        <BaseIntermediateOutputPath>../dist</BaseIntermediateOutputPath>
         <OutputPath>$(BaseOutputPath)/$(MSBuildProjectName)/bin</OutputPath>
         <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</IntermediateOutputPath>
         <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</MSBuildProjectExtensionsPath>
-        <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
     </PropertyGroup>
 </Project>
