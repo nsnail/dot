@@ -11,7 +11,7 @@
             "packages": [
                 {
                     "packageName": "NSExt",
-                    "version": "1.0.9-alpha.0.1"
+                    "version": "1.0.11-alpha.0.1"
                 },
                 {
                     "packageName": "Spectre.Console.Cli.NS",
