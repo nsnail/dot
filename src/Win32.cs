@@ -7,7 +7,9 @@ namespace Dot;
 
 internal static partial class Win32
 {
-    public const int SW_HIDE = 0;
+    public const int SW_HIDE          = 0;
+    public const int WM_CHANGECBCHAIN = 0x030D;
+    public const int WM_DRAWCLIPBOARD = 0x308;
 
     private const string _GDI32_DLL    = "gdi32.dll";
     private const string _KERNEL32_DLL = "kernel32.dll";
@@ -15,6 +17,10 @@ internal static partial class Win32
 
     [LibraryImport(_USER32_DLL)]
     internal static partial nint CallNextHookEx(nint hhk, int nCode, nint wParam, nint lParam);
+
+    [LibraryImport(_USER32_DLL)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool ChangeClipboardChain(nint hWndRemove, nint hWndNewNext);
 
     [LibraryImport(_KERNEL32_DLL)]
     internal static partial nint GetConsoleWindow();
@@ -33,6 +39,12 @@ internal static partial class Win32
 
     [LibraryImport(_USER32_DLL)]
     internal static partial int ReleaseDC(nint hWnd, nint dc);
+
+    [LibraryImport(_USER32_DLL)]
+    internal static partial int SendMessageA(nint hwnd, uint wMsg, nint wParam, nint lParam);
+
+    [LibraryImport(_USER32_DLL)]
+    internal static partial int SetClipboardViewer(nint hWnd);
 
     [LibraryImport(_KERNEL32_DLL)]
     internal static partial void SetLocalTime(Systemtime st);

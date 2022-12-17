@@ -264,4 +264,7 @@
     <data name="BufferSize" xml:space="preserve">
         <value>缓冲区大小（千字节）</value>
     </data>
+    <data name="Translating" xml:space="preserve">
+        <value>翻译中...</value>
+    </data>
 </root>

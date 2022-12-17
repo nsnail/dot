@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-using System.Globalization;
 using System.Net.Sockets;
 
 namespace Dot.Time;

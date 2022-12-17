@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text;
 using Dot.Git;
 #if NET7_0_WINDOWS
@@ -7,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Dot;
 
-internal sealed class Program
+internal static class Program
 {
     public static int Main(string[] args)
     {
@@ -21,6 +20,7 @@ internal sealed class Program
             #if NET7_0_WINDOWS
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 config.AddCommand<Color.Main>(nameof(Color).ToLower(CultureInfo.InvariantCulture));
+                config.AddCommand<Tran.Main>(nameof(Tran).ToLower(CultureInfo.InvariantCulture));
             }
             #endif
             config.AddCommand<Guid.Main>(nameof(Guid).ToLower(CultureInfo.InvariantCulture));

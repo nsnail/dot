@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-using System.Globalization;
 #if NET7_0_WINDOWS
 using TextCopy;
 #endif

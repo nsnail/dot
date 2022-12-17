@@ -13,10 +13,10 @@
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="NSExt" Version="1.0.9-alpha.0.1"/>
-        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.48"/>
-        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.48"/>
-        <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.0"/>
+        <PackageReference Include="NSExt" Version="1.0.9-alpha.0.1" />
+        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.48" />
+        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.48" />
+        <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.0" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Update="Lang\Str.resx">
@@ -24,6 +24,6 @@
             <LastGenOutput>Str.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-    <Import Project="../CodeQuality.props"/>
-    <Import Project="../GenerateResx.targets"/>
+    <Import Project="../CodeQuality.props" />
+    <Import Project="../GenerateResx.targets" />
 </Project>

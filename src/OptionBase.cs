@@ -1,5 +1,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
+global using Spectre.Console;
+global using Spectre.Console.Cli;
+
 namespace Dot;
 
 internal abstract class OptionBase : CommandSettings, IOption
