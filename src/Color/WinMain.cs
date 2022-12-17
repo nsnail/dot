@@ -1,6 +1,7 @@
 #if NET7_0_WINDOWS
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Dot.Native;
 using TextCopy;
 
 namespace Dot.Color;
