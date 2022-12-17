@@ -1,6 +1,5 @@
 // ReSharper disable ClassNeverInstantiated.Global
 
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using NSExt.Extensions;
@@ -13,7 +12,7 @@ namespace Dot.Text;
 
 [Description(nameof(Str.TextTool))]
 [Localization(typeof(Str))]
-internal sealed partial class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
     #if NET7_0_WINDOWS
     protected override async Task Core()
@@ -43,7 +42,6 @@ internal sealed partial class Main : ToolBase<Option>
         ret.Base64DeCodeHex  = ReadOnlySpan<char>.Empty;
         ret.Base64DeCode     = ReadOnlySpan<char>.Empty;
         ret.EncodingName     = enc.EncodingName;
-        ret.OriginText       = text;
         ret.Hex              = inputHex.String();
         ret.Base64           = text.Base64(enc);
         ret.Md5              = MD5.HashData(inputHex).String();
@@ -139,5 +137,26 @@ internal sealed partial class Main : ToolBase<Option>
         File.WriteAllText(file, str);
         Process.Start("explorer", file);
         #endif
+    }
+
+    private ref struct Output
+    {
+        public ReadOnlySpan<char> AndUnicode;
+        public ReadOnlySpan<char> BacksLantUnicode;
+        public ReadOnlySpan<char> Base64;
+        public ReadOnlySpan<char> Base64DeCode;
+        public ReadOnlySpan<char> Base64DeCodeHex;
+        public ReadOnlySpan<char> EncodingName;
+        public ReadOnlySpan<char> Hex;
+        public ReadOnlySpan<char> HtmlDecode;
+        public ReadOnlySpan<char> HtmlEncode;
+        public ReadOnlySpan<char> Md5;
+        public ReadOnlySpan<char> PercentUnicode;
+        public ReadOnlySpan<char> Sha1;
+        public ReadOnlySpan<char> Sha256;
+        public ReadOnlySpan<char> Sha512;
+        public ReadOnlySpan<char> UnicodeDecode;
+        public ReadOnlySpan<char> UrlDecode;
+        public ReadOnlySpan<char> UrlEncode;
     }
 }
