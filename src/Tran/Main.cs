@@ -9,7 +9,10 @@ internal sealed class Main : ToolBase<Option>
     [SupportedOSPlatform(nameof(OSPlatform.Windows))]
     protected override Task Core()
     {
-        var th = new Thread(() => { Application.Run(new FrmMain()); });
+        var th = new Thread(() => {
+            using var frm = new FrmMain();
+            Application.Run(frm);
+        });
         th.SetApartmentState(ApartmentState.STA);
         th.Start();
         th.Join();
