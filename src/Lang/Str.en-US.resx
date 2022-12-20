@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
-                id="root" xmlns="">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -253,5 +252,17 @@
     </data>
     <data name="BufferSize" xml:space="preserve">
         <value>Buffer size (kilobytes)</value>
+    </data>
+    <data name="Translating" xml:space="preserve">
+        <value>In translation...</value>
+    </data>
+    <data name="HideTranslate" xml:space="preserve">
+        <value>Press [green] Esc[/] to hide the translation</value>
+    </data>
+    <data name="StartTranslate" xml:space="preserve">
+        <value>Select the text and press [green] Capslock[/] to start the translation</value>
+    </data>
+    <data name="TranslateTool" xml:space="preserve">
+        <value>Translation tools</value>
     </data>
 </root>

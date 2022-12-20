@@ -1,6 +1,8 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedMethodReturnValue.Global
 
+#pragma warning disable SA1307
+
 using System.Runtime.InteropServices;
 
 namespace Dot.Native;
@@ -9,10 +11,16 @@ internal static partial class Win32
 {
     public const  int    CS_DROP_SHADOW   = 0x20000;
     public const  int    GCL_STYLE        = -26;
+    public const  int    HC_ACTION        = 0;
+    public const  int    INPUT_KEYBOARD   = 1;
+    public const  int    KEYEVENTF_KEYUP  = 0x0002;
     public const  int    SW_HIDE          = 0;
+    public const  int    WH_KEYBOARD_LL   = 13;
     public const  int    WH_MOUSE_LL      = 14;
     public const  int    WM_CHANGECBCHAIN = 0x030D;
     public const  int    WM_DRAWCLIPBOARD = 0x308;
+    public const  int    WM_KEYDOWN       = 0x0100;
+    public const  int    WM_KEYUP         = 0x0101;
     public const  int    WM_LBUTTONDOWN   = 0x0201;
     public const  int    WM_MOUSEMOVE     = 0x0200;
     private const string _GDI32_DLL       = "gdi32.dll";
@@ -50,6 +58,10 @@ internal static partial class Win32
     internal static partial int ReleaseDC(nint hWnd, nint dc);
 
     [LibraryImport(_USER32_DLL)]
+    internal static partial uint SendInput(uint cInputs, [MarshalAs(UnmanagedType.LPArray)] InputStruct[] inputs
+                                         , int  cbSize);
+
+    [LibraryImport(_USER32_DLL)]
     internal static partial int SendMessageA(nint hwnd, uint wMsg, nint wParam, nint lParam);
 
     [LibraryImport(_USER32_DLL)]
@@ -73,9 +85,36 @@ internal static partial class Win32
     internal static partial bool UnhookWindowsHookExA(nint hhk);
 
     [StructLayout(LayoutKind.Explicit)]
+    public struct InputStruct
+    {
+        [FieldOffset(8)] public KeybdInputStruct ki;
+        [FieldOffset(0)] public uint             type;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct KbdllhooksStruct
+    {
+        [FieldOffset(16)] public nint dwExtraInfo;
+        [FieldOffset(8)]  public uint flags;
+        [FieldOffset(4)]  public uint scanCode;
+        [FieldOffset(12)] public uint time;
+        [FieldOffset(0)]  public uint vkCode;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct KeybdInputStruct
+    {
+        [FieldOffset(20)] public long   _; // 补位以匹配 UNION的MOUSEINPUT参数 （28bytes）
+        [FieldOffset(12)] public nint   dwExtraInfo;
+        [FieldOffset(4)]  public uint   dwFlags;
+        [FieldOffset(8)]  public uint   time;
+        [FieldOffset(2)]  public ushort wScan;
+        [FieldOffset(0)]  public ushort wVk;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
     internal ref struct Systemtime
     {
-        #pragma warning disable SA1307
         [FieldOffset(6)]  public ushort wDay;
         [FieldOffset(4)]  public ushort wDayOfWeek;
         [FieldOffset(8)]  public ushort wHour;
@@ -84,6 +123,5 @@ internal static partial class Win32
         [FieldOffset(2)]  public ushort wMonth;
         [FieldOffset(12)] public ushort wSecond;
         [FieldOffset(0)]  public ushort wYear;
-        #pragma warning restore SA1307
     }
 }

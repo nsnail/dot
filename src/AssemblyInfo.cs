@@ -24,5 +24,5 @@ internal static class AssemblyInfo
     public const  string ASSEMBLY_PRODUCT                  = "dot";
     public const  string ASSEMBLY_TITLE                    = "功能全面的实用工具 - 程序员的瑞士军刀";
     public const  string ASSEMBLY_VERSION                  = _VERSION;
-    private const string _VERSION                          = "1.1.7";
+    private const string _VERSION                          = "1.1.7.1";
 }
