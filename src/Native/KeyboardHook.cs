@@ -57,12 +57,14 @@ internal sealed class KeyboardHook : IDisposable
 
     private nint HookCallback(int nCode, nint wParam, nint lParam)
     {
-        if (nCode < 0 || wParam != Win32.WM_KEYDOWN) {
-            return Win32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+        if (nCode >= 0 && wParam == Win32.WM_KEYDOWN) {
+            var hookStruct = (Win32.KbdllhooksStruct)Marshal.PtrToStructure(lParam, typeof(Win32.KbdllhooksStruct))!;
+            if (KeyUpEvent?.Invoke(null, hookStruct) ?? false) {
+                return -1;
+            }
         }
 
-        var hookStruct = (Win32.KbdllhooksStruct)Marshal.PtrToStructure(lParam, typeof(Win32.KbdllhooksStruct))!;
-        return KeyUpEvent?.Invoke(null, hookStruct) ?? false ? -1 : nint.Zero;
+        return Win32.CallNextHookEx(_hookId, nCode, wParam, lParam);
     }
 }
 
