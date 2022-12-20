@@ -109,6 +109,7 @@ internal sealed partial class FrmMain : Form
         _labelDest.Text = Str.Translating;
         Task.Run(() => {
             var translateText = TranslateText(clipText);
+            ClipboardService.SetText(translateText);
             Invoke(() => { _labelDest.Text = translateText; });
         });
 
