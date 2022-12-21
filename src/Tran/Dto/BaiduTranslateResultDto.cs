@@ -1,5 +1,7 @@
 // ReSharper disable  InconsistentNaming
 // ReSharper disable  ClassNeverInstantiated.Global
+// ReSharper disable  UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 #pragma warning disable IDE1006,SA1300
 namespace Dot.Tran.Dto;
@@ -47,6 +49,7 @@ internal sealed record BaiduTranslateResultDto
 
     public sealed record Trans_result
     {
+        // ReSharper disable once CollectionNeverUpdated.Global
         public List<DataItem> data { get; set; }
 
         public string from { get; set; }

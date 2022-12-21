@@ -55,6 +55,7 @@ internal sealed class MouseHook : IDisposable
 
     private nint HookCallback(int nCode, nint wParam, nint lParam)
     {
+        // ReSharper disable once InvertIf
         if (wParam == Win32.WM_MOUSEMOVE) {
             var hookStruct = (Msllhookstruct)Marshal.PtrToStructure(lParam, typeof(Msllhookstruct))!;
             MouseMoveEvent?.Invoke(null, new MouseEventArgs(MouseButtons.None, 0, hookStruct.X, hookStruct.Y, 0));

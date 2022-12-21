@@ -14,19 +14,18 @@ namespace Dot.Tran;
 [SupportedOSPlatform(nameof(OSPlatform.Windows))]
 internal sealed partial class WinMain : Form
 {
-    private const int    _RETRY_WAIT_MIL_SEC = 1000; //                                          重试等待时间（秒）
-    private const string _TRANSLATE_API_URL  = $"{_TRANSLATE_HOME_URL}/v2transapi";
-    private const string _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
-
-    private readonly HttpClient   _httpClient   = new();
+    private const    int          _RETRY_WAIT_MIL_SEC = 1000;
+    private const    string       _TRANSLATE_API_URL = $"{_TRANSLATE_HOME_URL}/v2transapi";
+    private const    string       _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
+    private readonly HttpClient   _httpClient = new();
     private readonly KeyboardHook _keyboardHook = new();
-    private readonly Label        _labelDest    = new(); //                                      显示翻译内容的文本框
-    private readonly MouseHook    _mouseHook    = new();
-    private readonly Size         _mouseMargin  = new(10, 10);
-    private          bool         _capsLockPressed; //                                           大写键按下进行翻译，区分ctrl+c
+    private readonly Label        _labelDest = new();
+    private readonly MouseHook    _mouseHook = new();
+    private readonly Size         _mouseMargin = new(10, 10); //        窗体与鼠标指针的距离
+    private          bool         _capsLockPressed; //                               大写键按下进行翻译，区分ctrl+c
     private          bool         _disposed;
-    private          nint         _nextClipViewer; //                                            下一个剪贴板监视链对象句柄
-    private          string       _token = "ae72ebad4113270fd26ada5125301268";
+    private          nint         _nextClipMonitor; //                               下一个剪贴板监视链对象句柄
+    private          string       _token = "ae72ebad4113270fd26ada5125301268"; //    翻译api token
 
     public WinMain()
     {
@@ -34,8 +33,7 @@ internal sealed partial class WinMain : Form
         InitHook();
         InitLabelDest();
         InitHttpClient();
-
-        _nextClipViewer = Win32.SetClipboardViewer(Handle);
+        InitClipMonitor();
     }
 
     ~WinMain()
@@ -58,7 +56,7 @@ internal sealed partial class WinMain : Form
             _keyboardHook?.Dispose();
         }
 
-        Win32.ChangeClipboardChain(Handle, _nextClipViewer); // 从剪贴板监视链移除本窗体
+        Win32.ChangeClipboardChain(Handle, _nextClipMonitor); // 从剪贴板监视链移除本窗体
         _disposed = true;
     }
 
@@ -66,21 +64,21 @@ internal sealed partial class WinMain : Form
     {
         void SendToNext(Message message)
         {
-            _ = Win32.SendMessageA(_nextClipViewer, (uint)message.Msg, message.WParam, message.LParam);
+            _ = Win32.SendMessageA(_nextClipMonitor, (uint)message.Msg, message.WParam, message.LParam);
         }
 
         switch (m.Msg) {
             case Win32.WM_DRAWCLIPBOARD:
                 if (_capsLockPressed) {
                     _capsLockPressed = false;
-                    DisplayClipboardData();
+                    TranslateAndShow();
                 }
 
                 SendToNext(m);
                 break;
             case Win32.WM_CHANGECBCHAIN:
-                if (m.WParam == _nextClipViewer) {
-                    _nextClipViewer = m.LParam;
+                if (m.WParam == _nextClipMonitor) {
+                    _nextClipMonitor = m.LParam;
                 }
                 else {
                     SendToNext(m);
@@ -96,27 +94,9 @@ internal sealed partial class WinMain : Form
     [GeneratedRegex("token: '(\\w+)'")]
     private static partial Regex TokenRegex();
 
-    /// <summary>
-    ///     显示剪贴板内容.
-    /// </summary>
-    private void DisplayClipboardData()
+    private void InitClipMonitor()
     {
-        var clipText = ClipboardService.GetText();
-        if (clipText.NullOrWhiteSpace()) {
-            return;
-        }
-
-        _labelDest.Text = Str.Translating;
-        Task.Run(() => {
-            var translateText = TranslateText(clipText);
-            ClipboardService.SetText(translateText);
-            Invoke(() => { _labelDest.Text = translateText; });
-        });
-
-        var point = Cursor.Position;
-        point.Offset(new Point(_mouseMargin));
-        Location = point;
-        Show();
+        _nextClipMonitor = Win32.SetClipboardViewer(Handle);
     }
 
     private void InitForm()
@@ -187,13 +167,35 @@ internal sealed partial class WinMain : Form
         Controls.Add(_labelDest);
     }
 
+    private void TranslateAndShow()
+    {
+        var clipText = ClipboardService.GetText();
+        if (clipText.NullOrWhiteSpace()) {
+            return;
+        }
+
+        _labelDest.Text = Str.Translating;
+        Task.Run(() => {
+            var translateText = TranslateText(clipText);
+            ClipboardService.SetText(translateText);
+            Invoke(() => { _labelDest.Text = translateText; });
+        });
+
+        var point = Cursor.Position;
+        point.Offset(new Point(_mouseMargin));
+        Location = point;
+        Show();
+    }
+
     private string TranslateText(string sourceText)
     {
         while (true) {
             var sign = BaiduSignCracker.Sign(sourceText);
             var content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>> {
                                                         new("from", "auto")
-                                                      , new("to", "zh")
+                                                      , new( //
+                                                            "to"
+                                                          , CultureInfo.CurrentCulture.TwoLetterISOLanguageName)
                                                       , new("query", sourceText)
                                                       , new("simple_means_flag", "3")
                                                       , new("sign", sign)

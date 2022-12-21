@@ -1,8 +1,10 @@
+// ReSharper disable UnusedMember.Global
+
 #pragma warning disable CS1591
 
 namespace Dot.Native;
 
-public class VkCode
+internal static class VkCode
 {
     public const int VK_A                   = 0x41; // A 键
     public const int VK_ACCEPT              = 0x1E; // IME 接受

@@ -7,6 +7,8 @@ namespace Dot.Tran;
 
 [Description(nameof(Str.TranslateTool))]
 [Localization(typeof(Str))]
+
+// ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class Main : ToolBase<Option>
 {
     [SupportedOSPlatform(nameof(OSPlatform.Windows))]

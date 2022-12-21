@@ -57,6 +57,7 @@ internal sealed class KeyboardHook : IDisposable
 
     private nint HookCallback(int nCode, nint wParam, nint lParam)
     {
+        // ReSharper disable once InvertIf
         if (nCode >= 0 && wParam == Win32.WM_KEYDOWN) {
             var hookStruct = (Win32.KbdllhooksStruct)Marshal.PtrToStructure(lParam, typeof(Win32.KbdllhooksStruct))!;
             if (KeyUpEvent?.Invoke(null, hookStruct) ?? false) {
