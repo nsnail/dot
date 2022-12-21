@@ -14,9 +14,6 @@ internal static class Program
 
         var app = new CommandApp();
         app.Configure(config => {
-            config.SetApplicationName(AssemblyInfo.ASSEMBLY_PRODUCT);
-            config.SetApplicationVersion(AssemblyInfo.ASSEMBLY_VERSION);
-
             config.AddCommand<Main>(nameof(Git).ToLower(CultureInfo.InvariantCulture));
             #if NET7_0_WINDOWS
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
