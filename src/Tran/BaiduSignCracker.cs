@@ -9,9 +9,13 @@ internal static class BaiduSignCracker
 
     public static string Sign(string text)
     {
-        var e = new List<int>(text.Length);
-        for (var i = 0; i < text.Length; i++) {
-            var k = (int)text[i];
+        var hash = text.Length > 30
+            ? string.Concat(text.AsSpan()[..10], text.AsSpan(text.Length / 2 - 5, 10), text.AsSpan()[^10..])
+            : text;
+
+        var e = new List<int>(hash.Length);
+        for (var i = 0; i < hash.Length; i++) {
+            var k = (int)hash[i];
             switch (k) {
                 case < 128:
                     e.Add(k);
@@ -20,8 +24,8 @@ internal static class BaiduSignCracker
                     e.Add((k >> 6) | 192);
                     break;
                 default: {
-                    if ((k & 64512) == 55296 && i + 1 < text.Length && (text[i + 1] & 64512) == 56320) {
-                        k = 65536 + ((k & 1023) << 10) + (text[++i] & 1023);
+                    if ((k & 64512) == 55296 && i + 1 < hash.Length && (hash[i + 1] & 64512) == 56320) {
+                        k = 65536 + ((k & 1023) << 10) + (hash[++i] & 1023);
                         e.Add((k >> 18)        | 240);
                         e.Add(((k >> 12) & 63) | 128);
                     }

@@ -1,5 +1,7 @@
 #if NET7_0_WINDOWS
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using Dot.Native;
 using Dot.Tran.Dto;
@@ -9,23 +11,22 @@ using Size = System.Drawing.Size;
 
 namespace Dot.Tran;
 
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 internal sealed partial class FrmMain : Form
 {
-    private const    int              _HIDING_MIL_SECS    = 5000; //                             隐藏窗体时间（秒
-    private const    int              _RETRY_WAIT_MIL_SEC = 1000; //                             重试等待时间（秒）
-    private const    string           _TRANSLATE_API_URL  = "https://fanyi.baidu.com/v2transapi";
-    private const    string           _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
-    private const    double           _WINDOW_OPACITY     = .5;         //                       窗体透明度
-    private static   ManualResetEvent _mre                = new(false); //           隐藏窗体侦测线程信号
-    private readonly HttpClient       _httpClient         = new();
-    private readonly Label            _labelDest          = new(); //                            显示翻译内容的文本框
+    private const int    _RETRY_WAIT_MIL_SEC = 1000; //                                          重试等待时间（秒）
+    private const string _TRANSLATE_API_URL  = $"{_TRANSLATE_HOME_URL}/v2transapi";
+    private const string _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
 
-    private readonly MouseHook _mouseHook   = new();
-    private readonly Size      _mouseMargin = new(10, 10);
-    private          bool      _disposed;
-    private          DateTime? _latestActiveTime; //                                           窗体最后激活时间
-    private          nint      _nextHwnd;         //                                           下一个剪贴板监视链对象句柄
-    private          string    _token = "ae72ebad4113270fd26ada5125301268";
+    private readonly HttpClient   _httpClient   = new();
+    private readonly KeyboardHook _keyboardHook = new();
+    private readonly Label        _labelDest    = new(); //                                      显示翻译内容的文本框
+    private readonly MouseHook    _mouseHook    = new();
+    private readonly Size         _mouseMargin  = new(10, 10);
+    private          bool         _capsLockPressed; //                                           大写键按下进行翻译，区分ctrl+c
+    private          bool         _disposed;
+    private          nint         _nextClipViewer; //                                            下一个剪贴板监视链对象句柄
+    private          string       _token = "ae72ebad4113270fd26ada5125301268";
 
     public FrmMain()
     {
@@ -34,9 +35,7 @@ internal sealed partial class FrmMain : Form
         InitLabelDest();
         InitHttpClient();
 
-        _nextHwnd = Win32.SetClipboardViewer(Handle);
-
-        Task.Run(HideWindow);
+        _nextClipViewer = Win32.SetClipboardViewer(Handle);
     }
 
     ~FrmMain()
@@ -53,14 +52,13 @@ internal sealed partial class FrmMain : Form
         }
 
         if (disposing) {
-            _mre = null; // 结束定时隐藏窗体线程
-            _mre?.Dispose();
             _httpClient?.Dispose();
             _labelDest?.Dispose();
             _mouseHook?.Dispose();
+            _keyboardHook?.Dispose();
         }
 
-        Win32.ChangeClipboardChain(Handle, _nextHwnd); // 从剪贴板监视链移除本窗体
+        Win32.ChangeClipboardChain(Handle, _nextClipViewer); // 从剪贴板监视链移除本窗体
         _disposed = true;
     }
 
@@ -68,18 +66,21 @@ internal sealed partial class FrmMain : Form
     {
         void SendToNext(Message message)
         {
-            _ = Win32.SendMessageA(_nextHwnd, (uint)message.Msg, message.WParam, message.LParam);
+            _ = Win32.SendMessageA(_nextClipViewer, (uint)message.Msg, message.WParam, message.LParam);
         }
 
         switch (m.Msg) {
             case Win32.WM_DRAWCLIPBOARD:
-                DisplayClipboardData();
+                if (_capsLockPressed) {
+                    _capsLockPressed = false;
+                    DisplayClipboardData();
+                }
+
                 SendToNext(m);
                 break;
             case Win32.WM_CHANGECBCHAIN:
-                Console.WriteLine(Win32.WM_CHANGECBCHAIN);
-                if (m.WParam == _nextHwnd) {
-                    _nextHwnd = m.LParam;
+                if (m.WParam == _nextClipViewer) {
+                    _nextClipViewer = m.LParam;
                 }
                 else {
                     SendToNext(m);
@@ -93,7 +94,7 @@ internal sealed partial class FrmMain : Form
     }
 
     [GeneratedRegex("token: '(\\w+)'")]
-    private static partial Regex MyRegex();
+    private static partial Regex TokenRegex();
 
     /// <summary>
     ///     显示剪贴板内容.
@@ -107,7 +108,8 @@ internal sealed partial class FrmMain : Form
 
         _labelDest.Text = Str.Translating;
         Task.Run(() => {
-            var translateText = _labelDest.Text = TranslateText(clipText);
+            var translateText = TranslateText(clipText);
+            ClipboardService.SetText(translateText);
             Invoke(() => { _labelDest.Text = translateText; });
         });
 
@@ -115,43 +117,57 @@ internal sealed partial class FrmMain : Form
         point.Offset(new Point(_mouseMargin));
         Location = point;
         Show();
-        _latestActiveTime = DateTime.Now;
-        _mre.Set();
-    }
-
-    private async Task HideWindow()
-    {
-        while (_mre is not null) {
-            while (Visible) {
-                await Task.Delay(100);
-                if (_latestActiveTime is null ||
-                    !((DateTime.Now - _latestActiveTime.Value).TotalMilliseconds > _HIDING_MIL_SECS)) {
-                    continue;
-                }
-
-                Invoke(Hide);
-            }
-
-            _mre.WaitOne();
-        }
     }
 
     private void InitForm()
     {
         AutoSize        = true;
         AutoSizeMode    = AutoSizeMode.GrowAndShrink;
+        MaximumSize     = Screen.FromHandle(Handle).Bounds.Size / 2;
         FormBorderStyle = FormBorderStyle.None;
-        Opacity         = _WINDOW_OPACITY;
         TopMost         = true;
         Visible         = false;
     }
 
-    private void InitHook()
+    private unsafe void InitHook()
     {
         _mouseHook.MouseMoveEvent += (_, e) => {
             var point = new Point(e.X, e.Y);
             point.Offset(new Point(_mouseMargin));
             Location = point;
+        };
+        _keyboardHook.KeyUpEvent += (_, e) => {
+            switch (e.vkCode) {
+                case VkCode.VK_CAPITAL: {
+                    var keyInputs = new Win32.InputStruct[4];
+
+                    keyInputs[0].type   = Win32.INPUT_KEYBOARD;
+                    keyInputs[0].ki.wVk = VkCode.VK_CONTROL;
+
+                    keyInputs[1].type   = Win32.INPUT_KEYBOARD;
+                    keyInputs[1].ki.wVk = VkCode.VK_C;
+
+                    keyInputs[2].type       = Win32.INPUT_KEYBOARD;
+                    keyInputs[2].ki.wVk     = VkCode.VK_C;
+                    keyInputs[2].ki.dwFlags = Win32.KEYEVENTF_KEYUP;
+
+                    keyInputs[3].type       = Win32.INPUT_KEYBOARD;
+                    keyInputs[3].ki.wVk     = VkCode.VK_CONTROL;
+                    keyInputs[3].ki.dwFlags = Win32.KEYEVENTF_KEYUP;
+
+                    Win32.SendInput((uint)keyInputs.Length, keyInputs, sizeof(Win32.InputStruct));
+                    _capsLockPressed = true;
+                    return true;
+                }
+
+                case VkCode.VK_ESCAPE:
+                    Hide();
+                    break;
+                default:
+                    return false;
+            }
+
+            return false;
         };
     }
 
@@ -159,11 +175,12 @@ internal sealed partial class FrmMain : Form
     {
         _httpClient.DefaultRequestHeaders.Add( //
             "User-Agent"
-          , " Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+          , "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
     }
 
     private void InitLabelDest()
     {
+        _labelDest.Font        = new Font(_labelDest.Font.FontFamily, 16);
         _labelDest.BorderStyle = BorderStyle.None;
         _labelDest.Dock        = DockStyle.Fill;
         _labelDest.AutoSize    = true;
@@ -173,11 +190,7 @@ internal sealed partial class FrmMain : Form
     private string TranslateText(string sourceText)
     {
         while (true) {
-            var hash = sourceText.Length > 30
-                ? string.Concat(sourceText.AsSpan()[..10], sourceText.AsSpan(sourceText.Length / 2 - 5, 10)
-                              , sourceText.AsSpan()[^10..])
-                : sourceText;
-            var sign = BaiduSignCracker.Sign(hash);
+            var sign = BaiduSignCracker.Sign(sourceText);
             var content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>> {
                                                         new("from", "auto")
                                                       , new("to", "zh")
@@ -204,7 +217,7 @@ internal sealed partial class FrmMain : Form
             _httpClient.DefaultRequestHeaders.Remove(nameof(Cookie));
             _httpClient.DefaultRequestHeaders.Add(nameof(Cookie), cookie);
             var html = _httpClient.GetStringAsync(_TRANSLATE_HOME_URL).Result;
-            _token = MyRegex().Match(html).Groups[1].Value;
+            _token = TokenRegex().Match(html).Groups[1].Value;
         }
     }
 }

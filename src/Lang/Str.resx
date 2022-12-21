@@ -267,4 +267,13 @@
     <data name="Translating" xml:space="preserve">
         <value>翻译中...</value>
     </data>
+    <data name="HideTranslate" xml:space="preserve">
+        <value>按下 [green]Esc[/] 隐藏译文</value>
+    </data>
+    <data name="StartTranslate" xml:space="preserve">
+        <value>选中文本按下 [green]Capslock[/] 开始翻译</value>
+    </data>
+    <data name="TranslateTool" xml:space="preserve">
+        <value>翻译工具</value>
+    </data>
 </root>
