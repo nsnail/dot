@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 namespace Dot.Tran;
 
 [SupportedOSPlatform(nameof(OSPlatform.Windows))]
-internal sealed partial class FrmMain : Form
+internal sealed partial class WinMain : Form
 {
     private const int    _RETRY_WAIT_MIL_SEC = 1000; //                                          重试等待时间（秒）
     private const string _TRANSLATE_API_URL  = $"{_TRANSLATE_HOME_URL}/v2transapi";
@@ -28,7 +28,7 @@ internal sealed partial class FrmMain : Form
     private          nint         _nextClipViewer; //                                            下一个剪贴板监视链对象句柄
     private          string       _token = "ae72ebad4113270fd26ada5125301268";
 
-    public FrmMain()
+    public WinMain()
     {
         InitForm();
         InitHook();
@@ -38,7 +38,7 @@ internal sealed partial class FrmMain : Form
         _nextClipViewer = Win32.SetClipboardViewer(Handle);
     }
 
-    ~FrmMain()
+    ~WinMain()
     {
         Dispose(false);
     }

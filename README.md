@@ -20,6 +20,7 @@ OPTIONS:
 COMMANDS:
     git                                      Git batch operation tool
     color                                    Screen coordinate color selection tool
+    tran                                     Translation tools
     guid                                     GUID tool
     ip                                       IP tools
     json                                     Json tool
@@ -30,7 +31,6 @@ COMMANDS:
     time                                     Time synchronization tool
     tolf                                     Convert newline characters to LF
     get <url>                                Multithreaded download tool
-
 
 ```
 

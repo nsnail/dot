@@ -10,8 +10,9 @@ internal static class Program
 {
     public static int Main(string[] args)
     {
-        var app = new CommandApp();
+        CustomCulture(ref args);
 
+        var app = new CommandApp();
         app.Configure(config => {
             config.SetApplicationName(AssemblyInfo.ASSEMBLY_PRODUCT);
             config.SetApplicationVersion(AssemblyInfo.ASSEMBLY_VERSION);
@@ -36,8 +37,21 @@ internal static class Program
 
             config.ValidateExamples();
         });
-
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         return app.Run(args);
+    }
+
+    private static void CustomCulture(ref string[] args)
+    {
+        var i = Array.IndexOf(args, "/e");
+        if (i < 0) {
+            return;
+        }
+
+        CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(args[i + 1]);
+        var argsList                                              = args.ToList();
+        argsList.RemoveAt(i);
+        argsList.RemoveAt(i);
+        args = argsList.ToArray();
     }
 }

@@ -19,6 +19,7 @@ OPTIONS:
 COMMANDS:
     git                                      Git批量操作工具
     color                                    屏幕坐标颜色选取工具
+    tran                                     翻译工具
     guid                                     GUID工具
     ip                                       IP工具
     json                                     Json工具
