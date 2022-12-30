@@ -21,7 +21,12 @@ internal sealed class Main : ToolBase<Option>
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             Application.ThreadException                += UIThreadException;
             using var frm = new WinMain();
-            Application.Run();
+            try {
+                Application.Run();
+            }
+            catch (Exception ex) {
+                Log(ex.Json());
+            }
         });
         th.SetApartmentState(ApartmentState.STA);
         th.Start();

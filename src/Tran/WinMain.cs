@@ -15,17 +15,19 @@ namespace Dot.Tran;
 internal sealed partial class WinMain : Form
 {
     private const    int          _RETRY_WAIT_MIL_SEC = 1000;
-    private const    string       _TRANSLATE_API_URL = $"{_TRANSLATE_HOME_URL}/v2transapi";
+    private const    string       _TRANSLATE_API_URL  = $"{_TRANSLATE_HOME_URL}/v2transapi";
     private const    string       _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
-    private readonly HttpClient   _httpClient = new();
-    private readonly KeyboardHook _keyboardHook = new();
-    private readonly Label        _labelDest = new();
-    private readonly MouseHook    _mouseHook = new();
-    private readonly Size         _mouseMargin = new(10, 10); //        窗体与鼠标指针的距离
-    private          bool         _capsLockPressed; //                               大写键按下进行翻译，区分ctrl+c
+    private readonly HttpClient   _httpClient         = new(new HttpClientHandler { UseProxy = false });
+    private readonly KeyboardHook _keyboardHook       = new();
+    private readonly Label        _labelDest          = new();
+    private readonly MouseHook    _mouseHook          = new();
+    private readonly Size         _mouseMargin        = new(10, 10);
+    private readonly string       _stateFile          = Path.Combine(Path.GetTempPath(), "dot-tran-state.tmp");
+    private          bool         _capsLockPressed;
+    private volatile string       _cookie;
     private          bool         _disposed;
-    private          nint         _nextClipMonitor; //                               下一个剪贴板监视链对象句柄
-    private          string       _token = "ae72ebad4113270fd26ada5125301268"; //    翻译api token
+    private          nint         _nextClipMonitor;
+    private volatile string       _token;
 
     public WinMain()
     {
@@ -33,6 +35,7 @@ internal sealed partial class WinMain : Form
         InitHook();
         InitLabelDest();
         InitHttpClient();
+        InitTokenCookie();
         InitClipMonitor();
     }
 
@@ -167,6 +170,19 @@ internal sealed partial class WinMain : Form
         Controls.Add(_labelDest);
     }
 
+    private void InitTokenCookie()
+    {
+        if (File.Exists(_stateFile)) {
+            var lines = File.ReadLines(_stateFile).ToArray();
+            _token  = lines[0];
+            _cookie = lines[1];
+            _httpClient.DefaultRequestHeaders.Add(nameof(Cookie), _cookie);
+        }
+        else {
+            Task.Run(UpdateStateFile);
+        }
+    }
+
     private void TranslateAndShow()
     {
         var clipText = ClipboardService.GetText();
@@ -214,13 +230,21 @@ internal sealed partial class WinMain : Form
 
             //cookie or token invalid
             Task.Delay(_RETRY_WAIT_MIL_SEC).Wait();
-            var cookie = string.Join(
-                ';', rsp.Headers.First(x => x.Key == "Set-Cookie").Value.Select(x => x.Split(';').First()));
-            _httpClient.DefaultRequestHeaders.Remove(nameof(Cookie));
-            _httpClient.DefaultRequestHeaders.Add(nameof(Cookie), cookie);
-            var html = _httpClient.GetStringAsync(_TRANSLATE_HOME_URL).Result;
-            _token = TokenRegex().Match(html).Groups[1].Value;
+            UpdateStateFile();
         }
+    }
+
+    private void UpdateStateFile()
+    {
+        var rsp = _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, _TRANSLATE_HOME_URL)).Result;
+        _cookie = string.Join(
+            ';', rsp.Headers.First(x => x.Key == "Set-Cookie").Value.Select(x => x.Split(';').First()));
+        _httpClient.DefaultRequestHeaders.Remove(nameof(Cookie));
+        _httpClient.DefaultRequestHeaders.Add(nameof(Cookie), _cookie);
+        var html = _httpClient.GetStringAsync(_TRANSLATE_HOME_URL).Result;
+        _token = TokenRegex().Match(html).Groups[1].Value;
+
+        File.WriteAllLines(_stateFile, new[] { _token, _cookie });
     }
 }
 #endif
