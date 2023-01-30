@@ -6,31 +6,31 @@ namespace Dot.Get;
 internal sealed class Option : OptionBase
 {
     [CommandOption("-b|--buffer-size")]
-    [Description(nameof(Str.BufferSize))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.BufferSize))]
+    [Localization(typeof(Ln))]
     [DefaultValue(8096)]
     public int BufferSize { get; set; }
 
     [CommandOption("-c|--chunk-number")]
-    [Description(nameof(Str.ChunkNumbers))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.ChunkNumbers))]
+    [Localization(typeof(Ln))]
     [DefaultValue(5)]
     public int ChunkNumbers { get; set; }
 
     [CommandOption("-m|--max-parallel")]
-    [Description(nameof(Str.MaxParallel))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.MaxParallel))]
+    [Localization(typeof(Ln))]
     [DefaultValue(5)]
     public int MaxParallel { get; set; }
 
     [CommandOption("-o|--output")]
-    [Description(nameof(Str.OutputPath))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.OutputPath))]
+    [Localization(typeof(Ln))]
     [DefaultValue(".")]
     public string Output { get; set; }
 
     [CommandArgument(0, "<url>")]
-    [Description(nameof(Str.Url))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.Url))]
+    [Localization(typeof(Ln))]
     public string Url { get; set; }
 }

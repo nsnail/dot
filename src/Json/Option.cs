@@ -6,25 +6,25 @@ namespace Dot.Json;
 internal sealed class Option : OptionBase
 {
     [CommandOption("-c|--compress")]
-    [Description(nameof(Str.CompressJson))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.CompressJson))]
+    [Localization(typeof(Ln))]
     [DefaultValue(false)]
     public bool Compress { get; set; }
 
     [CommandOption("-s|--convert-to-string")]
-    [Description(nameof(Str.JsonToString))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.JsonToString))]
+    [Localization(typeof(Ln))]
     [DefaultValue(false)]
     public bool ConvertToString { get; set; }
 
     [CommandOption("-f|--format")]
-    [Description(nameof(Str.FormatJson))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.FormatJson))]
+    [Localization(typeof(Ln))]
     [DefaultValue(true)]
     public bool Format { get; set; }
 
     [CommandArgument(0, "[input text]")]
-    [Description(nameof(Str.TextTobeProcessed))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.TextTobeProcessed))]
+    [Localization(typeof(Ln))]
     public string InputText { get; set; }
 }

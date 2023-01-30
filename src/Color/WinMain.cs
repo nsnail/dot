@@ -10,7 +10,7 @@ namespace Dot.Color;
 internal sealed class WinMain : Form
 {
     private readonly Bitmap  _bmp;
-    private readonly WinInfo _winInfo = new(); //小图窗口
+    private readonly WinInfo _winInfo = new(); // 小图窗口
 
     private bool _disposed;
 
@@ -20,11 +20,11 @@ internal sealed class WinMain : Form
         Win32.ShowWindow(Win32.GetConsoleWindow(), Win32.SW_HIDE);
 
         FormBorderStyle = FormBorderStyle.None;
-        Size            = Screen.PrimaryScreen!.Bounds.Size;
-        StartPosition   = FormStartPosition.Manual;
-        Location        = new Point(0, 0);
-        Opacity         = 0.01d; //主窗体加载截图过程设置为透明避免闪烁
-        _bmp            = new Bitmap(Size.Width, Size.Height);
+        Size = Screen.PrimaryScreen!.Bounds.Size;
+        StartPosition = FormStartPosition.Manual;
+        Location = new Point(0, 0);
+        Opacity = 0.01d; // 主窗体加载截图过程设置为透明避免闪烁
+        _bmp = new Bitmap(Size.Width, Size.Height);
         using var g = Graphics.FromImage(_bmp);
         g.CopyFromScreen(0, 0, 0, 0, Size);
     }

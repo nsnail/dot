@@ -7,12 +7,12 @@ using NSExt.Extensions;
 
 namespace Dot.Git;
 
-[Description(nameof(Str.GitTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.GitTool))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
-    private Encoding                                               _gitOutputEnc; //git command rsp 编码
-    private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      //仓库信息容器
+    private Encoding                                               _gitOutputEnc; // git command rsp 编码
+    private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      // 仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
     protected override Task Core()
@@ -20,7 +20,7 @@ internal sealed class Main : ToolBase<Option>
         return !Directory.Exists(Opt.Path)
             ? throw new ArgumentException( //
                 nameof(Opt.Path)           //
-              , string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
+              , string.Format(CultureInfo.InvariantCulture, Ln.PathNotFound, Opt.Path))
             : CoreInternal();
     }
 
@@ -37,7 +37,7 @@ internal sealed class Main : ToolBase<Option>
                            , new TaskDescriptionColumn { Alignment = Justify.Left }) //
                          .StartAsync(async ctx => {
                              var taskFinder = ctx
-                                              .AddTask(string.Format(CultureInfo.InvariantCulture, Str.FindGitReps
+                                              .AddTask(string.Format(CultureInfo.InvariantCulture, Ln.FindGitReps
                                                                    , Opt.Path))
                                               .IsIndeterminate();
                              var paths = Directory.GetDirectories(Opt.Path, ".git"       //
@@ -66,12 +66,12 @@ internal sealed class Main : ToolBase<Option>
                              await Parallel.ForEachAsync(tasks, DirHandle);
                          });
 
-        var table = new Table().AddColumn(new TableColumn(Str.Repository) { Width = 50 })
-                               .AddColumn(new TableColumn(Str.Command))
-                               .AddColumn(new TableColumn(Str.Response) { Width = 50 })
+        var table = new Table().AddColumn(new TableColumn(Ln.Repository) { Width = 50 })
+                               .AddColumn(new TableColumn(Ln.Command))
+                               .AddColumn(new TableColumn(Ln.Response) { Width = 50 })
                                .Caption(
-                                   $"{Str.ZeroCode}: [green]{_repoStatus.Count(x => x.Value == TaskStatusColumn.Statues
-                                                                                   .Succeed)}[/]/{_repoStatus.Count}");
+                                   $"{Ln.ZeroCode}: [green]{_repoStatus.Count(x => x.Value == TaskStatusColumn.Statues
+                                                                                  .Succeed)}[/]/{_repoStatus.Count}");
 
         foreach (var repo in _repoRsp) {
             var status = _repoStatus[repo.Key].Desc();
@@ -82,7 +82,9 @@ internal sealed class Main : ToolBase<Option>
         AnsiConsole.Write(table);
     }
 
+    #pragma warning disable SA1313
     private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
+        #pragma warning restore SA1313
     {
         payload.Value.StartTask();
         payload.Value.State.Status(TaskStatusColumn.Statues.Executing);

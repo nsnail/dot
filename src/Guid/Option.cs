@@ -6,8 +6,8 @@ namespace Dot.Guid;
 internal sealed class Option : OptionBase
 {
     [CommandOption("-u|--upper")]
-    [Description(nameof(Str.UseUppercase))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.UseUppercase))]
+    [Localization(typeof(Ln))]
     [DefaultValue(false)]
     public bool Upper { get; set; }
 }

@@ -6,8 +6,8 @@ using NSExt.Extensions;
 
 namespace Dot.Get;
 
-[Description(nameof(Str.DownloadTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.DownloadTool))]
+[Localization(typeof(Ln))]
 internal sealed partial class Main : ToolBase<Option>
 {
     private const string _PART = "part";
@@ -15,13 +15,13 @@ internal sealed partial class Main : ToolBase<Option>
     protected override async Task Core()
     {
         using var http = new HttpClient();
-        string attachment = default;
-        long contentLength = default;
-        var table = new Table().AddColumn(Str.DataIdentification).AddColumn(Str.DataContent).AddRow("Url", Opt.Url);
+        string    attachment = default;
+        long      contentLength = default;
+        var       table = new Table().AddColumn(Ln.DataIdentification).AddColumn(Ln.DataContent).AddRow("Url", Opt.Url);
         await AnsiConsole.Status()
                          .AutoRefresh(true)
                          .Spinner(Spinner.Known.Default)
-                         .StartAsync($"{Str.RequestMetaData}: {Opt.Url}", async _ => {
+                         .StartAsync($"{Ln.RequestMetaData}: {Opt.Url}", async _ => {
                              using var headRsp = await http.SendAsync(new HttpRequestMessage(HttpMethod.Head, Opt.Url));
                              using var content = headRsp.Content;
                              contentLength = content.Headers.ContentLength ?? 0;
@@ -45,15 +45,15 @@ internal sealed partial class Main : ToolBase<Option>
                            , new TaskDescriptionColumn() //
                            , new RemainingTimeColumn())  //
                          .StartAsync(async ctx => {
-                             var tParent = ctx.AddTask($"{Str.TotalProgress} {Str.RemainingTime}:").IsIndeterminate();
+                             var tParent = ctx.AddTask($"{Ln.TotalProgress} {Ln.RemainingTime}:").IsIndeterminate();
 
-                             //未知文件长度，单线程下载；
+                             // 未知文件长度，单线程下载；
                              if (contentLength == 0) {
                                  await using var nets = await http.GetStreamAsync(Opt.Url);
                                  await using var fs
                                      = new FileStream(mainFilePath, FileMode.CreateNew, FileAccess.Write
                                                     , FileShare.None);
-                                 tParent.MaxValue = Opt.BufferSize + 1; //由于文件长度未知， 进度条终点永远至为当前长度+1
+                                 tParent.MaxValue = Opt.BufferSize + 1; // 由于文件长度未知， 进度条终点永远至为当前长度+1
                                  StreamCopy(nets, fs, x => {
                                      tParent.MaxValue += x;
                                      tParent.Increment(x);
@@ -63,7 +63,7 @@ internal sealed partial class Main : ToolBase<Option>
                                  tParent.StopTask();
                              }
 
-                             //已知文件长度，多线程下载：
+                             // 已知文件长度，多线程下载：
                              else {
                                  tParent.IsIndeterminate(false);
                                  tParent.MaxValue = contentLength;
@@ -73,7 +73,7 @@ internal sealed partial class Main : ToolBase<Option>
                                             , new ParallelOptions { MaxDegreeOfParallelism = Opt.MaxParallel } //
                                             , i => {
                                                   var tChild = ctx.AddTask(
-                                                      $"{Str.Thread}{i} {Str.RemainingTime}:", maxValue: chunkSize);
+                                                      $"{Ln.Thread}{i} {Ln.RemainingTime}:", maxValue: chunkSize);
                                                   using var getReq   = new HttpRequestMessage(HttpMethod.Get, Opt.Url);
                                                   var       startPos = i * chunkSize;
                                                   var       endPos   = startPos + chunkSize - 1;
@@ -97,7 +97,7 @@ internal sealed partial class Main : ToolBase<Option>
                          });
 
         AnsiConsole.MarkupLine(
-            $"{Str.DownloadCompleted}, {Str.ElapsedTime}: {DateTime.Now - timer}, {Str.FileSaveLocation}: {mainFilePath}");
+            $"{Ln.DownloadCompleted}, {Ln.ElapsedTime}: {DateTime.Now - timer}, {Ln.FileSaveLocation}: {mainFilePath}");
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ internal sealed partial class Main : ToolBase<Option>
         }
 
         // ReSharper disable once InvertIf
-        if (Directory.Exists(path)) {        //path 是一个存在的目录。
+        if (Directory.Exists(path)) {        // path 是一个存在的目录。
             path = Path.Combine(path, file); // 构建文件路径
             GetUseablePath(ref path);        // 追加序号。
             return path;

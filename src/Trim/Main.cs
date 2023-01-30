@@ -4,8 +4,8 @@ using NSExt.Extensions;
 
 namespace Dot.Trim;
 
-[Description(nameof(Str.RemoveTrailingWhiteSpaces))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.RemoveTrailingWhiteSpaces))]
+[Localization(typeof(Ln))]
 internal sealed class Main : FilesTool<Option>
 {
     protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)

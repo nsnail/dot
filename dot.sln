@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AD79881E-7
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.tgitconfig = .tgitconfig
-		AddMetaFilesToSln.csx = AddMetaFilesToSln.csx
 		build.cake = build.cake
 		code-format.cmd = code-format.cmd
 		CodeCleanupOnSave.csx = CodeCleanupOnSave.csx
@@ -31,7 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AD79881E-7
 		StyleCopAnalyzers.ruleset = StyleCopAnalyzers.ruleset
 		switch-nuget.cmd = switch-nuget.cmd
 		switch-project.cmd = switch-project.cmd
-		switcher.json = switcher.json
+		switcher.nsext.json = switcher.nsext.json
+		SyncMetaFiles.csx = SyncMetaFiles.csx
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{15EF00AD-DFA8-4BE2-985E-85DA8092CB2F}"

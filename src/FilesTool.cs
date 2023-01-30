@@ -10,14 +10,14 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
     where TOption : DirOption
 {
     // ReSharper disable once StaticMemberInGenericType
-    private static readonly object                            _lock       = new(); //线程锁
-    private readonly        ConcurrentDictionary<string, int> _writeStats = new(); //写入统计：后缀，数量
-    private                 int                               _breakCnt;           //跳过文件数
-    private                 ProgressTask                      _childTask;          //子任务进度
-    private                 int                               _excludeCnt;         //排除文件数
-    private                 int                               _readCnt;            //读取文件数
-    private                 int                               _totalCnt;           //总文件数
-    private                 int                               _writeCnt;           //写入文件数
+    private static readonly object                            _lock       = new(); // 线程锁
+    private readonly        ConcurrentDictionary<string, int> _writeStats = new(); // 写入统计：后缀，数量
+    private                 int                               _breakCnt;           // 跳过文件数
+    private                 ProgressTask                      _childTask;          // 子任务进度
+    private                 int                               _excludeCnt;         // 排除文件数
+    private                 int                               _readCnt;            // 读取文件数
+    private                 int                               _totalCnt;           // 总文件数
+    private                 int                               _writeCnt;           // 写入文件数
 
     protected static FileStream CreateTempFile(out string file)
     {
@@ -52,7 +52,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
     {
         return !Directory.Exists(Opt.Path)
             ? throw new ArgumentException( //
-                nameof(Opt.Path), string.Format(CultureInfo.InvariantCulture, Str.PathNotFound, Opt.Path))
+                nameof(Opt.Path), string.Format(CultureInfo.InvariantCulture, Ln.PathNotFound, Opt.Path))
             : CoreInternal();
     }
 
@@ -69,7 +69,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
             }
 
             _childTask.Description
-                = $"{Str.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Str.Write}: [red]{_writeCnt}[/], {Str.Break}: [gray]{_breakCnt}[/], {Str.Exclude}: [yellow]{_excludeCnt}[/]";
+                = $"{Ln.Read}: [green]{_readCnt}[/]/{_totalCnt}, {Ln.Write}: [red]{_writeCnt}[/], {Ln.Break}: [gray]{_breakCnt}[/], {Ln.Exclude}: [yellow]{_excludeCnt}[/]";
         }
     }
 
@@ -81,7 +81,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
     private async Task CoreInternal()
     {
         if (!Opt.WriteMode) {
-            AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, "[gray]{0}[/]", Str.ExerciseMode);
+            AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, "[gray]{0}[/]", Ln.ExerciseMode);
         }
 
         IEnumerable<string> fileList;
@@ -93,7 +93,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
                            , new SpinnerColumn()                                     //
                            , new TaskDescriptionColumn { Alignment = Justify.Left }) //
                          .StartAsync(async ctx => {
-                             var taskSearchfile = ctx.AddTask(Str.SearchingFile).IsIndeterminate();
+                             var taskSearchfile = ctx.AddTask(Ln.SearchingFile).IsIndeterminate();
                              _childTask = ctx.AddTask("-/-", false);
                              fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
                              _totalCnt  = fileList.Count();
@@ -111,7 +111,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
             _ = grid.AddRow(kv.Key, kv.Value.ToString(CultureInfo.InvariantCulture));
         }
 
-        AnsiConsole.Write(new Panel(grid).Header(Str.WriteFileStats));
+        AnsiConsole.Write(new Panel(grid).Header(Ln.WriteFileStats));
     }
 
     // ReSharper disable once ReturnTypeCanBeEnumerable.Local
@@ -119,7 +119,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
     {
         var exCnt = 0;
 
-        //默认排除.git 、 node_modules 目录
+        // 默认排除.git 、 node_modules 目录
         if (Opt.ExcludeRegexes?.FirstOrDefault() is null) {
             Opt.ExcludeRegexes = new[] { @"\.git", "node_modules" };
         }

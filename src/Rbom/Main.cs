@@ -2,8 +2,8 @@
 
 namespace Dot.Rbom;
 
-[Description(nameof(Str.TrimUtf8Bom))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.TrimUtf8Bom))]
+[Localization(typeof(Ln))]
 internal sealed class Main : FilesTool<Option>
 {
     private readonly byte[] _utf8Bom = { 0xef, 0xbb, 0xbf };

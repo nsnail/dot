@@ -4,8 +4,8 @@ using System.Runtime.Versioning;
 
 namespace Dot.Color;
 
-[Description(nameof(Str.ScreenPixelTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.ScreenPixelTool))]
+[Localization(typeof(Ln))]
 [SupportedOSPlatform(nameof(OSPlatform.Windows))]
 
 // ReSharper disable once ClassNeverInstantiated.Global

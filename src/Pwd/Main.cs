@@ -7,8 +7,8 @@ using TextCopy;
 
 namespace Dot.Pwd;
 
-[Description(nameof(Str.RandomPasswordGenerator))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.RandomPasswordGenerator))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     private readonly char[][] _charTable = {
@@ -55,7 +55,7 @@ internal sealed class Main : ToolBase<Option>
             }
 
             var result = new string(pDest, 0, Opt.Length);
-            Console.WriteLine(Str.Copied, result);
+            Console.WriteLine(Ln.Copied, result);
             #if NET7_0_WINDOWS
             ClipboardService.SetText(result);
             #endif

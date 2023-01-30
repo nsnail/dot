@@ -3,8 +3,14 @@ using System.Security.Cryptography;
 
 namespace Dot.Tests;
 
+/// <summary>
+///     TestGet
+/// </summary>
 public class TestGet
 {
+    /// <summary>
+    ///     DownloadFile
+    /// </summary>
     [Test]
     public void DownloadFile()
     {
@@ -27,9 +33,17 @@ public class TestGet
         }
     }
 
+    /// <summary>
+    ///     Setup
+    /// </summary>
     [SetUp]
     public void Setup() { }
 
+    /// <summary>
+    ///     GetFileSha1
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
     private static string GetFileSha1(string file)
     {
         using var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

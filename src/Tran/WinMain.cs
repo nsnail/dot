@@ -15,14 +15,14 @@ namespace Dot.Tran;
 internal sealed partial class WinMain : Form
 {
     private const    int          _RETRY_WAIT_MIL_SEC = 1000;
-    private const    string       _TRANSLATE_API_URL  = $"{_TRANSLATE_HOME_URL}/v2transapi";
+    private const    string       _TRANSLATE_API_URL = $"{_TRANSLATE_HOME_URL}/v2transapi";
     private const    string       _TRANSLATE_HOME_URL = "https://fanyi.baidu.com";
-    private readonly HttpClient   _httpClient         = new(new HttpClientHandler { UseProxy = false });
-    private readonly KeyboardHook _keyboardHook       = new();
-    private readonly Label        _labelDest          = new();
-    private readonly MouseHook    _mouseHook          = new();
-    private readonly Size         _mouseMargin        = new(10, 10);
-    private readonly string       _stateFile          = Path.Combine(Path.GetTempPath(), "dot-tran-state.tmp");
+    private readonly HttpClient   _httpClient = new(new HttpClientHandler { UseProxy = false });
+    private readonly KeyboardHook _keyboardHook = new();
+    private readonly Label        _labelDest = new();
+    private readonly MouseHook    _mouseHook = new();
+    private readonly Size         _mouseMargin = new(10, 10);
+    private readonly string       _stateFile = Path.Combine(Path.GetTempPath(), "dot-tran-state.tmp");
     private          bool         _capsLockPressed;
     private volatile string       _cookie;
     private          bool         _disposed;
@@ -104,12 +104,12 @@ internal sealed partial class WinMain : Form
 
     private void InitForm()
     {
-        AutoSize        = true;
-        AutoSizeMode    = AutoSizeMode.GrowAndShrink;
-        MaximumSize     = Screen.FromHandle(Handle).Bounds.Size / 2;
+        AutoSize = true;
+        AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        MaximumSize = Screen.FromHandle(Handle).Bounds.Size / 2;
         FormBorderStyle = FormBorderStyle.None;
-        TopMost         = true;
-        Visible         = false;
+        TopMost = true;
+        Visible = false;
     }
 
     private unsafe void InitHook()
@@ -124,18 +124,18 @@ internal sealed partial class WinMain : Form
                 case VkCode.VK_CAPITAL: {
                     var keyInputs = new Win32.InputStruct[4];
 
-                    keyInputs[0].type   = Win32.INPUT_KEYBOARD;
+                    keyInputs[0].type = Win32.INPUT_KEYBOARD;
                     keyInputs[0].ki.wVk = VkCode.VK_CONTROL;
 
-                    keyInputs[1].type   = Win32.INPUT_KEYBOARD;
+                    keyInputs[1].type = Win32.INPUT_KEYBOARD;
                     keyInputs[1].ki.wVk = VkCode.VK_C;
 
-                    keyInputs[2].type       = Win32.INPUT_KEYBOARD;
-                    keyInputs[2].ki.wVk     = VkCode.VK_C;
+                    keyInputs[2].type = Win32.INPUT_KEYBOARD;
+                    keyInputs[2].ki.wVk = VkCode.VK_C;
                     keyInputs[2].ki.dwFlags = Win32.KEYEVENTF_KEYUP;
 
-                    keyInputs[3].type       = Win32.INPUT_KEYBOARD;
-                    keyInputs[3].ki.wVk     = VkCode.VK_CONTROL;
+                    keyInputs[3].type = Win32.INPUT_KEYBOARD;
+                    keyInputs[3].ki.wVk = VkCode.VK_CONTROL;
                     keyInputs[3].ki.dwFlags = Win32.KEYEVENTF_KEYUP;
 
                     Win32.SendInput((uint)keyInputs.Length, keyInputs, sizeof(Win32.InputStruct));
@@ -158,15 +158,15 @@ internal sealed partial class WinMain : Form
     {
         _httpClient.DefaultRequestHeaders.Add( //
             "User-Agent"
-          , "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+  , "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
     }
 
     private void InitLabelDest()
     {
-        _labelDest.Font        = new Font(_labelDest.Font.FontFamily, 16);
+        _labelDest.Font = new Font(_labelDest.Font.FontFamily, 16);
         _labelDest.BorderStyle = BorderStyle.None;
-        _labelDest.Dock        = DockStyle.Fill;
-        _labelDest.AutoSize    = true;
+        _labelDest.Dock = DockStyle.Fill;
+        _labelDest.AutoSize = true;
         Controls.Add(_labelDest);
     }
 
@@ -174,7 +174,7 @@ internal sealed partial class WinMain : Form
     {
         if (File.Exists(_stateFile)) {
             var lines = File.ReadLines(_stateFile).ToArray();
-            _token  = lines[0];
+            _token = lines[0];
             _cookie = lines[1];
             _httpClient.DefaultRequestHeaders.Add(nameof(Cookie), _cookie);
         }
@@ -190,7 +190,7 @@ internal sealed partial class WinMain : Form
             return;
         }
 
-        _labelDest.Text = Str.Translating;
+        _labelDest.Text = Ln.Translating;
         Task.Run(() => {
             var translateText = TranslateText(clipText);
             ClipboardService.SetText(translateText);
@@ -209,17 +209,17 @@ internal sealed partial class WinMain : Form
             var sign = BaiduSignCracker.Sign(sourceText);
             var content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>> {
                                                         new("from", "auto")
-                                                      , new( //
+                                              , new( //
                                                             "to"
-                                                          , CultureInfo.CurrentCulture.TwoLetterISOLanguageName)
-                                                      , new("query", sourceText)
-                                                      , new("simple_means_flag", "3")
-                                                      , new("sign", sign)
-                                                      , new("token", _token)
-                                                      , new("domain", "common")
+                                                  , CultureInfo.CurrentCulture.TwoLetterISOLanguageName)
+                                              , new("query", sourceText)
+                                              , new("simple_means_flag", "3")
+                                              , new("sign", sign)
+                                              , new("token", _token)
+                                              , new("domain", "common")
                                                     });
 
-            var rsp    = _httpClient.PostAsync(_TRANSLATE_API_URL, content).Result;
+            var rsp = _httpClient.PostAsync(_TRANSLATE_API_URL, content).Result;
             var rspObj = rsp.Content.ReadAsStringAsync().Result.Object<BaiduTranslateResultDto.Root>();
             if (rspObj.error == 0) {
                 return string.Join(Environment.NewLine, rspObj.trans_result.data.Select(x => x.dst));
@@ -228,7 +228,7 @@ internal sealed partial class WinMain : Form
             Console.Error.WriteLine(rspObj.Json().UnicodeDe());
             Console.Error.WriteLine(rsp.Headers.Json());
 
-            //cookie or token invalid
+            // cookie or token invalid
             Task.Delay(_RETRY_WAIT_MIL_SEC).Wait();
             UpdateStateFile();
         }

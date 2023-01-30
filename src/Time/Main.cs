@@ -5,8 +5,8 @@ using Dot.Native;
 
 namespace Dot.Time;
 
-[Description(nameof(Str.TimeTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.TimeTool))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     private const int _MAX_DEGREE_OF_PARALLELISM = 10;
@@ -56,12 +56,12 @@ internal sealed class Main : ToolBase<Option>
                                                .Average(x => x.Value.State.Result().TotalMilliseconds);
                          });
 
-        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, Str.NtpReceiveDone, $"[green]{_successCnt}[/]"
+        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, Ln.NtpReceiveDone, $"[green]{_successCnt}[/]"
                              , _ntpServers.Length, $"[yellow]{_offsetAvg:f2}[/]");
 
         if (Opt.Sync) {
             SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
-            AnsiConsole.MarkupLine($"[green]{Str.LocalTimeSyncDone}[/]");
+            AnsiConsole.MarkupLine($"[green]{Ln.LocalTimeSyncDone}[/]");
         }
     }
 
@@ -72,9 +72,9 @@ internal sealed class Main : ToolBase<Option>
             var table = new Table().HideHeaders()
                                    .AddColumn(new TableColumn(string.Empty))
                                    .AddColumn(new TableColumn(string.Empty))
-                                   .Caption(Str.PressAnyKey)
-                                   .AddRow(Str.NtpClock,   DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
-                                   .AddRow(Str.LocalClock, DateTime.Now.ToString("O"));
+                                   .Caption(Ln.PressAnyKey)
+                                   .AddRow(Ln.NtpClock,   DateTime.Now.AddMilliseconds(-_offsetAvg).ToString("O"))
+                                   .AddRow(Ln.LocalClock, DateTime.Now.ToString("O"));
 
             var cts = new CancellationTokenSource();
             var task = AnsiConsole.Live(table)
@@ -145,7 +145,9 @@ internal sealed class Main : ToolBase<Option>
         }
     }
 
+    #pragma warning disable SA1313
     private ValueTask ServerHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
+        #pragma warning restore SA1313
     {
         payload.Value.StartTask();
         payload.Value.State.Status(TaskStatusColumn.Statues.Connecting);

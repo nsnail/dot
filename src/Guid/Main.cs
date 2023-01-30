@@ -6,8 +6,8 @@ using TextCopy;
 
 namespace Dot.Guid;
 
-[Description(nameof(Str.GuidTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.GuidTool))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     protected override Task Core()
@@ -17,7 +17,7 @@ internal sealed class Main : ToolBase<Option>
             guid = guid.ToUpper(CultureInfo.InvariantCulture);
         }
 
-        Console.WriteLine(Str.Copied, guid);
+        Console.WriteLine(Ln.Copied, guid);
         #if NET7_0_WINDOWS
         ClipboardService.SetText(guid);
         #endif

@@ -27,14 +27,14 @@ namespace Dot.Lang {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal sealed class Str {
+    internal sealed class Ln {
 
         private static global::System.Resources.ResourceManager resourceMan;
 
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Str() {
+        internal Ln() {
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Dot.Lang {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Lang.Str", typeof(Str).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Dot.Languages.Ln", typeof(Ln).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -67,7 +67,7 @@ namespace Dot.Lang {
 
       <#
     var xml = new XmlDocument();
-    xml.Load("Str.resx");
+    xml.Load("Ln.resx");
     foreach (XmlNode data in xml.SelectNodes("//root/data")!)
     {
 #>

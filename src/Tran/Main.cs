@@ -5,8 +5,8 @@ using NSExt.Extensions;
 
 namespace Dot.Tran;
 
-[Description(nameof(Str.TranslateTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.TranslateTool))]
+[Localization(typeof(Ln))]
 
 // ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class Main : ToolBase<Option>
@@ -14,12 +14,12 @@ internal sealed class Main : ToolBase<Option>
     [SupportedOSPlatform(nameof(OSPlatform.Windows))]
     protected override Task Core()
     {
-        AnsiConsole.MarkupLine(Str.StartTranslate);
-        AnsiConsole.MarkupLine(Str.HideTranslate);
+        AnsiConsole.MarkupLine(Ln.StartTranslate);
+        AnsiConsole.MarkupLine(Ln.HideTranslate);
         var th = new Thread(() => {
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
-            Application.ThreadException                += UIThreadException;
+            Application.ThreadException += UIThreadException;
             using var frm = new WinMain();
             try {
                 Application.Run();

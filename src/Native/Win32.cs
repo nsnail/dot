@@ -87,41 +87,79 @@ internal static partial class Win32
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct KbdllhooksStruct
     {
-        [FieldOffset(0)]  public readonly  uint vkCode;
-        [FieldOffset(16)] private readonly nint dwExtraInfo;
-        [FieldOffset(8)]  private readonly uint flags;
-        [FieldOffset(4)]  private readonly uint scanCode;
-        [FieldOffset(12)] private readonly uint time;
+        [FieldOffset(0)]
+        public readonly uint vkCode;
+
+        [FieldOffset(16)]
+        private readonly nint dwExtraInfo;
+
+        [FieldOffset(8)]
+        private readonly uint flags;
+
+        [FieldOffset(4)]
+        private readonly uint scanCode;
+
+        [FieldOffset(12)]
+        private readonly uint time;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     public struct InputStruct
     {
-        [FieldOffset(8)] public KeybdInputStruct ki;
-        [FieldOffset(0)] public uint             type;
+        [FieldOffset(8)]
+        public KeybdInputStruct ki;
+
+        [FieldOffset(0)]
+        public uint type;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     public struct KeybdInputStruct
     {
-        [FieldOffset(4)]  public           uint   dwFlags;
-        [FieldOffset(0)]  public           ushort wVk;
-        [FieldOffset(20)] private readonly long   _; // 补位以匹配 UNION的MOUSEINPUT参数 （28bytes）
-        [FieldOffset(12)] private readonly nint   dwExtraInfo;
-        [FieldOffset(8)]  private readonly uint   time;
-        [FieldOffset(2)]  private readonly ushort wScan;
+        [FieldOffset(4)]
+        public uint dwFlags;
+
+        [FieldOffset(0)]
+        public ushort wVk;
+
+        [FieldOffset(20)]
+        private readonly long _; // 补位以匹配 UNION的MOUSEINPUT参数 （28bytes）
+
+        [FieldOffset(12)]
+        private readonly nint dwExtraInfo;
+
+        [FieldOffset(8)]
+        private readonly uint time;
+
+        [FieldOffset(2)]
+        private readonly ushort wScan;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     public ref struct Systemtime
     {
-        [FieldOffset(6)]  public ushort wDay;
-        [FieldOffset(4)]  public ushort wDayOfWeek;
-        [FieldOffset(8)]  public ushort wHour;
-        [FieldOffset(14)] public ushort wMilliseconds;
-        [FieldOffset(10)] public ushort wMinute;
-        [FieldOffset(2)]  public ushort wMonth;
-        [FieldOffset(12)] public ushort wSecond;
-        [FieldOffset(0)]  public ushort wYear;
+        [FieldOffset(6)]
+        public ushort wDay;
+
+        [FieldOffset(4)]
+        public ushort wDayOfWeek;
+
+        [FieldOffset(8)]
+        public ushort wHour;
+
+        [FieldOffset(14)]
+        public ushort wMilliseconds;
+
+        [FieldOffset(10)]
+        public ushort wMinute;
+
+        [FieldOffset(2)]
+        public ushort wMonth;
+
+        [FieldOffset(12)]
+        public ushort wSecond;
+
+        [FieldOffset(0)]
+        public ushort wYear;
     }
 }

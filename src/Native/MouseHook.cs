@@ -32,7 +32,7 @@ internal sealed class MouseHook : IDisposable
     private static nint SetHook(Win32.HookProc lpfn)
     {
         using var process = Process.GetCurrentProcess();
-        using var module  = process.MainModule;
+        using var module = process.MainModule;
         return Win32.SetWindowsHookExA(Win32.WH_MOUSE_LL, lpfn, module!.BaseAddress, 0);
     }
 
@@ -67,8 +67,11 @@ internal sealed class MouseHook : IDisposable
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct Msllhookstruct
     {
-        [FieldOffset(0)] public readonly int X;
-        [FieldOffset(4)] public readonly int Y;
+        [FieldOffset(0)]
+        public readonly int X;
+
+        [FieldOffset(4)]
+        public readonly int Y;
     }
 }
 #endif

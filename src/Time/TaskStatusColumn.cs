@@ -10,17 +10,34 @@ internal sealed class TaskStatusColumn : ProgressColumn
 {
     public enum Statues : byte
     {
-        // ReSharper disable once UnusedMember.Global
+        /// <summary>
+        ///     Ready
+        /// </summary>
         [Description($"[gray]{nameof(Ready)}[/]")]
         Ready
 
-      , [Description($"[yellow]{nameof(Connecting)}[/]")]
+       ,
+
+        /// <summary>
+        ///     Connecting
+        /// </summary>
+        [Description($"[yellow]{nameof(Connecting)}[/]")]
         Connecting
 
-      , [Description($"[green]{nameof(Succeed)}[/]")]
+       ,
+
+        /// <summary>
+        ///     Succeed
+        /// </summary>
+        [Description($"[green]{nameof(Succeed)}[/]")]
         Succeed
 
-      , [Description($"[red]{nameof(Failed)}[/]")]
+       ,
+
+        /// <summary>
+        ///     Failed
+        /// </summary>
+        [Description($"[red]{nameof(Failed)}[/]")]
         Failed
     }
 

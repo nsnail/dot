@@ -1,10 +1,26 @@
 <Project>
     <PropertyGroup>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <BaseOutputPath>../dist</BaseOutputPath>
+        <Authors>nsnail</Authors>
         <BaseIntermediateOutputPath>../dist</BaseIntermediateOutputPath>
-        <OutputPath>$(BaseOutputPath)/$(MSBuildProjectName)/bin</OutputPath>
+        <BaseOutputPath>../dist</BaseOutputPath>
+        <Copyright>© 2006-2023 nsnail</Copyright>
+        <Description>功能全面的实用工具 - 程序员的瑞士军刀</Description>
+        <EnableBaseIntermediateOutputPathMismatchWarning>false</EnableBaseIntermediateOutputPathMismatchWarning>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ImplicitUsings>enable</ImplicitUsings>
         <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</IntermediateOutputPath>
         <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</MSBuildProjectExtensionsPath>
+        <OutputPath>$(BaseOutputPath)/$(MSBuildProjectName)/bin</OutputPath>
+        <Product>dot</Product>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>
+        <RootNamespace>Dot</RootNamespace>
+        <Title>$(AssemblyName)</Title>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="MinVer" Version="4.3.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 </Project>

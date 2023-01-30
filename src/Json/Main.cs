@@ -8,8 +8,8 @@ using TextCopy;
 
 namespace Dot.Json;
 
-[Description(nameof(Str.Json))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.Json))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     private object _inputObj;
@@ -24,7 +24,7 @@ internal sealed class Main : ToolBase<Option>
         }
         #endif
         if (inputText.NullOrWhiteSpace()) {
-            throw new ArgumentException(Str.InputTextIsEmpty);
+            throw new ArgumentException(Ln.InputTextIsEmpty);
         }
 
         try {
@@ -40,7 +40,7 @@ internal sealed class Main : ToolBase<Option>
                 // ignored
             }
 
-            throw new ArgumentException(Str.InvalidJsonString);
+            throw new ArgumentException(Ln.InvalidJsonString);
         }
 
         return CoreInternal();

@@ -34,7 +34,7 @@ internal sealed class KeyboardHook : IDisposable
     private static nint SetHook(Win32.HookProc lpfn)
     {
         using var process = Process.GetCurrentProcess();
-        using var module  = process.MainModule;
+        using var module = process.MainModule;
         return Win32.SetWindowsHookExA(Win32.WH_KEYBOARD_LL, lpfn, module!.BaseAddress, 0);
     }
 

@@ -5,8 +5,8 @@ using System.Net.Sockets;
 
 namespace Dot.IP;
 
-[Description(nameof(Str.Ip))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.Ip))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     protected override async Task Core()
@@ -26,7 +26,7 @@ internal sealed class Main : ToolBase<Option>
         }
 
         using var http = new HttpClient();
-        Console.Write(Str.PublicIP);
+        Console.Write(Ln.PublicIP);
         var str = await http.GetStringAsync("http://httpbin.org/ip");
         Console.WriteLine(str);
     }

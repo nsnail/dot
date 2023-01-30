@@ -8,8 +8,8 @@ namespace Dot;
 internal abstract class OptionBase : CommandSettings, IOption
 {
     [CommandOption("-k|--keep--session")]
-    [Description(nameof(Str.KeepSession))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.KeepSession))]
+    [Localization(typeof(Ln))]
     [DefaultValue(false)]
     public bool KeepSession { get; set; }
 }

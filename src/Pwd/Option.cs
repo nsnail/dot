@@ -15,12 +15,12 @@ internal sealed class Option : OptionBase
     }
 
     [CommandArgument(1, "<password length>")]
-    [Description(nameof(Str.PwdLength))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.PwdLength))]
+    [Localization(typeof(Ln))]
     public int Length { get; set; }
 
     [CommandArgument(0, "<generate type>")]
-    [Description(nameof(Str.PwdGenerateTypes))]
-    [Localization(typeof(Str))]
+    [Description(nameof(Ln.PwdGenerateTypes))]
+    [Localization(typeof(Ln))]
     public GenerateTypes Type { get; set; }
 }

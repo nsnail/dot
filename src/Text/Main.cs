@@ -10,13 +10,13 @@ using TextCopy;
 
 namespace Dot.Text;
 
-[Description(nameof(Str.TextTool))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.TextTool))]
+[Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
     #if NET7_0_WINDOWS
     protected override async Task Core()
-        #else
+    #else
     protected override Task Core()
         #endif
     {
@@ -26,7 +26,7 @@ internal sealed class Main : ToolBase<Option>
         }
         #endif
         if (Opt.Text.NullOrEmpty()) {
-            throw new ArgumentException(Str.InputTextIsEmpty);
+            throw new ArgumentException(Ln.InputTextIsEmpty);
         }
 
         ParseAndShow(Opt.Text);

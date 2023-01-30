@@ -2,8 +2,8 @@
 
 namespace Dot.ToLf;
 
-[Description(nameof(Str.ConvertEndOfLineToLF))]
-[Localization(typeof(Str))]
+[Description(nameof(Ln.ConvertEndOfLineToLF))]
+[Localization(typeof(Ln))]
 internal sealed class Main : FilesTool<Option>
 {
     protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
@@ -31,12 +31,12 @@ internal sealed class Main : FilesTool<Option>
                         fsw.WriteByte(0x0a);
                         hasWrote = true;
                         continue;
-                    case 0x0d: //cr macos
+                    case 0x0d: // cr macos
                         fsw.WriteByte(0x0a);
                         _        = fsr.Seek(-1, SeekOrigin.Current);
                         hasWrote = true;
                         continue;
-                    case 0x00 or 0xff: //非文本文件
+                    case 0x00 or 0xff: // 非文本文件
                         isBin = true;
                         break;
                     default:
