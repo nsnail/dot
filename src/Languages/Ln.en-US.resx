@@ -50,7 +50,7 @@
         <value>Screen coordinate color selection tool</value>
     </data>
     <data name="DownloadTool" xml:space="preserve">
-        <value>Multithreaded download tool</value>
+        <value>Multi-Threaded download tool</value>
     </data>
     <data name="TextTool" xml:space="preserve">
         <value>Text encoding tool</value>

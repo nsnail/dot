@@ -10,7 +10,7 @@ namespace Dot.Guid;
 [Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         var guid = System.Guid.NewGuid().ToString();
         if (Opt.Upper) {

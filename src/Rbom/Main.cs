@@ -8,7 +8,7 @@ internal sealed class Main : FilesTool<Option>
 {
     private readonly byte[] _utf8Bom = { 0xef, 0xbb, 0xbf };
 
-    protected override async ValueTask FileHandle(string file, CancellationToken cancelToken)
+    protected override async ValueTask FileHandleAsync(string file, CancellationToken cancelToken)
     {
         ShowMessage(1, 0, 0);
 

@@ -1,6 +1,6 @@
 // ReSharper disable UnusedMember.Global
-
-#pragma warning disable CS1591
+// ReSharper disable IdentifierTypo
+// ReSharper disable CommentTypo
 
 namespace Dot.Native;
 

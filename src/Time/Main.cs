@@ -12,6 +12,7 @@ internal sealed class Main : ToolBase<Option>
     private const int _MAX_DEGREE_OF_PARALLELISM = 10;
     private const int _NTP_PORT                  = 123;
 
+    // ReSharper disable StringLiteralTypo
     private readonly string[] _ntpServers = {
                                                 "ntp.ntsc.ac.cn", "cn.ntp.org.cn", "edu.ntp.org.cn", "cn.pool.ntp.org"
                                               , "time.pool.aliyun.com", "time1.aliyun.com", "time2.aliyun.com"
@@ -30,11 +31,12 @@ internal sealed class Main : ToolBase<Option>
                                               , "stdtime.gov.hk"
                                             };
 
+    // ReSharper restore StringLiteralTypo
     private double _offsetAvg;
 
     private int _successCnt;
 
-    protected override async Task Core()
+    protected override async Task CoreAsync()
     {
         await AnsiConsole.Progress()
                          .Columns(                       //
@@ -50,7 +52,7 @@ internal sealed class Main : ToolBase<Option>
 
                              await Parallel.ForEachAsync(
                                  tasks, new ParallelOptions { MaxDegreeOfParallelism = _MAX_DEGREE_OF_PARALLELISM }
-                               , ServerHandle);
+                               , ServerHandleAsync);
 
                              _offsetAvg = tasks.Where(x => x.Value.State.Status() == TaskStatusColumn.Statues.Succeed)
                                                .Average(x => x.Value.State.Result().TotalMilliseconds);
@@ -60,14 +62,14 @@ internal sealed class Main : ToolBase<Option>
                              , _ntpServers.Length, $"[yellow]{_offsetAvg:f2}[/]");
 
         if (Opt.Sync) {
-            SetSysteTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
+            SetSystemTime(DateTime.Now.AddMilliseconds(-_offsetAvg));
             AnsiConsole.MarkupLine($"[green]{Ln.LocalTimeSyncDone}[/]");
         }
     }
 
-    protected override async Task Run()
+    protected override async Task RunAsync()
     {
-        await Core();
+        await CoreAsync();
         if (Opt.KeepSession) {
             var table = new Table().HideHeaders()
                                    .AddColumn(new TableColumn(string.Empty))
@@ -94,9 +96,9 @@ internal sealed class Main : ToolBase<Option>
         }
     }
 
-    private static void SetSysteTime(DateTime time)
+    private static void SetSystemTime(DateTime time)
     {
-        var timeToSet = new Win32.Systemtime {
+        var timeToSet = new Win32.SystemTime {
                                                  wDay          = (ushort)time.Day
                                                , wDayOfWeek    = (ushort)time.DayOfWeek
                                                , wHour         = (ushort)time.Hour
@@ -145,9 +147,7 @@ internal sealed class Main : ToolBase<Option>
         }
     }
 
-    #pragma warning disable SA1313
-    private ValueTask ServerHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
-        #pragma warning restore SA1313
+    private ValueTask ServerHandleAsync(KeyValuePair<string, ProgressTask> payload, CancellationToken ct)
     {
         payload.Value.StartTask();
         payload.Value.State.Status(TaskStatusColumn.Statues.Connecting);
@@ -158,7 +158,7 @@ internal sealed class Main : ToolBase<Option>
         else {
             payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
             payload.Value.State.Result(offset);
-            Interlocked.Increment(ref _successCnt);
+            _ = Interlocked.Increment(ref _successCnt);
         }
 
         payload.Value.StopTask();

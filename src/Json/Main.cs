@@ -14,7 +14,7 @@ internal sealed class Main : ToolBase<Option>
 {
     private object _inputObj;
 
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         var inputText = Opt.InputText;
 
@@ -43,7 +43,7 @@ internal sealed class Main : ToolBase<Option>
             throw new ArgumentException(Ln.InvalidJsonString);
         }
 
-        return CoreInternal();
+        return CoreInternalAsync();
     }
 
     private static string UnescapeString(string text)
@@ -51,24 +51,23 @@ internal sealed class Main : ToolBase<Option>
         return text.Replace("\\\"", "\"");
     }
 
-    private async Task<string> ConvertToString()
+    private async Task<string> ConvertToStringAsync()
     {
-        var ret = await JsonCompress();
-        ret = ret.Replace("\"", "\\\"");
-        return ret;
+        var ret = await JsonCompressAsync();
+        return ret.Replace("\"", "\\\"");
     }
 
-    private async Task CoreInternal()
+    private async Task CoreInternalAsync()
     {
         string result = null;
         if (Opt.Compress) {
-            result = await JsonCompress();
+            result = await JsonCompressAsync();
         }
         else if (Opt.ConvertToString) {
-            result = await ConvertToString();
+            result = await ConvertToStringAsync();
         }
         else if (Opt.Format) {
-            result = await JsonFormat();
+            result = await JsonFormatAsync();
         }
 
         if (!result.NullOrWhiteSpace()) {
@@ -78,15 +77,15 @@ internal sealed class Main : ToolBase<Option>
         }
     }
 
-    private Task<string> JsonCompress()
+    private Task<string> JsonCompressAsync()
     {
         var ret = _inputObj.Json();
         return Task.FromResult(ret);
     }
 
-    private Task<string> JsonFormat()
+    private Task<string> JsonFormatAsync()
     {
-        var ret = _inputObj.Json(true);
+        var ret = _inputObj.Json(new JsonSerializerOptions { WriteIndented = true });
         return Task.FromResult(ret);
     }
 }

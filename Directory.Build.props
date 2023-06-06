@@ -1,16 +1,16 @@
 <Project>
     <PropertyGroup>
+        <!--        $(XXX) 定义有顺序 排序请注意-->
+        <SolutionDir>$(MSBuildThisFileDirectory)</SolutionDir>
         <Authors>nsnail</Authors>
-        <BaseIntermediateOutputPath>../dist</BaseIntermediateOutputPath>
-        <BaseOutputPath>../dist</BaseOutputPath>
+        <BaseIntermediateOutputPath>$(SolutionDir)/dist</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(SolutionDir)/dist</BaseOutputPath>
         <Copyright>© 2006-2023 nsnail</Copyright>
         <Description>功能全面的实用工具 - 程序员的瑞士军刀</Description>
         <EnableBaseIntermediateOutputPathMismatchWarning>false</EnableBaseIntermediateOutputPathMismatchWarning>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ImplicitUsings>enable</ImplicitUsings>
-        <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</IntermediateOutputPath>
-        <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)/$(MSBuildProjectName)/obj</MSBuildProjectExtensionsPath>
-        <OutputPath>$(BaseOutputPath)/$(MSBuildProjectName)/bin</OutputPath>
+        <MinVerDefaultPreReleaseIdentifiers>beta</MinVerDefaultPreReleaseIdentifiers>
         <Product>dot</Product>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>

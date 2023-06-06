@@ -10,14 +10,14 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
     where TOption : DirOption
 {
     // ReSharper disable once StaticMemberInGenericType
-    private static readonly object                            _lock       = new(); // 线程锁
-    private readonly        ConcurrentDictionary<string, int> _writeStats = new(); // 写入统计：后缀，数量
-    private                 int                               _breakCnt;           // 跳过文件数
-    private                 ProgressTask                      _childTask;          // 子任务进度
-    private                 int                               _excludeCnt;         // 排除文件数
-    private                 int                               _readCnt;            // 读取文件数
-    private                 int                               _totalCnt;           // 总文件数
-    private                 int                               _writeCnt;           // 写入文件数
+    private readonly object                            _lock       = new(); // 线程锁
+    private readonly ConcurrentDictionary<string, int> _writeStats = new(); // 写入统计：后缀，数量
+    private          int                               _breakCnt;           // 跳过文件数
+    private          ProgressTask                      _childTask;          // 子任务进度
+    private          int                               _excludeCnt;         // 排除文件数
+    private          int                               _readCnt;            // 读取文件数
+    private          int                               _totalCnt;           // 总文件数
+    private          int                               _writeCnt;           // 写入文件数
 
     protected static FileStream CreateTempFile(out string file)
     {
@@ -37,7 +37,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
                 File.SetAttributes(file, new FileInfo(file).Attributes & ~FileAttributes.ReadOnly);
                 fsr = new FileStream(file, mode, access, share);
             }
-            catch (Exception) {
+            catch {
                 // ignored
             }
         }
@@ -48,15 +48,15 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
         return fsr;
     }
 
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         return !Directory.Exists(Opt.Path)
             ? throw new ArgumentException( //
                 nameof(Opt.Path), string.Format(CultureInfo.InvariantCulture, Ln.PathNotFound, Opt.Path))
-            : CoreInternal();
+            : CoreInternalAsync();
     }
 
-    protected abstract ValueTask FileHandle(string file, CancellationToken cancelToken);
+    protected abstract ValueTask FileHandleAsync(string file, CancellationToken cancelToken);
 
     protected void ShowMessage(int readCnt, int writeCnt, int breakCnt)
     {
@@ -78,7 +78,7 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
         _ = _writeStats.AddOrUpdate(key, 1, (_, oldValue) => oldValue + 1);
     }
 
-    private async Task CoreInternal()
+    private async Task CoreInternalAsync()
     {
         if (!Opt.WriteMode) {
             AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, "[gray]{0}[/]", Ln.ExerciseMode);
@@ -93,15 +93,15 @@ internal abstract class FilesTool<TOption> : ToolBase<TOption>
                            , new SpinnerColumn()                                     //
                            , new TaskDescriptionColumn { Alignment = Justify.Left }) //
                          .StartAsync(async ctx => {
-                             var taskSearchfile = ctx.AddTask(Ln.SearchingFile).IsIndeterminate();
+                             var taskSearchFile = ctx.AddTask(Ln.SearchingFile).IsIndeterminate();
                              _childTask = ctx.AddTask("-/-", false);
                              fileList   = EnumerateFiles(Opt.Path, Opt.Filter, out _excludeCnt);
                              _totalCnt  = fileList.Count();
-                             taskSearchfile.StopTask();
+                             taskSearchFile.StopTask();
 
                              _childTask.MaxValue = _totalCnt;
                              _childTask.StartTask();
-                             await Parallel.ForEachAsync(fileList, FileHandle);
+                             await Parallel.ForEachAsync(fileList, FileHandleAsync);
                          });
 
         var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(16))

@@ -21,7 +21,7 @@ internal sealed class MouseHook : IDisposable
         Dispose(false);
     }
 
-    public event MouseEventHandler MouseMoveEvent;
+    public event EventHandler<MouseEventArgs> MouseMoveEvent;
 
     public void Dispose()
     {
@@ -32,7 +32,7 @@ internal sealed class MouseHook : IDisposable
     private static nint SetHook(Win32.HookProc lpfn)
     {
         using var process = Process.GetCurrentProcess();
-        using var module = process.MainModule;
+        using var module  = process.MainModule;
         return Win32.SetWindowsHookExA(Win32.WH_MOUSE_LL, lpfn, module!.BaseAddress, 0);
     }
 
@@ -47,7 +47,7 @@ internal sealed class MouseHook : IDisposable
         }
 
         if (_hookId != default) {
-            Win32.UnhookWindowsHookExA(_hookId);
+            _ = Win32.UnhookWindowsHookExA(_hookId);
         }
 
         _disposed = true;
@@ -58,7 +58,7 @@ internal sealed class MouseHook : IDisposable
         // ReSharper disable once InvertIf
         if (wParam == Win32.WM_MOUSEMOVE) {
             var hookStruct = (Msllhookstruct)Marshal.PtrToStructure(lParam, typeof(Msllhookstruct))!;
-            MouseMoveEvent?.Invoke(null, new MouseEventArgs(MouseButtons.None, 0, hookStruct.X, hookStruct.Y, 0));
+            MouseMoveEvent?.Invoke(this, new MouseEventArgs(MouseButtons.None, 0, hookStruct.X, hookStruct.Y, 0));
         }
 
         return Win32.CallNextHookEx(_hookId, nCode, wParam, lParam);

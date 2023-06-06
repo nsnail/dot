@@ -15,9 +15,9 @@ namespace Dot.Text;
 internal sealed class Main : ToolBase<Option>
 {
     #if NET7_0_WINDOWS
-    protected override async Task Core()
-    #else
-    protected override Task Core()
+    protected override async Task CoreAsync()
+        #else
+    protected override Task CoreAsync()
         #endif
     {
         #if NET7_0_WINDOWS
@@ -39,15 +39,18 @@ internal sealed class Main : ToolBase<Option>
     {
         Output ret;
         var    inputHex = text.Hex(enc);
-        ret.Base64DeCodeHex  = ReadOnlySpan<char>.Empty;
-        ret.Base64DeCode     = ReadOnlySpan<char>.Empty;
-        ret.EncodingName     = enc.EncodingName;
-        ret.Hex              = inputHex.String();
-        ret.Base64           = text.Base64(enc);
-        ret.Md5              = MD5.HashData(inputHex).String();
-        ret.Sha1             = SHA1.HashData(inputHex).String();
-        ret.Sha256           = SHA256.HashData(inputHex).String();
-        ret.Sha512           = SHA512.HashData(inputHex).String();
+
+        ret.Base64DeCodeHex = ReadOnlySpan<char>.Empty;
+        ret.Base64DeCode    = ReadOnlySpan<char>.Empty;
+        ret.EncodingName    = enc.EncodingName;
+        ret.Hex             = inputHex.Str();
+        ret.Base64          = text.Base64(enc);
+        #pragma warning disable CA5351, CA5350
+        ret.Md5  = MD5.HashData(inputHex).Str();
+        ret.Sha1 = SHA1.HashData(inputHex).Str();
+        #pragma warning restore CA5350, CA5351
+        ret.Sha256           = SHA256.HashData(inputHex).Str();
+        ret.Sha512           = SHA512.HashData(inputHex).Str();
         ret.UrlEncode        = text.Url();
         ret.UrlDecode        = text.UrlDe();
         ret.HtmlDecode       = text.HtmlDe();
@@ -58,9 +61,9 @@ internal sealed class Main : ToolBase<Option>
         ret.UnicodeDecode    = text.UnicodeDe();
 
         if (Equals(enc, Encoding.BigEndianUnicode)) {
-            ret.PercentUnicode   = inputHex.String(false, "%u", 2);
-            ret.AndUnicode       = inputHex.String(false, @";&#x", 2)[1..] + ";";
-            ret.BacksLantUnicode = inputHex.String(false, @"\u", 2);
+            ret.PercentUnicode   = inputHex.Str(false, "%u", 2);
+            ret.AndUnicode       = inputHex.Str(false, ";&#x", 2)[1..] + ";";
+            ret.BacksLantUnicode = inputHex.Str(false, @"\u", 2);
         }
 
         if (!text.IsBase64String()) {
@@ -71,7 +74,7 @@ internal sealed class Main : ToolBase<Option>
         try {
             base64DeHex = text.Base64De();
         }
-        catch (Exception) {
+        catch {
             // ignored
         }
 
@@ -79,7 +82,7 @@ internal sealed class Main : ToolBase<Option>
             return ret;
         }
 
-        ret.Base64DeCodeHex = base64DeHex.String();
+        ret.Base64DeCodeHex = base64DeHex.Str();
         ret.Base64DeCode    = enc.GetString(base64DeHex);
 
         return ret;
@@ -89,29 +92,29 @@ internal sealed class Main : ToolBase<Option>
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine( //
+        _ = sb.AppendLine( //
             CultureInfo.InvariantCulture
           , $"{new string('-', 20)} {o.EncodingName} {new string('-', 30 - o.EncodingName.Length)}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"hex:               {o.Hex}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"base64:            {o.Base64}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"base64-decode-hex: {o.Base64DeCodeHex}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"base64-decode:     {o.Base64DeCode}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"md5:               {o.Md5}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"sha1:              {o.Sha1}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"sha256:            {o.Sha256}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"sha512:            {o.Sha512}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"url-encode:        {o.UrlEncode}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"url-decode:        {o.UrlDecode}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"hex:               {o.Hex}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"base64:            {o.Base64}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"base64-decode-hex: {o.Base64DeCodeHex}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"base64-decode:     {o.Base64DeCode}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"md5:               {o.Md5}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"sha1:              {o.Sha1}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"sha256:            {o.Sha256}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"sha512:            {o.Sha512}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"url-encode:        {o.UrlEncode}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"url-decode:        {o.UrlDecode}");
 
         if (o.EncodingName.Equals(Encoding.BigEndianUnicode.EncodingName, StringComparison.OrdinalIgnoreCase)) {
-            sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-percent:   {o.PercentUnicode}");
-            sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-and:       {o.AndUnicode}");
-            sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-backslant: {o.BacksLantUnicode}");
-            sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-decode:    {o.UnicodeDecode}");
+            _ = sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-percent:   {o.PercentUnicode}");
+            _ = sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-and:       {o.AndUnicode}");
+            _ = sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-back-slant: {o.BacksLantUnicode}");
+            _ = sb.AppendLine(CultureInfo.InvariantCulture, $"unicode-decode:    {o.UnicodeDecode}");
         }
 
-        sb.AppendLine(CultureInfo.InvariantCulture, $"html-encode:       {o.HtmlEncode}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"html-decode:       {o.HtmlDecode}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"html-encode:       {o.HtmlEncode}");
+        _ = sb.AppendLine(CultureInfo.InvariantCulture, $"html-decode:       {o.HtmlDecode}");
 
         return sb.ToString();
     }
@@ -124,10 +127,10 @@ internal sealed class Main : ToolBase<Option>
         var unicodeBigEndian    = BuildOutput(text, Encoding.BigEndianUnicode);
 
         var sb = new StringBuilder();
-        sb.AppendLine(BuildTemplate(ansi));
-        sb.AppendLine(BuildTemplate(utf8));
-        sb.AppendLine(BuildTemplate(unicodeLittleEndian));
-        sb.AppendLine(BuildTemplate(unicodeBigEndian));
+        sb.AppendLine(BuildTemplate(ansi))
+          .AppendLine(BuildTemplate(utf8))
+          .AppendLine(BuildTemplate(unicodeLittleEndian))
+          .AppendLine(BuildTemplate(unicodeBigEndian));
         var str = sb.ToString();
 
         Console.WriteLine(str);

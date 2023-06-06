@@ -1,0 +1,1 @@
+dotnet jb cleanupcode --no-build ./dot.sln

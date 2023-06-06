@@ -8,11 +8,12 @@ namespace Dot.Get;
 
 [Description(nameof(Ln.DownloadTool))]
 [Localization(typeof(Ln))]
-internal sealed partial class Main : ToolBase<Option>
+internal sealed class Main : ToolBase<Option>
 {
-    private const string _PART = "part";
+    private const           string _PART      = "part";
+    private static readonly Regex  _partRegex = new($"(\\d+)\\.{_PART}", RegexOptions.Compiled);
 
-    protected override async Task Core()
+    protected override async Task CoreAsync()
     {
         using var http = new HttpClient();
         string    attachment = default;
@@ -28,7 +29,9 @@ internal sealed partial class Main : ToolBase<Option>
                              attachment = content.Headers.ContentDisposition?.FileName ??
                                              Opt.Url[(Opt.Url.LastIndexOf('/') + 1)..];
                              foreach (var kv in content.Headers) {
+                                 #pragma warning disable IDE0058
                                  table.AddRow(kv.Key, string.Join(Environment.NewLine, kv.Value));
+                                 #pragma warning restore IDE0058
                              }
                          });
         AnsiConsole.Write(table);
@@ -59,38 +62,41 @@ internal sealed partial class Main : ToolBase<Option>
                                      tParent.Increment(x);
                                  });
                                  tParent.MaxValue = tParent.Value; // 写完了
-                                 tParent.IsIndeterminate(false);
+                                 _                = tParent.IsIndeterminate(false);
                                  tParent.StopTask();
                              }
 
                              // 已知文件长度，多线程下载：
                              else {
-                                 tParent.IsIndeterminate(false);
+                                 _                = tParent.IsIndeterminate(false);
                                  tParent.MaxValue = contentLength;
                                  var chunkSize = contentLength / Opt.ChunkNumbers;
 
-                                 Parallel.For(0, Opt.ChunkNumbers
-                                            , new ParallelOptions { MaxDegreeOfParallelism = Opt.MaxParallel } //
-                                            , i => {
-                                                  var tChild = ctx.AddTask(
-                                                      $"{Ln.Thread}{i} {Ln.RemainingTime}:", maxValue: chunkSize);
-                                                  using var getReq   = new HttpRequestMessage(HttpMethod.Get, Opt.Url);
-                                                  var       startPos = i * chunkSize;
-                                                  var       endPos   = startPos + chunkSize - 1;
-                                                  if (i == Opt.ChunkNumbers - 1) {
-                                                      endPos += contentLength % chunkSize;
-                                                  }
+                                 async void BodyAction(int i)
+                                 {
+                                     var tChild = ctx.AddTask( //
+                                         $"{Ln.Thread}{i} {Ln.RemainingTime}:", maxValue: chunkSize);
+                                     using var getReq   = new HttpRequestMessage(HttpMethod.Get, Opt.Url);
+                                     var       startPos = i * chunkSize;
+                                     var       endPos   = startPos + chunkSize - 1;
+                                     if (i == Opt.ChunkNumbers - 1) {
+                                         endPos += contentLength % chunkSize;
+                                     }
 
-                                                  getReq.Headers.Range = new RangeHeaderValue(startPos, endPos);
+                                     getReq.Headers.Range = new RangeHeaderValue(startPos, endPos);
 
-                                                  // ReSharper disable once AccessToDisposedClosure
-                                                  using var getRsp
-                                                      = http.Send(getReq, HttpCompletionOption.ResponseHeadersRead);
-                                                  WritePart(getRsp, mainFilePath, i, startPos, endPos, x => {
-                                                      tChild.Increment(x);
-                                                      tParent.Increment(x);
-                                                  });
-                                              });
+                                     // ReSharper disable once AccessToDisposedClosure
+                                     using var getRsp
+                                         = await http.SendAsync(getReq, HttpCompletionOption.ResponseHeadersRead);
+                                     WritePart(getRsp, mainFilePath, i, startPos, endPos, x => {
+                                         tChild.Increment(x);
+                                         tParent.Increment(x);
+                                     });
+                                 }
+
+                                 _ = Parallel.For(0, Opt.ChunkNumbers
+                                                , new ParallelOptions { MaxDegreeOfParallelism = Opt.MaxParallel } //
+                                                , BodyAction);
 
                                  MergeParts(mainFilePath);
                              }
@@ -109,14 +115,14 @@ internal sealed partial class Main : ToolBase<Option>
     private static string BuildFilePath(string path, string file)
     {
         // path 是一个存在的文件，已追加尾标
-        if (GetUseablePath(ref path)) {
+        if (GetUsablePath(ref path)) {
             return path;
         }
 
         // ReSharper disable once InvertIf
         if (Directory.Exists(path)) {        // path 是一个存在的目录。
             path = Path.Combine(path, file); // 构建文件路径
-            GetUseablePath(ref path);        // 追加序号。
+            _    = GetUsablePath(ref path);  // 追加序号。
             return path;
         }
 
@@ -124,15 +130,14 @@ internal sealed partial class Main : ToolBase<Option>
         return path;
     }
 
-    private static bool GetUseablePath(ref string path)
+    private static bool GetUsablePath(ref string path)
     {
         var dir  = Path.GetDirectoryName(path);
         var name = Path.GetFileNameWithoutExtension(path);
         var ext  = Path.GetExtension(path);
         var ret  = false;
-        #pragma warning disable SA1002
-        for (var i = 1;; ++i) {
-            #pragma warning restore SA1002
+
+        for (var i = 1; ; ++i) {
             if (File.Exists(path)) {
                 path = Path.Combine(dir!, $"{name}({i}){ext}");
                 ret  = true;
@@ -153,7 +158,7 @@ internal sealed partial class Main : ToolBase<Option>
                              .OrderBy(x => x)
                              .ToArray();
         using var fs = File.Create(mainFilePath);
-        fs.SetLength(PartRegex().Match(files.Last()).Groups[1].Value.Int64());
+        fs.SetLength(_partRegex.Match(files[^1]).Groups[1].Value.Int64());
         foreach (var file in files) {
             using var fsc = File.OpenRead(file);
             fsc.CopyTo(fs);
@@ -161,9 +166,6 @@ internal sealed partial class Main : ToolBase<Option>
             File.Delete(file);
         }
     }
-
-    [GeneratedRegex($"(\\d+)\\.{_PART}")]
-    private static partial Regex PartRegex();
 
     private void StreamCopy(Stream source, Stream dest, Action<int> rateHandle)
     {

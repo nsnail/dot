@@ -15,16 +15,16 @@ internal sealed class Main : ToolBase<Option>
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      // 仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         return !Directory.Exists(Opt.Path)
             ? throw new ArgumentException( //
                 nameof(Opt.Path)           //
               , string.Format(CultureInfo.InvariantCulture, Ln.PathNotFound, Opt.Path))
-            : CoreInternal();
+            : CoreInternalAsync();
     }
 
-    private async Task CoreInternal()
+    private async Task CoreInternalAsync()
     {
         _gitOutputEnc = Encoding.GetEncoding(Opt.GitOutputEncoding);
         var progressBar = new ProgressBarColumn { Width = 10 };
@@ -63,7 +63,7 @@ internal sealed class Main : ToolBase<Option>
                              taskFinder.StopTask();
                              taskFinder.State.Status(TaskStatusColumn.Statues.Succeed);
 
-                             await Parallel.ForEachAsync(tasks, DirHandle);
+                             await Parallel.ForEachAsync(tasks, DirHandleAsync);
                          });
 
         var table = new Table().AddColumn(new TableColumn(Ln.Repository) { Width = 50 })
@@ -74,17 +74,16 @@ internal sealed class Main : ToolBase<Option>
                                                                                   .Succeed)}[/]/{_repoStatus.Count}");
 
         foreach (var repo in _repoRsp) {
-            var status = _repoStatus[repo.Key].Desc();
-            table.AddRow(status.Replace(_repoStatus[repo.Key].ToString(), new DirectoryInfo(repo.Key).Name), Opt.Args
-                       , status.Replace(_repoStatus[repo.Key].ToString(), repo.Value.ToString()));
+            var status = _repoStatus[repo.Key].ResDesc<Ln>();
+            _ = table.AddRow( //
+                status.Replace(_repoStatus[repo.Key].ToString(), new DirectoryInfo(repo.Key).Name), Opt.Args
+              , status.Replace(_repoStatus[repo.Key].ToString(), repo.Value.ToString()));
         }
 
         AnsiConsole.Write(table);
     }
 
-    #pragma warning disable SA1313
-    private async ValueTask DirHandle(KeyValuePair<string, ProgressTask> payload, CancellationToken _)
-        #pragma warning restore SA1313
+    private async ValueTask DirHandleAsync(KeyValuePair<string, ProgressTask> payload, CancellationToken ct)
     {
         payload.Value.StartTask();
         payload.Value.State.Status(TaskStatusColumn.Statues.Executing);
@@ -97,7 +96,7 @@ internal sealed class Main : ToolBase<Option>
             }
 
             var msg = Encoding.UTF8.GetString(_gitOutputEnc.GetBytes(e.Data));
-            _repoRsp[payload.Key].Append(msg.EscapeMarkup());
+            _ = _repoRsp[payload.Key].Append(msg.EscapeMarkup());
         }
 
         // 启动git进程
@@ -119,14 +118,14 @@ internal sealed class Main : ToolBase<Option>
 
         if (p.ExitCode == 0) {
             payload.Value.State.Status(TaskStatusColumn.Statues.Succeed);
-            _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Succeed
-                                  , (_, _) => TaskStatusColumn.Statues.Succeed);
+            _ = _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Succeed
+                                      , (_, _) => TaskStatusColumn.Statues.Succeed);
             payload.Value.StopTask();
         }
         else {
             payload.Value.State.Status(TaskStatusColumn.Statues.Failed);
-            _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Failed
-                                  , (_, _) => TaskStatusColumn.Statues.Failed);
+            _ = _repoStatus.AddOrUpdate(payload.Key, _ => TaskStatusColumn.Statues.Failed
+                                      , (_, _) => TaskStatusColumn.Statues.Failed);
         }
 
         payload.Value.StopTask();

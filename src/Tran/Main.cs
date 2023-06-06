@@ -12,14 +12,14 @@ namespace Dot.Tran;
 internal sealed class Main : ToolBase<Option>
 {
     [SupportedOSPlatform(nameof(OSPlatform.Windows))]
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         AnsiConsole.MarkupLine(Ln.StartTranslate);
         AnsiConsole.MarkupLine(Ln.HideTranslate);
         var th = new Thread(() => {
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
-            Application.ThreadException += UIThreadException;
+            Application.ThreadException                += UIThreadException;
             using var frm = new WinMain();
             try {
                 Application.Run();
@@ -37,7 +37,7 @@ internal sealed class Main : ToolBase<Option>
     private static void Log(string msg)
     {
         var file = Path.Combine(Path.GetTempPath(), $"{DateTime.Now.yyyyMMdd()}.dotlog");
-        File.AppendAllText(file, $"{Environment.NewLine}{msg}");
+        File.AppendAllText(file, Environment.NewLine + msg);
     }
 
     private static void UIThreadException(object sender, ThreadExceptionEventArgs e)

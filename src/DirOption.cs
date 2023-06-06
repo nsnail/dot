@@ -2,7 +2,7 @@
 
 namespace Dot;
 
-internal class DirOption : OptionBase
+internal abstract class DirOption : OptionBase
 {
     [CommandOption("-e|--exclude")]
     [Description(nameof(Ln.ExcludePathRegexes))]

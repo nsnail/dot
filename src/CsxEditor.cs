@@ -4,12 +4,12 @@ namespace Dot;
 
 // ReSharper disable once UnusedType.Global
 // ReSharper disable once UnusedMember.Global
-internal sealed class CsxEditor
+internal static class CsxEditor
 {
     // ReSharper disable once UnusedMember.Local
-    #pragma warning disable IDE0051
+    #pragma warning disable S1144, RCS1213, IDE0051
     private static void Run()
-        #pragma warning restore IDE0051
+        #pragma warning restore IDE0051, RCS1213, S1144
     {
         /*
             for %%i in (*.png) do pngquant %%i --force --output %%i --skip-if-larger

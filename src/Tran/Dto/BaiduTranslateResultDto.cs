@@ -2,8 +2,10 @@
 // ReSharper disable  ClassNeverInstantiated.Global
 // ReSharper disable  UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable IdentifierTypo
 
 #pragma warning disable IDE1006,SA1300
+
 namespace Dot.Tran.Dto;
 
 internal sealed record BaiduTranslateResultDto
@@ -26,7 +28,9 @@ internal sealed record BaiduTranslateResultDto
         public string trg_str { get; set; }
     }
 
+    #pragma warning disable S1144
     public sealed record Root
+        #pragma warning restore S1144
     {
         public string errmsg { get; set; }
 

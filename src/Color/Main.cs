@@ -11,7 +11,7 @@ namespace Dot.Color;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class Main : ToolBase<Option>
 {
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         Application.Run(new WinMain());
         return Task.CompletedTask;

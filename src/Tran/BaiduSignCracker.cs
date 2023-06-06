@@ -23,7 +23,7 @@ internal static class BaiduSignCracker
                 case < 2048:
                     e.Add((k >> 6) | 192);
                     break;
-                default: {
+                default:
                     if ((k & 64512) == 55296 && i + 1 < hash.Length && (hash[i + 1] & 64512) == 56320) {
                         k = 65536 + ((k & 1023) << 10) + (hash[++i] & 1023);
                         e.Add((k >> 18)        | 240);
@@ -36,7 +36,6 @@ internal static class BaiduSignCracker
                     }
 
                     break;
-                }
             }
         }
 
@@ -55,7 +54,7 @@ internal static class BaiduSignCracker
                 var c       = password[i + 2];
                 var moveBit = c               >= 'a' ? c - 87 : c.ToString().Int32();
                 var d       = password[i + 1] == '+' ? number >>> moveBit : number << moveBit;
-                number = password[i] == '+' ? (number + d) & (int)uint.MaxValue : number ^ d;
+                number = password[i] == '+' ? number + d : number ^ d;
             }
         }
 

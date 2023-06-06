@@ -1,7 +1,7 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedMethodReturnValue.Global
 
-#pragma warning disable SA1307, SX1309
+#pragma warning disable SA1307,SX1309
 
 using System.Runtime.InteropServices;
 
@@ -71,7 +71,7 @@ internal static partial class Win32
     public static partial int SetClipboardViewer(nint hWnd);
 
     [LibraryImport(_KERNEL32_DLL)]
-    public static partial void SetLocalTime(Systemtime st);
+    public static partial void SetLocalTime(SystemTime st);
 
     [LibraryImport(_USER32_DLL)]
     public static partial nint SetWindowsHookExA(int idHook, HookProc lpfn, nint hMod, uint dwThreadId);
@@ -136,7 +136,7 @@ internal static partial class Win32
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    public ref struct Systemtime
+    public ref struct SystemTime
     {
         [FieldOffset(6)]
         public ushort wDay;

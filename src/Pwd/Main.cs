@@ -18,7 +18,7 @@ internal sealed class Main : ToolBase<Option>
                                              , "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".ToCharArray()
                                            };
 
-    protected override Task Core()
+    protected override Task CoreAsync()
     {
         unsafe {
             var pSource   = stackalloc char[_charTable.Sum(x => x.Length)];

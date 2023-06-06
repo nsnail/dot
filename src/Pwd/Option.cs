@@ -8,10 +8,11 @@ internal sealed class Option : OptionBase
     [Flags]
     public enum GenerateTypes
     {
-        Number           = 0b0001
-      , LowerCaseLetter  = 0b0010
-      , UpperCaseLetter  = 0b0100
-      , SpecialCharacter = 0b1000
+        None             = 0
+      , Number           = 1
+      , LowerCaseLetter  = 1 << 1
+      , UpperCaseLetter  = 1 << 2
+      , SpecialCharacter = 1 << 3
     }
 
     [CommandArgument(1, "<password length>")]

@@ -11,9 +11,9 @@
         <DefineConstants>$(DefineConstants);NET7_0_WINDOWS</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="NSExt" Version="1.0.11-alpha.0.1" />
-        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.48" />
-        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.48" />
+        <PackageReference Include="NSExt" Version="1.0.15-alpha.0.1" />
+        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.74" />
+        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.74" />
         <PackageReference Condition="'$(TargetFramework)' == 'net7.0-windows'" Include="TextCopy" Version="6.2.1" />
     </ItemGroup>
     <ItemGroup>

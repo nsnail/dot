@@ -14,7 +14,7 @@ internal sealed class TaskStatusColumn : ProgressColumn
         ///     Ready
         /// </summary>
         [Description($"[gray]{nameof(Ready)}[/]")]
-        Ready
+        Ready = 0
 
        ,
 
@@ -22,7 +22,7 @@ internal sealed class TaskStatusColumn : ProgressColumn
         ///     Executing
         /// </summary>
         [Description($"[yellow]{nameof(Executing)}[/]")]
-        Executing
+        Executing = 1
 
        ,
 
@@ -30,7 +30,7 @@ internal sealed class TaskStatusColumn : ProgressColumn
         ///     Succeed
         /// </summary>
         [Description($"[green]{nameof(Succeed)}[/]")]
-        Succeed
+        Succeed = 2
 
        ,
 
@@ -38,7 +38,7 @@ internal sealed class TaskStatusColumn : ProgressColumn
         ///     Failed
         /// </summary>
         [Description($"[red]{nameof(Failed)}[/]")]
-        Failed
+        Failed = 3
     }
 
     /// <summary>
@@ -53,6 +53,6 @@ internal sealed class TaskStatusColumn : ProgressColumn
     public override IRenderable Render(RenderOptions options, ProgressTask task, TimeSpan deltaTime)
     {
         var text = task.State.Get<Statues>(nameof(TaskStatusColumn));
-        return new Markup(text.Desc()).Overflow(Overflow.Ellipsis).Justify(Alignment);
+        return new Markup(text.ResDesc<Ln>()).Overflow(Overflow.Ellipsis).Justify(Alignment);
     }
 }

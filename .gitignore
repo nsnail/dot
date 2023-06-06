@@ -400,5 +400,5 @@ FodyWeavers.xsd
 
 # User Define
 dist/
-nuget.config
 *.[Dd]esigner.cs
+*.db
