@@ -7,7 +7,7 @@ internal abstract class DirOption : OptionBase
     [CommandOption("-e|--exclude")]
     [Description(nameof(Ln.ExcludePathRegexes))]
     [Localization(typeof(Ln))]
-    public IEnumerable<string> ExcludeRegexes { get; set; }
+    public string[] ExcludeRegexes { get; set; }
 
     [CommandOption("-f|--filter")]
     [Description(nameof(Ln.FileSearchPattern))]
