@@ -13,11 +13,11 @@ $file = 9999
 while ($null -eq $files[[int]$file - 1])
 {
     $i = 0
-    启用写入模式-Host '请选择要切换的配置文件文件'
+    Write-Host '请选择要切换的配置文件文件'
     foreach ($file in $files)
     {
         $i++
-        启用写入模式-Host $i $file.Name
+        Write-Host $i $file.Name
     }
     $file = 读取-Host
 }
