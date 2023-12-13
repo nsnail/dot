@@ -1,26 +1,39 @@
+<!-- 注意此文件名大小写不可变更 -->
 <Project>
     <PropertyGroup>
-        <!--        $(XXX) 定义有顺序 排序请注意-->
         <SolutionDir>$(MSBuildThisFileDirectory)</SolutionDir>
+    </PropertyGroup>
+    <Import Project="$(SolutionDir)/build/minver.targets" />
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Authors>nsnail</Authors>
-        <BaseIntermediateOutputPath>$(SolutionDir)/dist</BaseIntermediateOutputPath>
-        <BaseOutputPath>$(SolutionDir)/dist</BaseOutputPath>
+        <BaseIntermediateOutputPath>$(SolutionDir)/dist/backend/$(MSBuildProjectName)/obj</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(SolutionDir)/dist/backend/$(MSBuildProjectName)/bin</BaseOutputPath>
         <Copyright>© 2006-2023 nsnail</Copyright>
-        <Description>功能全面的实用工具 - 程序员的瑞士军刀</Description>
+        <Description>Cross-platform, all-around utility set with a beautiful character interface-the Swiss Army knife</Description>
         <EnableBaseIntermediateOutputPathMismatchWarning>false</EnableBaseIntermediateOutputPathMismatchWarning>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>preview</LangVersion>
         <MinVerDefaultPreReleaseIdentifiers>beta</MinVerDefaultPreReleaseIdentifiers>
-        <Product>dot</Product>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <NoWarn>CA1707;IDE0005;IDE0008;IDE0010;IDE0028;IDE0055;IDE0160;IDE0300;IDE0305;RCS1141;RCS1142;RCS1181;S101;S1121;S1135;S125;S2094;S3604;S4663;SYSLIB1045;SA1010;RCS1123;SA1407;IDE0048;S1075;S3928</NoWarn>
+        <Product>Dot</Product>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/nsnail/dot.git</RepositoryUrl>
-        <RootNamespace>Dot</RootNamespace>
+        <TargetFrameworks>net8.0-windows;net8.0</TargetFrameworks>
         <Title>$(AssemblyName)</Title>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+        <DefineConstants>$(DefineConstants);NET8_0_WINDOWS</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="MinVer" Version="4.3.0">
+        <PackageReference Include="MinVer" Version="5.0.0-beta.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="../GlobalUsings.cs" Link="GlobalUsings.cs" />
     </ItemGroup>
 </Project>
