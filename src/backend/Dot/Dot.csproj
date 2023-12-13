@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>dot</AssemblyName>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <OutputType>Exe</OutputType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <RootNamespace>Dot</RootNamespace>
+        <UseWindowsForms Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
+    </PropertyGroup>
+    <Import Project="$(SolutionDir)/build/code.quality.props"/>
+    <Import Project="$(SolutionDir)/build/copy.pkg.xml.comment.files.targets"/>
+    <Import Project="$(SolutionDir)/build/prebuild.targets"/>
+    <ItemGroup>
+        <PackageReference Include="NSExt" Version="1.1.0"/>
+        <PackageReference Include="Spectre.Console.Cli.NS" Version="0.45.1-preview.0.124"/>
+        <PackageReference Include="Spectre.Console.NS" Version="0.45.1-preview.0.124"/>
+        <PackageReference Condition="'$(TargetFramework)' == 'net8.0-windows'" Include="TextCopy" Version="6.2.1"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+</Project>
