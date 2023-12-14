@@ -21,7 +21,10 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget
       - working-directory: ./src/backend/Dot
         run: dotnet publish Dot.csproj -f net8.0-windows -r win-x64 -c Release
+      - working-directory: ./src/backend/Dot
+        run: dotnet publish Dot.csproj -f net8.0 -r linux-x64 -c Release
       - uses: actions/create-release@v1
+        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -30,11 +33,18 @@ jobs:
           draft: false
           prerelease: false
       - uses: actions/upload-release-asset@v1
-        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./dist/backend/Dot/bin/Release/net8.0-windows/win-x64/publish/dot.exe
-          asset_name: dot.exe
+          asset_name: dot-win-x64.exe
+          asset_content_type: application/octet-stream
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/backend/Dot/bin/Release/net8.0/linux-x64/publish/dot
+          asset_name: dot-linux-x64
           asset_content_type: application/octet-stream
