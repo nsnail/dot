@@ -11,14 +11,15 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 从仓库拉取代码
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           filter: tree:0
-      - name: Setup .NET
+      - name: 安装 DOTNET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
-      - name: Publish backend
+      - name: 发布 .net8-windows@win-x64
         working-directory: ./src/backend/Dot
-        run: dotnet publish Dot.csproj -c Release
+        run: dotnet publish Dot.csproj -f net8.0-windows -r win-x64 -c Release
