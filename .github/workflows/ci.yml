@@ -30,10 +30,11 @@ jobs:
           draft: false
           prerelease: false
       - uses: actions/upload-release-asset@v1
+        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
-          asset_content_type: application/zip
+          asset_path: ./dist/backend/Dot/bin/Release/net8.0-windows/win-x64/publish/dot.exe
+          asset_name: dot.exe
+          asset_content_type: application/octet-stream
