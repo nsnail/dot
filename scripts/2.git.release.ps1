@@ -13,6 +13,9 @@ git checkout main
 git branch -D release
 git checkout -b release
 ./node_modules/.bin/standard-version -r $types[$prefix][0]
+./code.clean.ps1
+git add .
+git commit --amend
 git push --follow-tags --force origin release
 Start-Process -FilePath "https://github.com/nsnail/dot/compare/main...release"
 cd ./scripts
