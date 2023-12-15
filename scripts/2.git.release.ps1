@@ -16,7 +16,7 @@ git checkout -b release
 cd ./scripts
 ./code.clean.ps1
 git commit --amend --no-edit -a
-git push --tags --force origin release
+git push --follow-tags origin release
 Start-Process -FilePath "https://github.com/nsnail/dot/compare/main...release"
 Write-Host "按『Enter』回到主分支，『Ctrl+C』退出"
 Pause
