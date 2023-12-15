@@ -16,6 +16,9 @@ git checkout -b release
 cd ./scripts
 ./code.clean.ps1
 git commit --amend --no-edit -a
+$tag = $(git describe --tags $(git rev-list --tags --max-count=1))
+git tag -d $tag
+git tag $tag
 git push --tags origin release
 Start-Process -FilePath "https://github.com/nsnail/dot/compare/main...release"
 Write-Host "按『Enter』回到主分支，『Ctrl+C』退出"
