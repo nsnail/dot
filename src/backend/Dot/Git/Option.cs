@@ -28,4 +28,24 @@ internal sealed class Option : OptionBase
     [Localization(typeof(Ln))]
     [DefaultValue(".")]
     public string Path { get; set; }
+
+    #if NET8_0_WINDOWS
+    [CommandOption("-i|--install-right-click-menu")]
+    [Description(nameof(Ln.添加Windows右键菜单))]
+    [Localization(typeof(Ln))]
+    [DefaultValue(false)]
+    public bool InstallRightClickMenu { get; set; }
+
+    [CommandOption("-u|--uninstall-right-click-menu")]
+    [Description(nameof(Ln.卸载Windows右键菜单))]
+    [Localization(typeof(Ln))]
+    [DefaultValue(false)]
+    public bool UninstallRightClickMenu { get; set; }
+
+    [CommandOption("-o|--open-git-url")]
+    [Description(nameof(Ln.打开Git仓库网址))]
+    [Localization(typeof(Ln))]
+    [DefaultValue(false)]
+    public bool OpenGitUrl { get; set; }
+    #endif
 }
