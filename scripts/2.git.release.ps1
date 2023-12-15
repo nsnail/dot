@@ -13,11 +13,11 @@ git checkout main
 git branch -D release
 git checkout -b release
 ./node_modules/.bin/standard-version -r $types[$prefix][0]
+cd ./scripts
 ./code.clean.ps1
 git commit --amend --no-edit -a
 git push --follow-tags --force origin release
 Start-Process -FilePath "https://github.com/nsnail/dot/compare/main...release"
-cd ./scripts
 Write-Host "按『Enter』回到主分支，『Ctrl+C』退出"
 Pause
 git checkout main
