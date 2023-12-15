@@ -3,6 +3,9 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using NSExt.Extensions;
+#if NET8_0_WINDOWS
+using Microsoft.Win32;
+#endif
 
 namespace Dot.Git;
 
@@ -10,12 +13,31 @@ namespace Dot.Git;
 [Localization(typeof(Ln))]
 internal sealed class Main : ToolBase<Option>
 {
+    #if NET8_0_WINDOWS
+    private static readonly Regex _regex = new("url = (http.*)");
+    #endif
     private Encoding                                               _gitOutputEnc; // git command rsp 编码
     private ConcurrentDictionary<string, StringBuilder>            _repoRsp;      // 仓库信息容器
     private ConcurrentDictionary<string, TaskStatusColumn.Statues> _repoStatus;
 
     protected override Task CoreAsync()
     {
+        #if NET8_0_WINDOWS
+        #pragma warning disable IDE0046
+        if (Opt.InstallRightClickMenu) {
+            #pragma warning restore IDE0046
+            return InstallRightClickMenuAsync();
+        }
+
+        if (Opt.UninstallRightClickMenu) {
+            return UninstallRightClickMenuAsync();
+        }
+
+        if (Opt.OpenGitUrl) {
+            return OpenGitUrlAsync();
+        }
+        #endif
+
         return !Directory.Exists(Opt.Path)
             ? throw new ArgumentException($"{Ln.指定的路径不存在}: {Opt.Path}", "PATH")
             : CoreInternalAsync();
@@ -125,4 +147,36 @@ internal sealed class Main : ToolBase<Option>
 
         payload.Value.StopTask();
     }
+
+    #if NET8_0_WINDOWS
+    #pragma warning disable SA1204
+    private static Task InstallRightClickMenuAsync()
+        #pragma warning restore SA1204
+    {
+        Registry.SetValue(@"HKEY_CLASSES_ROOT\Directory\shell\OpenGitUrl\command", string.Empty
+                        , @$"""{Environment.ProcessPath}"" git -o ""%1""");
+        Console.WriteLine(Ln.Windows右键菜单已添加);
+        return Task.CompletedTask;
+    }
+
+    private static Task UninstallRightClickMenuAsync()
+    {
+        Registry.ClassesRoot.OpenSubKey(@"Directory\shell", true)?.DeleteSubKeyTree("OpenGitUrl", false);
+        Console.WriteLine(Ln.Windows右键菜单已卸载);
+        return Task.CompletedTask;
+    }
+
+    private Task OpenGitUrlAsync()
+    {
+        var file = @$"{Opt.Path}\.git\config";
+        if (File.Exists(file)) {
+            var content = File.ReadAllText(file);
+            Console.WriteLine(content);
+            var url = _regex.Match(content).Groups[1].Value;
+            _ = Process.Start("explorer.exe", url);
+        }
+
+        return Task.CompletedTask;
+    }
+    #endif
 }
